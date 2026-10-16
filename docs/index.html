@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>EuroTrip 2026 ✈️ Alan & Hillary | Dashboard</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#1e1b4b',
+            },
+            surface: {
+              DEFAULT: '#0f172a',
+              card: '#1e293b',
+              border: '#334155',
+              hover: '#293548'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbars & smooth transitions */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.125rem 0.625rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- TOP BAR / HEADER -->
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo & Title -->
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-pink-500 flex items-center justify-center text-xl shadow-lg shadow-brand-500/20">
+            ✈️
+          </div>
+          <div>
+            <h1 class="text-base sm:text-lg font-bold leading-tight flex items-center gap-2">
+              EuroTrip 2026
+              <span class="text-xs font-normal text-slate-400 hidden sm:inline">| Alan & Hillary</span>
+            </h1>
+            <p class="text-xs text-slate-400 flex items-center gap-1">
+              <span>Nov 1 - Nov 20</span>
+              <span>•</span>
+              <span class="text-emerald-400 font-medium">1 EUR = 4.000 COP</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick Info / Status Pill -->
+        <div class="flex items-center gap-2">
+          <!-- Allergy Warning Button -->
+          <button onclick="toggleAllergyModal(true)" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-950/80 border border-rose-700/60 text-rose-300 hover:bg-rose-900 text-xs font-semibold transition shadow-sm animate-pulse" title="Ver advertencias de alergias">
+            <span>⚠️</span>
+            <span class="hidden md:inline">ALERGIA MANÍ</span>
+          </button>
+          
+          <a href="../README.md" class="hidden sm:flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-medium transition">
+            <span>📖</span> Repo
+          </a>
+        </div>
+      </div>
+
+      <!-- DESKTOP / TABLET NAVIGATION TABS -->
+      <nav class="flex space-x-1 sm:space-x-4 border-t border-slate-800/60 py-2 overflow-x-auto no-scrollbar" id="navTabs">
+        <button onclick="switchTab('itinerario')" id="tab-btn-itinerario" class="nav-btn active flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition text-white bg-brand-600 shadow-sm shadow-brand-500/20">
+          <span>📅</span> Itinerario
+        </button>
+        <button onclick="switchTab('presupuesto')" id="tab-btn-presupuesto" class="nav-btn flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition text-slate-400 hover:text-white hover:bg-slate-800">
+          <span>💰</span> Presupuesto
+        </button>
+        <button onclick="switchTab('gastos')" id="tab-btn-gastos" class="nav-btn flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition text-slate-400 hover:text-white hover:bg-slate-800">
+          <span>🧾</span> Gastos (<span id="expensesCount">0</span>)
+        </button>
+        <button onclick="switchTab('por-hacer')" id="tab-btn-por-hacer" class="nav-btn flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition text-slate-400 hover:text-white hover:bg-slate-800">
+          <span>✅</span> Por Hacer (<span id="todoBadge">0</span>)
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- CRITICAL ALLERGY BANNER -->
+  <div class="bg-gradient-to-r from-red-950 via-rose-900 to-amber-950 border-b border-rose-800/80 px-4 py-2.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between text-xs sm:text-sm text-rose-100">
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="bg-rose-600 text-white font-bold px-2 py-0.5 rounded text-xs">¡ALERTA MÉDICA!</span>
+        <span class="font-medium">MANÍ / CACAHUETES = PELIGRO ANÁFILAXIS.</span>
+        <span class="text-rose-200 hidden md:inline">IT: <i>Arachidi</i> | FR: <i>Arachides</i> | ES: <i>Cacahuete/Maní</i>.</span>
+        <span class="text-amber-200 text-xs hidden lg:inline">(Camarones: preferencia, no alergia).</span>
+      </div>
+      <button onclick="toggleAllergyModal(true)" class="underline text-xs text-rose-200 hover:text-white font-semibold ml-2">
+        Ver tarjetas
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- ================================================================= -->
+    <!-- TAB 1: ITINERARIO -->
+    <!-- ================================================================= -->
+    <section id="tab-itinerario" class="tab-content space-y-6">
+      <!-- Overview Hero Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 sm:p-4">
+          <p class="text-xs text-slate-400 font-medium">Duración Total</p>
+          <p class="text-lg sm:text-2xl font-bold text-white mt-1">20 Días</p>
+          <p class="text-[11px] text-brand-400 mt-0.5">1 al 20 Nov 2026</p>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 sm:p-4">
+          <p class="text-xs text-slate-400 font-medium">Países & Banderas</p>
+          <p class="text-lg sm:text-2xl font-bold text-white mt-1">4 Países</p>
+          <p class="text-[11px] text-slate-300 mt-0.5">🇨🇴 🇪🇸 🇮🇹 🇫🇷</p>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 sm:p-4">
+          <p class="text-xs text-slate-400 font-medium">Ciudades Clave</p>
+          <p class="text-lg sm:text-2xl font-bold text-white mt-1">6 + 3 Tours</p>
+          <p class="text-[11px] text-slate-300 mt-0.5">MAD, BCN, MIL, ROM, PAR + Como, Pisa, Flor</p>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 sm:p-4">
+          <p class="text-xs text-slate-400 font-medium">Clima Otoñal</p>
+          <p class="text-lg sm:text-2xl font-bold text-sky-400 mt-1">4°C - 16°C</p>
+          <p class="text-[11px] text-amber-400 mt-0.5">Atardece ~17:15</p>
+        </div>
+      </div>
+
+      <!-- Filters & Actions -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-3 rounded-xl">
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+          <span class="text-xs text-slate-400 font-semibold px-1">Filtro:</span>
+          <button onclick="filterItinerary('all')" class="itin-filter-btn px-3 py-1 rounded-lg text-xs font-medium bg-brand-600 text-white" data-filter="all">Todos</button>
+          <button onclick="filterItinerary('España')" class="itin-filter-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:text-white" data-filter="España">🇪🇸 España</button>
+          <button onclick="filterItinerary('Italia')" class="itin-filter-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:text-white" data-filter="Italia">🇮🇹 Italia</button>
+          <button onclick="filterItinerary('Francia')" class="itin-filter-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:text-white" data-filter="Francia">🇫🇷 Francia</button>
+          <button onclick="filterItinerary('Colombia')" class="itin-filter-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:text-white" data-filter="Colombia">🇨🇴 Colombia</button>
+        </div>
+        <div class="text-xs text-slate-400 text-right">
+          Mostrando <span id="itinCount" class="font-bold text-white">20</span> días del recorrido
+        </div>
+      </div>
+
+      <!-- Day-by-Day Timeline List -->
+      <div id="itineraryContainer" class="space-y-4">
+        <!-- Rendered by JavaScript -->
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 2: PRESUPUESTO -->
+    <!-- ================================================================= -->
+    <section id="tab-presupuesto" class="tab-content hidden space-y-6">
+      <!-- High Level KPI Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <!-- Pagado Card -->
+        <div class="bg-gradient-to-br from-emerald-950/60 to-slate-900 border border-emerald-800/40 rounded-2xl p-5 shadow-lg relative overflow-hidden">
+          <div class="absolute -right-4 -bottom-4 text-emerald-500/10 text-8xl font-black select-none">✓</div>
+          <p class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Ya Pagado</p>
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-white mt-1" id="kpiPaidCOP">$0</h3>
+          <p class="text-xs text-emerald-300/80 mt-1" id="kpiPaidEUR">0.00 €</p>
+          <div class="mt-3 flex items-center gap-2">
+            <span class="badge bg-emerald-900/60 text-emerald-300 border border-emerald-700/50">Vuelos BOG-MAD, Iryo, Trenitalia, Hoteles BOG/MAD/BCN</span>
+          </div>
+        </div>
+
+        <!-- Reservado Pendiente Card -->
+        <div class="bg-gradient-to-br from-amber-950/60 to-slate-900 border border-amber-800/40 rounded-2xl p-5 shadow-lg relative overflow-hidden">
+          <div class="absolute -right-4 -bottom-4 text-amber-500/10 text-8xl font-black select-none">⏳</div>
+          <p class="text-xs font-bold text-amber-400 uppercase tracking-wider">Reservado (Pago Pendiente)</p>
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-white mt-1" id="kpiReservedCOP">$0</h3>
+          <p class="text-xs text-amber-300/80 mt-1" id="kpiReservedEUR">0.00 €</p>
+          <div class="mt-3 flex items-center gap-2">
+            <span class="badge bg-amber-900/60 text-amber-300 border border-amber-700/50">Hospedajes Roma y París (Se pagan en destino/fechas límite)</span>
+          </div>
+        </div>
+
+        <!-- Faltante Estimado Card -->
+        <div class="bg-gradient-to-br from-rose-950/60 to-slate-900 border border-rose-800/40 rounded-2xl p-5 shadow-lg relative overflow-hidden">
+          <div class="absolute -right-4 -bottom-4 text-rose-500/10 text-8xl font-black select-none">⚠️</div>
+          <p class="text-xs font-bold text-rose-400 uppercase tracking-wider">Por Comprar / Faltante</p>
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-white mt-1" id="kpiMissingCOP">$0</h3>
+          <p class="text-xs text-rose-300/80 mt-1" id="kpiMissingEUR">0.00 €</p>
+          <div class="mt-3 flex items-center gap-2">
+            <span class="badge bg-rose-900/60 text-rose-300 border border-rose-700/50">Madrid II, BAQ-BOG, París-MAD, Entradas, Seguro</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overall Progress Bar -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between text-xs sm:text-sm font-semibold gap-1">
+          <span class="text-slate-300">Progreso de Presupuesto Consolidado:</span>
+          <span class="text-slate-400" id="budgetProgressLabel">Cargando...</span>
+        </div>
+        <div class="w-full bg-slate-800 rounded-full h-4 overflow-hidden flex shadow-inner">
+          <div id="barPaid" class="bg-emerald-500 h-full transition-all duration-500" style="width: 0%" title="Pagado"></div>
+          <div id="barReserved" class="bg-amber-500 h-full transition-all duration-500" style="width: 0%" title="Reservado"></div>
+          <div id="barMissing" class="bg-rose-500 h-full transition-all duration-500" style="width: 0%" title="Por Comprar"></div>
+        </div>
+        <div class="flex flex-wrap items-center gap-4 text-xs pt-1">
+          <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-emerald-500"></div> <span class="text-slate-300">Pagado</span></div>
+          <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-amber-500"></div> <span class="text-slate-300">Reservado (Pendiente)</span></div>
+          <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-rose-500"></div> <span class="text-slate-300">Por Comprar / Reservar</span></div>
+          <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-blue-500"></div> <span class="text-slate-300">Estimación de Comidas & Metro</span></div>
+        </div>
+      </div>
+
+      <!-- Categories Breakdown Cards -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <span>📊</span> Desglose por Categorías
+        </h3>
+        <div id="budgetCategoriesContainer" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <!-- Rendered by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 3: GASTOS -->
+    <!-- ================================================================= -->
+    <section id="tab-gastos" class="tab-content hidden space-y-6">
+      <!-- Gastos Summary Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+          <p class="text-xs text-slate-400 font-semibold">Total Registrado (COP)</p>
+          <p class="text-lg sm:text-2xl font-black text-white mt-1" id="expTotalCOP">$0</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">En data.js</p>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+          <p class="text-xs text-slate-400 font-semibold">Total Registrado (EUR)</p>
+          <p class="text-lg sm:text-2xl font-black text-emerald-400 mt-1" id="expTotalEUR">0.00 €</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Tasa: 4.000 COP</p>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+          <p class="text-xs text-slate-400 font-semibold">Promedio Diario (20 Días)</p>
+          <p class="text-lg sm:text-2xl font-black text-brand-400 mt-1" id="expAvgDaily">$0</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Por día de viaje</p>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+          <p class="text-xs text-slate-400 font-semibold">Registros de Pago</p>
+          <p class="text-lg sm:text-2xl font-black text-amber-400 mt-1" id="expItemsCount">0</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Transacciones</p>
+        </div>
+      </div>
+
+      <!-- Controls & Quick Add Button -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-4 rounded-xl">
+        <div class="flex items-center gap-2 flex-wrap">
+          <input type="text" id="expenseSearch" placeholder="Buscar concepto o ciudad..." oninput="filterExpensesTable()" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 w-48 sm:w-64">
+          <select id="expenseCategoryFilter" onchange="filterExpensesTable()" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-brand-500">
+            <option value="all">Todas las categorías</option>
+            <option value="Vuelos">Vuelos</option>
+            <option value="Trenes">Trenes</option>
+            <option value="Hospedaje">Hospedaje</option>
+            <option value="Comida">Comida</option>
+            <option value="Tours">Tours / Ocio</option>
+            <option value="Transporte">Transporte Local</option>
+            <option value="Otros">Otros</option>
+          </select>
+        </div>
+        <button onclick="openNewExpenseModal()" class="flex items-center justify-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-xs font-bold transition shadow-md shadow-brand-600/30">
+          <span>➕</span> Registrar Nuevo Gasto
+        </button>
+      </div>
+
+      <!-- Expenses Log Table -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-800/80 text-slate-300 font-semibold border-b border-slate-700">
+                <th class="p-3 sm:p-4">Fecha</th>
+                <th class="p-3 sm:p-4">Concepto / Descripción</th>
+                <th class="p-3 sm:p-4">Categoría</th>
+                <th class="p-3 sm:p-4 text-right">Monto (COP)</th>
+                <th class="p-3 sm:p-4 text-right">Monto (EUR)</th>
+                <th class="p-3 sm:p-4 hidden md:table-cell">Pagador</th>
+                <th class="p-3 sm:p-4 hidden sm:table-cell">Método</th>
+                <th class="p-3 sm:p-4 text-center">Estado</th>
+              </tr>
+            </thead>
+            <tbody id="expensesTableBody" class="divide-y divide-slate-800 text-slate-300">
+              <!-- Rendered by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="text-xs text-slate-400 bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+        💡 <b>Tip para viajeros:</b> Los gastos agregados desde esta interfaz se guardan en la memoria local de tu navegador. Para que queden registrados de forma definitiva para ambos en el repositorio de GitHub, actualiza el archivo <code class="text-brand-300">docs/data.js</code> en el arreglo <code class="text-brand-300">expensesData</code>.
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 4: POR HACER (CHECKLIST) -->
+    <!-- ================================================================= -->
+    <section id="tab-por-hacer" class="tab-content hidden space-y-6">
+      <!-- Checklist Progress Banner -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <span>📋</span> Lista de Tareas y Pendientes Críticos
+            </h3>
+            <p class="text-xs text-slate-400">Marca los ítems completados mientras preparan el viaje</p>
+          </div>
+          <span class="text-sm sm:text-base font-bold text-brand-400" id="todoProgressPercent">0%</span>
+        </div>
+        <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
+          <div id="todoProgressBar" class="bg-gradient-to-r from-brand-500 to-emerald-400 h-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <div class="text-xs text-slate-400 flex items-center justify-between">
+          <span id="todoCompletionStats">0 de 0 tareas completadas</span>
+          <button onclick="resetTodoLocalStorage()" class="text-xs text-slate-500 hover:text-slate-300 underline">Restaurar estado inicial</button>
+        </div>
+      </div>
+
+      <!-- Filters & Add Task -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-4 rounded-xl">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-xs text-slate-400 font-semibold">Prioridad:</span>
+          <button onclick="filterTodos('all')" class="todo-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-brand-600 text-white" data-priority="all">Todas</button>
+          <button onclick="filterTodos('Alta')" class="todo-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-priority="Alta">🔴 Alta</button>
+          <button onclick="filterTodos('Media')" class="todo-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-priority="Media">🟡 Media</button>
+          <button onclick="filterTodos('Baja')" class="todo-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-priority="Baja">🟢 Baja</button>
+        </div>
+        <button onclick="openNewTaskModal()" class="flex items-center justify-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-xs font-bold transition shadow-md shadow-brand-600/30">
+          <span>➕</span> Agregar Tarea
+        </button>
+      </div>
+
+      <!-- Todo Cards List -->
+      <div id="todoListContainer" class="space-y-3">
+        <!-- Rendered by JavaScript -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ALLERGY MODAL (EMERGENCY CARD) -->
+  <div id="allergyModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border-2 border-rose-600/80 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative">
+      <button onclick="toggleAllergyModal(false)" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl font-bold">✕</button>
+
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-rose-600/20 border border-rose-500 flex items-center justify-center text-2xl text-rose-500">
+          ⚠️
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-white">Tarjeta de Alergias Médicas</h3>
+          <p class="text-xs text-rose-400 font-semibold">Mostrar directamente a camareros y chefs</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-sm">
+        <!-- Español -->
+        <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+          <div class="flex items-center justify-between text-xs text-slate-400 font-semibold mb-1">
+            <span>🇪🇸 ESPAÑOL</span>
+            <span class="text-rose-400">Alergia Severa</span>
+          </div>
+          <p class="text-white font-medium">"Tengo alergia mortal al <b>maní / cacahuetes</b> y a sus aceites o trazas. ¿Este plato contiene cacahuete?"</p>
+          <p class="text-xs text-amber-300/80 mt-1 italic">(Nota de Alan: No camarones por preferencia, no alergia).</p>
+        </div>
+
+        <!-- Italiano -->
+        <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+          <div class="flex items-center justify-between text-xs text-slate-400 font-semibold mb-1">
+            <span>🇮🇹 ITALIANO</span>
+            <span class="text-rose-400">Allergia Grave</span>
+          </div>
+          <p class="text-white font-medium">"Sono gravemente allergico alle <b>arachidi</b> (noccioline americane) e all'olio di arachidi. Questo piatto contiene arachidi?"</p>
+          <p class="text-xs text-amber-300/80 mt-1 italic">Preferenza: Niente gamberi / gamberetti, per favore.</p>
+        </div>
+
+        <!-- Francés -->
+        <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+          <div class="flex items-center justify-between text-xs text-slate-400 font-semibold mb-1">
+            <span>🇫🇷 FRANÇAIS</span>
+            <span class="text-rose-400">Allergie Mortelle</span>
+          </div>
+          <p class="text-white font-medium">"Je suis sévèrement allergique aux <b>arachides / cacahuètes</b> et à l'huile d'arachide. Ce plat contient-il des arachides?"</p>
+          <p class="text-xs text-amber-300/80 mt-1 italic">Préférence: Pas de crevettes, s'il vous plaît.</p>
+        </div>
+      </div>
+
+      <div class="bg-rose-950/40 border border-rose-800/60 p-3 rounded-xl text-xs text-rose-200">
+        🚨 <b>En caso de emergencia médica:</b> Marcar al número europeo único de emergencias <b>112</b> (válido en España, Italia y Francia).
+      </div>
+
+      <div class="text-right">
+        <button onclick="toggleAllergyModal(false)" class="px-5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW EXPENSE MODAL -->
+  <div id="newExpenseModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span>➕</span> Registrar Gasto Nuevo
+        </h3>
+        <button onclick="closeNewExpenseModal()" class="text-slate-400 hover:text-white font-bold">✕</button>
+      </div>
+
+      <form id="newExpenseForm" onsubmit="handleNewExpenseSubmit(event)" class="space-y-3 text-xs sm:text-sm">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Concepto o Descripción</label>
+          <input type="text" id="formExpDesc" required placeholder="Ej: Cena pasta Trastevere" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-brand-500">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Monto en COP ($)</label>
+            <input type="number" id="formExpCOP" oninput="convertExpenseCOPtoEUR()" required placeholder="Ej: 160000" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-brand-500">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Equivalente EUR (€)</label>
+            <input type="number" step="0.01" id="formExpEUR" oninput="convertExpenseEURtoCOP()" required placeholder="Ej: 40.00" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-brand-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Categoría</label>
+            <select id="formExpCategory" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-brand-500">
+              <option value="Comida">Comida / Restaurante</option>
+              <option value="Hospedaje">Hospedaje</option>
+              <option value="Transporte">Transporte Local</option>
+              <option value="Trenes">Trenes</option>
+              <option value="Vuelos">Vuelos</option>
+              <option value="Tours">Tours / Ocio</option>
+              <option value="Compras">Compras</option>
+              <option value="Otros">Otros</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Pagador</label>
+            <select id="formExpPayer" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-brand-500">
+              <option value="Alan">Alan</option>
+              <option value="Hillary">Hillary</option>
+              <option value="Ambos">Ambos (Compartido)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Fecha</label>
+            <input type="date" id="formExpDate" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white focus:outline-none focus:border-brand-500">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Método de Pago</label>
+            <select id="formExpMethod" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-brand-500">
+              <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
+              <option value="Tarjeta Débito">Tarjeta Débito</option>
+              <option value="Efectivo EUR">Efectivo EUR</option>
+              <option value="Apple Pay / Contactless">Apple Pay / Contactless</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeNewExpenseModal()" class="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white text-xs">Cancelar</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs">Guardar Gasto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- NEW TASK MODAL -->
+  <div id="newTaskModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span>➕</span> Nueva Tarea / Pendiente
+        </h3>
+        <button onclick="closeNewTaskModal()" class="text-slate-400 hover:text-white font-bold">✕</button>
+      </div>
+
+      <form id="newTaskForm" onsubmit="handleNewTaskSubmit(event)" class="space-y-3 text-xs sm:text-sm">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Descripción de la Tarea</label>
+          <input type="text" id="formTaskText" required placeholder="Ej: Comprar billetes Trenord Como" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-brand-500">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Categoría</label>
+            <select id="formTaskCategory" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-brand-500">
+              <option value="Transporte">Transporte</option>
+              <option value="Alojamiento">Alojamiento</option>
+              <option value="Experiencias">Experiencias</option>
+              <option value="Equipaje">Equipaje</option>
+              <option value="Documentos">Documentos</option>
+              <option value="Salud">Salud</option>
+              <option value="Finanzas">Finanzas</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Prioridad</label>
+            <select id="formTaskPriority" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-brand-500">
+              <option value="Alta">🔴 Alta</option>
+              <option value="Media">🟡 Media</option>
+              <option value="Baja">🟢 Baja</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Responsable</label>
+            <select id="formTaskAssigned" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-brand-500">
+              <option value="Alan">Alan</option>
+              <option value="Hillary">Hillary</option>
+              <option value="Ambos">Ambos</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Fecha Límite</label>
+            <input type="date" id="formTaskDueDate" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white focus:outline-none focus:border-brand-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Notas adicionales (opcional)</label>
+          <input type="text" id="formTaskNotes" placeholder="Detalles, enlaces o recordatorios" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-brand-500">
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeNewTaskModal()" class="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white text-xs">Cancelar</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs">Guardar Tarea</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="mt-auto border-t border-slate-800 bg-slate-900/60 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p>EuroTrip 2026: Alan & Hillary • Noviembre 2026 ✈️</p>
+      <p class="flex items-center gap-3">
+        <span>Tasa de cambio: 1 EUR = 4.000 COP</span>
+        <span>•</span>
+        <a href="../README.md" class="text-brand-400 hover:underline">Documentación</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- LOAD DATA & MAIN APPLICATION LOGIC -->
+  <script src="data.js"></script>
+  <script>
+    // =========================================================================
+    // GLOBAL STATE & STORAGE INITIALIZATION
+    // =========================================================================
+    let localExpenses = [];
+    let localTodos = [];
+    let currentItinFilter = 'all';
+    let currentTodoFilter = 'all';
+
+    // Formatters
+    const formatCOP = (num) => '$' + Number(num || 0).toLocaleString('es-CO');
+    const formatEUR = (num) => Number(num || 0).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+
+    // Initialize application on DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      initData();
+      renderItinerary();
+      renderBudget();
+      renderExpenses();
+      renderTodos();
+      updateBadges();
+
+      // Set default date inputs to today
+      const today = new Date().toISOString().split('T')[0];
+      if (document.getElementById('formExpDate')) document.getElementById('formExpDate').value = today;
+    });
+
+    function initData() {
+      // Load saved expenses from localStorage if present, else copy from data.js
+      const savedExpenses = localStorage.getItem('eurotrip_expenses');
+      if (savedExpenses) {
+        try {
+          localExpenses = JSON.parse(savedExpenses);
+        } catch (e) {
+          localExpenses = [...expensesData];
+        }
+      } else {
+        localExpenses = [...expensesData];
+      }
+
+      // Load saved todos from localStorage if present, else copy from data.js
+      const savedTodos = localStorage.getItem('eurotrip_todos');
+      if (savedTodos) {
+        try {
+          localTodos = JSON.parse(savedTodos);
+        } catch (e) {
+          localTodos = [...todoListData];
+        }
+      } else {
+        localTodos = [...todoListData];
+      }
+    }
+
+    function saveExpensesToStorage() {
+      localStorage.setItem('eurotrip_expenses', JSON.stringify(localExpenses));
+      renderExpenses();
+      renderBudget(); // update totals
+      updateBadges();
+    }
+
+    function saveTodosToStorage() {
+      localStorage.setItem('eurotrip_todos', JSON.stringify(localTodos));
+      renderTodos();
+      updateBadges();
+    }
+
+    function resetTodoLocalStorage() {
+      if (confirm('¿Restaurar las tareas al estado original de data.js?')) {
+        localTodos = [...todoListData];
+        saveTodosToStorage();
+      }
+    }
+
+    function updateBadges() {
+      document.getElementById('expensesCount').textContent = localExpenses.length;
+      const pendingTodos = localTodos.filter(t => !t.completed).length;
+      document.getElementById('todoBadge').textContent = pendingTodos;
+    }
+
+    // =========================================================================
+    // NAVIGATION TABS
+    // =========================================================================
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-brand-600', 'text-white', 'shadow-sm', 'shadow-brand-500/20');
+        btn.classList.add('text-slate-400');
+      });
+
+      const selectedTab = document.getElementById(`tab-${tabName}`);
+      const selectedBtn = document.getElementById(`tab-btn-${tabName}`);
+
+      if (selectedTab && selectedBtn) {
+        selectedTab.classList.remove('hidden');
+        selectedBtn.classList.remove('text-slate-400');
+        selectedBtn.classList.add('active', 'bg-brand-600', 'text-white', 'shadow-sm', 'shadow-brand-500/20');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // =========================================================================
+    // ITINERARY RENDERING & FILTERING
+    // =========================================================================
+    function filterItinerary(country) {
+      currentItinFilter = country;
+      document.querySelectorAll('.itin-filter-btn').forEach(btn => {
+        if (btn.getAttribute('data-filter') === country) {
+          btn.className = 'itin-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-brand-600 text-white';
+        } else {
+          btn.className = 'itin-filter-btn px-3 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:text-white';
+        }
+      });
+      renderItinerary();
+    }
+
+    function renderItinerary() {
+      const container = document.getElementById('itineraryContainer');
+      const filtered = itineraryData.filter(d => {
+        if (currentItinFilter === 'all') return true;
+        return d.country === currentItinFilter;
+      });
+
+      document.getElementById('itinCount').textContent = filtered.length;
+
+      container.innerHTML = filtered.map(day => {
+        // Status badges for transport
+        let transBadge = '';
+        if (day.transportStatus.toLowerCase().includes('pagado')) {
+          transBadge = '<span class="badge bg-emerald-950 border border-emerald-700 text-emerald-300">✓ ' + day.transportStatus + '</span>';
+        } else if (day.transportStatus.toLowerCase().includes('presupuesto')) {
+          transBadge = '<span class="badge bg-blue-950 border border-blue-700 text-blue-300">' + day.transportStatus + '</span>';
+        } else {
+          transBadge = '<span class="badge bg-amber-950 border border-amber-700 text-amber-300">⚠️ ' + day.transportStatus + '</span>';
+        }
+
+        // Status badges for accommodation
+        let accomBadge = '';
+        if (day.accommodationStatus.toLowerCase().includes('pagado')) {
+          accomBadge = '<span class="badge bg-emerald-950 border border-emerald-700 text-emerald-300">✓ ' + day.accommodationStatus + '</span>';
+        } else if (day.accommodationStatus.toLowerCase().includes('gratis')) {
+          accomBadge = '<span class="badge bg-purple-950 border border-purple-700 text-purple-300">🤝 ' + day.accommodationStatus + '</span>';
+        } else if (day.accommodationStatus.toLowerCase().includes('reservado')) {
+          accomBadge = '<span class="badge bg-amber-950 border border-amber-700 text-amber-300">⏳ ' + day.accommodationStatus + '</span>';
+        } else {
+          accomBadge = '<span class="badge bg-rose-950 border border-rose-700 text-rose-300">⚠️ ' + day.accommodationStatus + '</span>';
+        }
+
+        const highlightsHtml = day.highlights.map(h => `<li class="flex items-start gap-1.5"><span class="text-brand-400 mt-0.5">•</span><span>${h}</span></li>`).join('');
+
+        return `
+          <div class="bg-slate-900 border border-slate-800 hover:border-slate-700 transition rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
+              <div class="flex items-center gap-3">
+                <span class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 text-2xl flex items-center justify-center shadow-inner">
+                  ${day.flag}
+                </span>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-brand-400 tracking-wide">${day.dayCode}</span>
+                    <span class="text-xs text-slate-400">|</span>
+                    <span class="text-xs font-semibold text-slate-300">${day.displayDate}</span>
+                  </div>
+                  <h3 class="text-base sm:text-lg font-bold text-white">${day.city}</h3>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2 self-start sm:self-auto">
+                <span class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300">
+                  🌙 ${day.nights > 0 ? day.nights + ' noches' : 'Tránsito'}
+                </span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
+              <!-- Transporte -->
+              <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80 space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-400 font-semibold flex items-center gap-1.5">
+                    <span>${day.transportType === 'flight' ? '✈️' : day.transportType === 'train' ? '🚄' : '🚌'}</span> Transporte
+                  </span>
+                  ${transBadge}
+                </div>
+                <p class="text-slate-200 font-medium">${day.transport}</p>
+              </div>
+
+              <!-- Alojamiento -->
+              <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80 space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-400 font-semibold flex items-center gap-1.5">
+                    <span>🛏️</span> Alojamiento
+                  </span>
+                  ${accomBadge}
+                </div>
+                <p class="text-slate-200 font-medium">${day.accommodation}</p>
+              </div>
+            </div>
+
+            <!-- Destacados & Notas -->
+            <div class="bg-slate-950/40 p-3.5 rounded-xl border border-slate-800/60 space-y-2 text-xs">
+              <span class="text-slate-400 font-semibold uppercase tracking-wider block">Actividades & Rutas Planeadas:</span>
+              <ul class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-slate-300">
+                ${highlightsHtml}
+              </ul>
+              ${day.weather ? `<p class="text-sky-300 pt-1 flex items-center gap-1"><span>🌤️</span> <b>Clima:</b> ${day.weather}</p>` : ''}
+              ${day.notes ? `<p class="text-amber-300 pt-0.5 flex items-center gap-1"><span>💡</span> <b>Nota:</b> ${day.notes}</p>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // BUDGET RENDERING
+    // =========================================================================
+    function renderBudget() {
+      // Calculate totals across categories
+      let totalPaidCOP = 0;
+      let totalReservedCOP = 0;
+      let totalMissingCOP = 0;
+      let totalEstimatedCOP = 0;
+
+      Object.values(budgetCategories).forEach(category => {
+        category.items.forEach(item => {
+          if (item.status === 'paid') totalPaidCOP += item.cop;
+          else if (item.status === 'reserved') totalReservedCOP += item.cop;
+          else if (item.status === 'missing') totalMissingCOP += item.cop;
+          else if (item.status === 'pending') totalMissingCOP += item.cop; // pending flight bookings
+          else if (item.status === 'estimated') totalEstimatedCOP += item.cop;
+        });
+      });
+
+      // Update KPI labels
+      document.getElementById('kpiPaidCOP').textContent = formatCOP(totalPaidCOP);
+      document.getElementById('kpiPaidEUR').textContent = formatEUR(totalPaidCOP / EXCHANGE_RATE);
+
+      document.getElementById('kpiReservedCOP').textContent = formatCOP(totalReservedCOP);
+      document.getElementById('kpiReservedEUR').textContent = formatEUR(totalReservedCOP / EXCHANGE_RATE);
+
+      document.getElementById('kpiMissingCOP').textContent = formatCOP(totalMissingCOP);
+      document.getElementById('kpiMissingEUR').textContent = formatEUR(totalMissingCOP / EXCHANGE_RATE);
+
+      const grandTotal = totalPaidCOP + totalReservedCOP + totalMissingCOP + totalEstimatedCOP;
+      const pctPaid = ((totalPaidCOP / grandTotal) * 100).toFixed(1);
+      const pctReserved = ((totalReservedCOP / grandTotal) * 100).toFixed(1);
+      const pctMissing = ((totalMissingCOP / grandTotal) * 100).toFixed(1);
+
+      document.getElementById('barPaid').style.width = pctPaid + '%';
+      document.getElementById('barReserved').style.width = pctReserved + '%';
+      document.getElementById('barMissing').style.width = pctMissing + '%';
+
+      document.getElementById('budgetProgressLabel').textContent = `${pctPaid}% Pagado (${formatCOP(totalPaidCOP)}) de ${formatCOP(grandTotal)} estimado total`;
+
+      // Render Categories
+      const container = document.getElementById('budgetCategoriesContainer');
+      container.innerHTML = Object.values(budgetCategories).map(cat => {
+        let catTotalCOP = 0;
+        const itemsHtml = cat.items.map(item => {
+          catTotalCOP += item.cop;
+          let badgeClass = 'bg-slate-800 text-slate-300';
+          let statusText = item.status;
+          if (item.status === 'paid') {
+            badgeClass = 'bg-emerald-950 border border-emerald-700 text-emerald-300';
+            statusText = 'Pagado';
+          } else if (item.status === 'reserved') {
+            badgeClass = 'bg-amber-950 border border-amber-700 text-amber-300';
+            statusText = 'Reservado';
+          } else if (item.status === 'missing' || item.status === 'pending') {
+            badgeClass = 'bg-rose-950 border border-rose-700 text-rose-300';
+            statusText = 'Falta comprar';
+          } else if (item.status === 'estimated') {
+            badgeClass = 'bg-blue-950 border border-blue-700 text-blue-300';
+            statusText = 'Estimado';
+          }
+
+          return `
+            <div class="flex items-center justify-between py-2 border-b border-slate-800/60 last:border-0 gap-2">
+              <div class="min-w-0">
+                <p class="font-medium text-slate-200 truncate">${item.name}</p>
+                <p class="text-[11px] text-slate-400">${item.notes || ''}</p>
+              </div>
+              <div class="text-right flex-shrink-0">
+                <p class="font-bold text-white">${formatCOP(item.cop)}</p>
+                <div class="flex items-center justify-end gap-1.5 mt-0.5">
+                  <span class="text-[11px] text-slate-400">${formatEUR(item.eur || (item.cop / EXCHANGE_RATE))}</span>
+                  <span class="badge ${badgeClass} text-[10px] px-1.5 py-0.2">${statusText}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <h4 class="font-bold text-base text-white flex items-center gap-2">
+                <span>📁</span> ${cat.name}
+              </h4>
+              <span class="text-xs font-extrabold text-brand-400 bg-brand-950/60 border border-brand-800 px-2.5 py-1 rounded-lg">
+                ${formatCOP(catTotalCOP)}
+              </span>
+            </div>
+            <div class="divide-y divide-slate-800/40 text-xs">
+              ${itemsHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // EXPENSES RENDERING & MANAGEMENT
+    // =========================================================================
+    function filterExpensesTable() {
+      const query = (document.getElementById('expenseSearch').value || '').toLowerCase();
+      const cat = document.getElementById('expenseCategoryFilter').value;
+
+      const filtered = localExpenses.filter(e => {
+        const matchesQuery = e.description.toLowerCase().includes(query) || (e.city && e.city.toLowerCase().includes(query));
+        const matchesCat = (cat === 'all') || (e.category === cat);
+        return matchesQuery && matchesCat;
+      });
+
+      renderExpensesTableOnly(filtered);
+    }
+
+    function renderExpenses() {
+      // Calculate Stats
+      let totalCOP = 0;
+      let totalEUR = 0;
+      localExpenses.forEach(e => {
+        totalCOP += Number(e.amountCOP || 0);
+        totalEUR += Number(e.amountEUR || (e.amountCOP / EXCHANGE_RATE));
+      });
+
+      document.getElementById('expTotalCOP').textContent = formatCOP(totalCOP);
+      document.getElementById('expTotalEUR').textContent = formatEUR(totalEUR);
+      document.getElementById('expAvgDaily').textContent = formatCOP(Math.round(totalCOP / 20));
+      document.getElementById('expItemsCount').textContent = localExpenses.length;
+
+      filterExpensesTable();
+    }
+
+    function renderExpensesTableOnly(dataList) {
+      const tbody = document.getElementById('expensesTableBody');
+      if (dataList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-500">No se encontraron gastos con los filtros aplicados.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = dataList.map((item, idx) => {
+        return `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="p-3 sm:p-4 text-slate-400 whitespace-nowrap font-mono text-[11px]">${item.date}</td>
+            <td class="p-3 sm:p-4 font-medium text-white">
+              <div>${item.description}</div>
+              ${item.city ? `<div class="text-[11px] text-slate-400 font-normal">📍 ${item.city}</div>` : ''}
+            </td>
+            <td class="p-3 sm:p-4">
+              <span class="badge bg-slate-800 text-slate-300 border border-slate-700">${item.category}</span>
+            </td>
+            <td class="p-3 sm:p-4 text-right font-bold text-white whitespace-nowrap">${formatCOP(item.amountCOP)}</td>
+            <td class="p-3 sm:p-4 text-right text-emerald-400 font-medium whitespace-nowrap">${formatEUR(item.amountEUR)}</td>
+            <td class="p-3 sm:p-4 text-slate-300 hidden md:table-cell">${item.payer || 'Alan / Hillary'}</td>
+            <td class="p-3 sm:p-4 text-slate-400 hidden sm:table-cell text-xs">${item.method || 'Tarjeta'}</td>
+            <td class="p-3 sm:p-4 text-center">
+              <span class="badge bg-emerald-950 border border-emerald-700 text-emerald-300">✓ ${item.status || 'Pagado'}</span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openNewExpenseModal() {
+      document.getElementById('newExpenseModal').classList.remove('hidden');
+    }
+    function closeNewExpenseModal() {
+      document.getElementById('newExpenseModal').classList.add('hidden');
+    }
+
+    function convertExpenseCOPtoEUR() {
+      const cop = parseFloat(document.getElementById('formExpCOP').value) || 0;
+      document.getElementById('formExpEUR').value = (cop / EXCHANGE_RATE).toFixed(2);
+    }
+    function convertExpenseEURtoCOP() {
+      const eur = parseFloat(document.getElementById('formExpEUR').value) || 0;
+      document.getElementById('formExpCOP').value = Math.round(eur * EXCHANGE_RATE);
+    }
+
+    function handleNewExpenseSubmit(e) {
+      e.preventDefault();
+      const desc = document.getElementById('formExpDesc').value;
+      const cop = parseFloat(document.getElementById('formExpCOP').value) || 0;
+      const eur = parseFloat(document.getElementById('formExpEUR').value) || (cop / EXCHANGE_RATE);
+      const cat = document.getElementById('formExpCategory').value;
+      const payer = document.getElementById('formExpPayer').value;
+      const date = document.getElementById('formExpDate').value;
+      const method = document.getElementById('formExpMethod').value;
+
+      const newExpense = {
+        id: 'g-local-' + Date.now(),
+        date: date,
+        description: desc,
+        category: cat,
+        amountCOP: cop,
+        amountEUR: eur,
+        payer: payer,
+        method: method,
+        status: "Pagado",
+        city: "En Viaje"
+      };
+
+      localExpenses.unshift(newExpense);
+      saveExpensesToStorage();
+      closeNewExpenseModal();
+      document.getElementById('newExpenseForm').reset();
+    }
+
+    // =========================================================================
+    // TODO LIST RENDERING & ACTIONS
+    // =========================================================================
+    function filterTodos(priority) {
+      currentTodoFilter = priority;
+      document.querySelectorAll('.todo-filter-btn').forEach(btn => {
+        if (btn.getAttribute('data-priority') === priority) {
+          btn.className = 'todo-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-brand-600 text-white';
+        } else {
+          btn.className = 'todo-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white';
+        }
+      });
+      renderTodos();
+    }
+
+    function toggleTodo(id) {
+      const item = localTodos.find(t => t.id === id);
+      if (item) {
+        item.completed = !item.completed;
+        saveTodosToStorage();
+      }
+    }
+
+    function renderTodos() {
+      const container = document.getElementById('todoListContainer');
+      const total = localTodos.length;
+      const completed = localTodos.filter(t => t.completed).length;
+      const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+      document.getElementById('todoProgressBar').style.width = percent + '%';
+      document.getElementById('todoProgressPercent').textContent = percent + '%';
+      document.getElementById('todoCompletionStats').textContent = `${completed} de ${total} tareas completadas`;
+
+      const filtered = localTodos.filter(t => {
+        if (currentTodoFilter === 'all') return true;
+        return t.priority === currentTodoFilter;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-slate-500 bg-slate-900 rounded-xl border border-slate-800">No hay tareas pendientes en esta categoría.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        let priorityBadge = '';
+        if (item.priority === 'Alta') priorityBadge = '<span class="badge bg-rose-950 border border-rose-800 text-rose-300">Alta</span>';
+        else if (item.priority === 'Media') priorityBadge = '<span class="badge bg-amber-950 border border-amber-800 text-amber-300">Media</span>';
+        else priorityBadge = '<span class="badge bg-emerald-950 border border-emerald-800 text-emerald-300">Baja</span>';
+
+        return `
+          <div class="bg-slate-900 border ${item.completed ? 'border-slate-800/40 opacity-60' : 'border-slate-800'} rounded-xl p-4 flex items-start gap-3 transition hover:border-slate-700 shadow-sm">
+            <input type="checkbox" ${item.completed ? 'checked' : ''} onchange="toggleTodo('${item.id}')" class="w-5 h-5 mt-0.5 rounded border-slate-700 text-brand-600 focus:ring-brand-500 bg-slate-950 cursor-pointer">
+            <div class="flex-grow space-y-1">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                <span class="text-xs sm:text-sm font-semibold ${item.completed ? 'line-through text-slate-400' : 'text-white'}">
+                  ${item.task}
+                </span>
+                <div class="flex items-center gap-1.5 self-start sm:self-auto">
+                  ${priorityBadge}
+                  <span class="badge bg-slate-800 text-slate-400">${item.category}</span>
+                </div>
+              </div>
+              <div class="flex flex-wrap items-center gap-3 text-[11px] text-slate-400">
+                ${item.assignedTo ? `<span>👤 <b>Asignado:</b> ${item.assignedTo}</span>` : ''}
+                ${item.dueDate ? `<span>📅 <b>Límite:</b> ${item.dueDate}</span>` : ''}
+                ${item.notes ? `<span class="text-slate-300">💬 ${item.notes}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openNewTaskModal() {
+      document.getElementById('newTaskModal').classList.remove('hidden');
+    }
+    function closeNewTaskModal() {
+      document.getElementById('newTaskModal').classList.add('hidden');
+    }
+
+    function handleNewTaskSubmit(e) {
+      e.preventDefault();
+      const text = document.getElementById('formTaskText').value;
+      const cat = document.getElementById('formTaskCategory').value;
+      const prio = document.getElementById('formTaskPriority').value;
+      const assigned = document.getElementById('formTaskAssigned').value;
+      const due = document.getElementById('formTaskDueDate').value;
+      const notes = document.getElementById('formTaskNotes').value;
+
+      const newTask = {
+        id: 'todo-local-' + Date.now(),
+        task: text,
+        category: cat,
+        priority: prio,
+        completed: false,
+        dueDate: due,
+        assignedTo: assigned,
+        notes: notes
+      };
+
+      localTodos.unshift(newTask);
+      saveTodosToStorage();
+      closeNewTaskModal();
+      document.getElementById('newTaskForm').reset();
+    }
+
+    // =========================================================================
+    // ALLERGY MODAL TOGGLE
+    // =========================================================================
+    function toggleAllergyModal(show) {
+      const modal = document.getElementById('allergyModal');
+      if (show) {
+        modal.classList.remove('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+  </script>
+</body>
+</html>
