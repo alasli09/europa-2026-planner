@@ -65,24 +65,19 @@
 - **Fruits à coque** (traces d'arachides)
 - **Boulangeries:** Les crêpes, sauces satay, pâtisseries orientales ou gâteaux.
 
----
-
 ## 🚨 Protocolo de Emergencia Médica en Europa
+
+> [!CAUTION]
+> **Hillary NO carga autoinyector (EpiPen).** La única medida disponible es **evitar el maní por completo.** Si hay una reacción, llamar al 112 de inmediato.
 
 Si ocurre una ingestión accidental y aparecen síntomas de reacción alérgica (dificultad para respirar, opresión en la garganta, hinchazón de labios/lengua, mareo severo, urticaria generalizada):
 
-### 1. Actuar de Inmediato con el EpiPen
-- Retirar la tapa azul de seguridad.
-- Apoyar firmemente la punta naranja en la **cara lateral externa del muslo** (se puede aplicar a través de la ropa).
-- Presionar fuerte hasta escuchar el "clic" y mantener presionado firmemente durante **5 segundos**.
-- Masajear suavemente la zona durante 10 segundos.
-
-### 2. Llamar al Número Único Europeo: 112
+### 1. Llamar INMEDIATAMENTE al 112
 - **Número de Emergencias 112:** Es gratuito y funciona en España, Italia y Francia, incluso sin saldo ni tarjeta SIM local.
 - Decir claramente al operador:
-  - En España: *"¡Emergencia! Shock anafiláctico por alergia alimentaria. Necesitamos una ambulancia urgente en [Dirección]. Ya administramos adrenalina."*
-  - En Italia: *"Emergenza medica! Shock anafilattico da arachidi. Abbiamo bisogno di un'ambulanza urgente a [Indirizzo]."*
-  - En Francia: *"Urgence médicale! Choc anaphylactique aux arachides. Nous avons besoin d'une ambulance immédiatement au [Adresse]."*
+  - En España: *"¡Emergencia! Reacción alérgica severa por cacahuete/maní. Necesitamos una ambulancia urgente en [Dirección]."*
+  - En Italia: *"Emergenza medica! Reazione allergica grave alle arachidi. Abbiamo bisogno di un'ambulanza urgente a [Indirizzo]."*
+  - En Francia: *"Urgence médicale! Réaction allergique grave aux arachides. Nous avons besoin d'une ambulance immédiatement au [Adresse]."*
 
-### 3. Posición de Seguridad
+### 2. Posición de Seguridad
 - Acostar a la persona boca arriba con las piernas elevadas. Si tiene dificultad para respirar, sentarla inclinada hacia adelante. Nunca dejar a la persona sola.

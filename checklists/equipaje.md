@@ -5,6 +5,9 @@
 > **+ 1 Artículo Personal / Morral (40 x 30 x 20 cm)**  
 > *Sin maletas grandes de bodega para facilitar traslados en trenes bala, adoquines históricos y vuelos low-cost (Vueling / Wizz Air).*
 
+> [!TIP]
+> ✅ **MALETAS COMPRADAS (16 de octubre de 2026).** Se compraron maletines de mano y maletas de mano con las medidas de Vueling (55x40x20 / 40x30x20), que son compatibles con Avianca, Vueling y Wizz Air. **Este ítem está resuelto.**
+
 ---
 
 ## 📏 Dimensiones y Restricciones Estrictas
@@ -70,9 +73,8 @@ En Madrid, Roma, Barcelona, Milán y París en noviembre la temperatura oscila e
 ## 🎒 Morral de Mano (Siempre con nosotros)
 
 ### Salud y Alergias (¡INDISPENSABLE!)
-- [ ] **EpiPen (Autoinyector de Adrenalina):** En estuche térmico protector, con su fórmula médica en inglés/español.
 - [ ] **Antihistamínicos:** Loratadina / Cetirizina / Desloratadina en tabletas.
-- [ ] **Tarjetas de alergia al maní plastificadas:** 3 copias listas para entregar.
+- [ ] **Tarjetas de alergia al maní plastificadas:** 3 copias listas para entregar (ver `info/alergias.md`).
 - [ ] **Botiquín básico:** Ibuprofeno, acetaminofén, curas / band-aids para ampollas, antidiarreico, sales de rehidratación.
 
 ### Documentos y Dinero

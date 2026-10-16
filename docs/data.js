@@ -506,7 +506,7 @@ const budgetCategories = {
     color: "teal",
     items: [
       { id: "s1", name: "Seguro Médico Internacional (2 personas)", cop: 480000, eur: 120.00, status: "missing", notes: "Requisito Schengen" },
-      { id: "s2", name: "Maletas Trolley Cabina 55x35x20 (x2)", cop: 500000, eur: 125.00, status: "missing", notes: "Medidas exactas aerolíneas low-cost" },
+      { id: "s2", name: "Maletas Trolley Cabina 55x40x20 (x2) + Morrales 40x30x20", cop: 500000, eur: 125.00, status: "paid", notes: "Compradas el 16 oct. Medidas Vueling, compatibles con Avianca y Wizz" },
       { id: "s3", name: "eSIM de Datos para Europa (Holafly / Airalo)", cop: 180000, eur: 45.00, status: "estimated", notes: "Internet ilimitado en ruta" }
     ]
   }
@@ -650,13 +650,13 @@ const todoListData = [
   },
   {
     id: "todo-7",
-    task: "Comprar maletas trolley de cabina 55x35x20 cm (x2) y morrales 40x30x20 cm",
+    task: "Comprar maletas trolley de cabina y morrales de mano",
     category: "Equipaje",
     priority: "Alta",
-    completed: false,
-    dueDate: "2026-10-26",
+    completed: true,
+    dueDate: "2026-10-16",
     assignedTo: "Hillary & Alan",
-    notes: "Medir estrictamente incluyendo ruedas y manija para no pagar recargos en aerolíneas low-cost."
+    notes: "✅ Compradas el 16 de octubre. Medidas Vueling (55x40x20 trolley + 40x30x20 morral), compatibles con las 3 aerolíneas."
   },
   {
     id: "todo-8",
