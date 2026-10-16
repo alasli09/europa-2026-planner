@@ -234,7 +234,7 @@ const itineraryData = [
     transportStatus: "Tickets sencillos / caminata",
     transportCostCOP: 30000,
     accommodation: "Hospedaje Roma (Noche 2/4)",
-    accommodationStatus: "Reservado (Pago pendiente)",
+    accommodationStatus: "Pagado",
     accommodationCostCOP: 0,
     nights: 4,
     highlights: ["Coliseo Romano por dentro", "Foro Romano y Monte Palatino", "Monumento a Vittorio Emanuele II (Altar de la Patria)", "Cena y pastas en el bohemio Trastevere"],
@@ -254,7 +254,7 @@ const itineraryData = [
     transportStatus: "En presupuesto",
     transportCostCOP: 480000,
     accommodation: "Hospedaje Roma (Noche 3/4)",
-    accommodationStatus: "Reservado (Pago pendiente)",
+    accommodationStatus: "Pagado",
     accommodationCostCOP: 0,
     nights: 4,
     highlights: ["Mañana: Piazza dei Miracoli y Torre Inclinada de Pisa", "Mediodía/Tarde: Florencia - Duomo Santa Maria del Fiore", "Ponte Vecchio sobre el río Arno", "Regreso nocturno en tren a Roma"],
@@ -274,7 +274,7 @@ const itineraryData = [
     transportStatus: "Tickets metro",
     transportCostCOP: 30000,
     accommodation: "Hospedaje Roma (Noche 4/4)",
-    accommodationStatus: "Reservado (Pago pendiente)",
+    accommodationStatus: "Pagado",
     accommodationCostCOP: 0,
     nights: 4,
     highlights: ["Ciudad del Vaticano: Plaza y Basílica de San Pedro", "Museos Vaticanos y Capilla Sixtina", "Castillo de Sant'Angelo y puente de los Ángeles", "Panteón de Agripa y Piazza Navona"],
@@ -289,17 +289,17 @@ const itineraryData = [
     city: "Roma → París",
     country: "Francia",
     flag: "🇫🇷",
-    transport: "Vuelo Wizz Air Roma (FCO/CIA) → París (ORY/BVA)",
+    transport: "Vuelo Wizz Air Roma (FCO) → París (ORY)",
     transportType: "flight",
-    transportStatus: "En presupuesto",
-    transportCostCOP: 560000,
+    transportStatus: "Pagado",
+    transportCostCOP: 525467,
     accommodation: "Hospedaje París (Noche 1/3)",
-    accommodationStatus: "Reservado (Pago pendiente)",
+    accommodationStatus: "Pagado",
     accommodationCostCOP: 990522, // 3 noches total
     nights: 3,
     highlights: ["Vuelo hacia París la Ciudad Luz", "Check-in en alojamiento parisino", "Trocadéro y vistas de la Torre Eiffel iluminada", "Crucero nocturno por el Río Sena (Bateaux Mouches)"],
     weather: "París bastante frío (4°C - 10°C). Chaqueta abrigada y guantes.",
-    notes: "Alergia en Francia: ARACHIDES = Cacahuete. Hotel reservado pendiente de pago."
+    notes: "Alergia en Francia: ARACHIDES = Cacahuete. Hospedaje pagado."
   },
   {
     dayNumber: 15,
@@ -314,7 +314,7 @@ const itineraryData = [
     transportStatus: "Tickets metro",
     transportCostCOP: 45000,
     accommodation: "Hospedaje París (Noche 2/3)",
-    accommodationStatus: "Reservado (Pago pendiente)",
+    accommodationStatus: "Pagado",
     accommodationCostCOP: 0,
     nights: 3,
     highlights: ["Museo del Louvre (Mona Lisa, Victoria de Samotracia)", "Jardines de las Tullerías", "Place de la Concorde y Campos Elíseos", "Arco de Triunfo con mirador superior"],
@@ -334,7 +334,7 @@ const itineraryData = [
     transportStatus: "Tickets metro",
     transportCostCOP: 40000,
     accommodation: "Hospedaje París (Noche 3/3)",
-    accommodationStatus: "Reservado (Pago pendiente)",
+    accommodationStatus: "Pagado",
     accommodationCostCOP: 0,
     nights: 3,
     highlights: ["Barrio bohemio de Montmartre", "Basílica del Sagrado Corazón (Sacré-Cœur)", "Place du Tertre (pintores callejeros)", "Catedral de Notre-Dame y Barrio Latino"],
@@ -349,17 +349,17 @@ const itineraryData = [
     city: "París → Madrid",
     country: "España",
     flag: "🇪🇸",
-    transport: "Vuelo París (ORY/CDG) → Madrid (MAD)",
+    transport: "Vuelo París → Madrid (MAD)",
     transportType: "flight",
-    transportStatus: "Pendiente por comprar",
-    transportCostCOP: 640000,
+    transportStatus: "Pagado",
+    transportCostCOP: 631400,
     accommodation: "Alojamiento Madrid II (Noche 1/3)",
-    accommodationStatus: "Pendiente por reservar",
-    accommodationCostCOP: 1100000, // estimado 3 noches
+    accommodationStatus: "Pagado",
+    accommodationCostCOP: 929547, // 3 noches total
     nights: 3,
     highlights: ["Vuelo de regreso a España", "Llegada y check-in en Madrid", "Tarde de compras o paseo por Malasaña y Chueca", "Cena de reencuentro en Madrid"],
     weather: "Madrid frío (6°C - 13°C).",
-    notes: "URGENTE: Comprar billetes de vuelo París-Madrid y reservar este hospedaje."
+    notes: "Vuelo París-Madrid y alojamiento Madrid II ya comprados y pagados."
   },
   {
     dayNumber: 18,
@@ -374,7 +374,7 @@ const itineraryData = [
     transportStatus: "En presupuesto",
     transportCostCOP: 30000,
     accommodation: "Alojamiento Madrid II (Noche 2/3)",
-    accommodationStatus: "Pendiente por reservar",
+    accommodationStatus: "Pagado",
     accommodationCostCOP: 0,
     nights: 3,
     highlights: ["Palacio Real de Madrid y Catedral de la Almudena", "Jardines de Sabatini", "Templo de Debod al atardecer", "Gourmet Experience en Corte Inglés Callao"],
@@ -394,32 +394,32 @@ const itineraryData = [
     transportStatus: "En presupuesto",
     transportCostCOP: 30000,
     accommodation: "Alojamiento Madrid II (Noche 3/3)",
-    accommodationStatus: "Pendiente por reservar",
+    accommodationStatus: "Pagado",
     accommodationCostCOP: 0,
     nights: 3,
     highlights: ["Día libre de compras: Barrio de Salamanca, Fuencarral y Gran Vía", "Recuerdos y souvenirs para la familia en Colombia", "Cena especial de despedida europea"],
     weather: "Fresco (6°C - 13°C).",
-    notes: "Organizar maletas y dejar todo pesado/medido (55x35x20) para el vuelo de mañana."
+    notes: "Organizar maletas y dejar todo pesado/medido para el vuelo de mañana."
   },
   {
     dayNumber: 20,
     dayCode: "D20",
     date: "2026-11-20",
     displayDate: "Vie 20 Nov",
-    city: "Madrid → Bogotá → Barranquilla",
+    city: "Madrid → Bogotá",
     country: "Colombia",
     flag: "🇨🇴",
-    transport: "Vuelo Avianca MAD → BOG y conexión BOG → BAQ",
+    transport: "Vuelo Avianca MAD → BOG (Llegada 11:40)",
     transportType: "flight",
-    transportStatus: "MAD-BOG Pagado / Conexión por comprar",
-    transportCostCOP: 400000,
-    accommodation: "¡De vuelta en casa! Barranquilla 🏠",
-    accommodationStatus: "Propio",
-    accommodationCostCOP: 0,
-    nights: 0,
-    highlights: ["Traslado a Barajas Terminal 4", "Trámite de devolución de impuestos (TAX FREE / DIVA)", "Vuelo transatlántico de vuelta a Colombia", "Llegada feliz a Barranquilla"],
-    weather: "Retorno al calor caribeño de Curramba (30°C).",
-    notes: "Llegar a Barajas 3.5 horas antes para sellar Tax Free en máquinas DIVA."
+    transportStatus: "MAD-BOG Pagado / BOG-BAQ por comprar",
+    transportCostCOP: 0,
+    accommodation: "Hotel en Bogotá (Noche 20 al 21 nov)",
+    accommodationStatus: "Pendiente por comprar / reservar",
+    accommodationCostCOP: 120000,
+    nights: 1,
+    highlights: ["Traslado a Barajas Terminal 4", "Trámite de devolución de impuestos (TAX FREE / DIVA)", "Vuelo transatlántico de vuelta a Colombia (AV27)", "Llegada a Bogotá y descanso de noche"],
+    weather: "Bogotá fría (9°C - 16°C).",
+    notes: "Pendiente: comprar noche en Bogotá y tiquete BOG-BAQ de regreso."
   }
 ];
 
@@ -430,10 +430,11 @@ const budgetCategories = {
     color: "indigo",
     items: [
       { id: "v1", name: "Avianca BOG-MAD-BOG (2 personas)", cop: 6125542, eur: 1531.39, status: "paid", notes: "Comprado y confirmado" },
-      { id: "v2", name: "Vueling Barcelona → Milán (2 personas)", cop: 600000, eur: 150.00, status: "pending", notes: "En presupuesto, por confirmar" },
-      { id: "v3", name: "Wizz Air Roma → París (2 personas)", cop: 560000, eur: 140.00, status: "pending", notes: "En presupuesto, por confirmar" },
-      { id: "v4", name: "Vuelos Barranquilla ↔ Bogotá (2 personas i/v)", cop: 800000, eur: 200.00, status: "missing", notes: "Por comprar" },
-      { id: "v5", name: "Vuelo París → Madrid (Nov 17 - 2 personas)", cop: 640000, eur: 160.00, status: "missing", notes: "Por comprar urgente" }
+      { id: "v2", name: "Vueling Barcelona → Milán (2 personas)", cop: 238744, eur: 59.69, status: "paid", notes: "Trolley 10 kg incluido" },
+      { id: "v3", name: "Wizz Air Roma → París (2 personas)", cop: 525467, eur: 131.37, status: "paid", notes: "Priority pagado, trolley incluido" },
+      { id: "v4", name: "Vuelo Barranquilla → Bogotá (Nov 1 - 2 personas)", cop: 245232, eur: 61.31, status: "paid", notes: "Comprado y confirmado" },
+      { id: "v5", name: "Vuelo París → Madrid (Nov 17 - 2 personas)", cop: 631400, eur: 157.85, status: "paid", notes: "Comprado y pagado" },
+      { id: "v6", name: "Vuelo Bogotá → Barranquilla (Nov 21 - 2 personas)", cop: 400000, eur: 100.00, status: "missing", notes: "⚠️ PENDIENTE POR COMPRAR" }
     ]
   },
   trenes: {
@@ -456,9 +457,10 @@ const budgetCategories = {
       { id: "h2", name: "Madrid I (3 noches - Nov 2-5)", cop: 1065613, eur: 266.40, status: "paid", notes: "Pagado" },
       { id: "h3", name: "Barcelona (2 noches - Nov 5-7)", cop: 763579, eur: 190.90, status: "paid", notes: "Pagado" },
       { id: "h4", name: "Milán (3 noches - Nov 7-10)", cop: 0, eur: 0.00, status: "paid", notes: "Casa de amigo ($0 COP)" },
-      { id: "h5", name: "Roma (4 noches - Nov 10-14)", cop: 1091900, eur: 272.98, status: "reserved", notes: "Reservado, pago pendiente" },
-      { id: "h6", name: "París (3 noches - Nov 14-17)", cop: 990522, eur: 247.63, status: "reserved", notes: "Reservado, pago pendiente" },
-      { id: "h7", name: "Madrid II (3 noches - Nov 17-20)", cop: 1100000, eur: 275.00, status: "missing", notes: "Por reservar (TBD)" }
+      { id: "h5", name: "Roma (4 noches - Nov 10-14)", cop: 1091900, eur: 272.98, status: "paid", notes: "Pagado" },
+      { id: "h6", name: "París (3 noches - Nov 14-17)", cop: 990522, eur: 247.63, status: "paid", notes: "Pagado" },
+      { id: "h7", name: "Madrid II (3 noches - Nov 17-20)", cop: 929547, eur: 232.39, status: "paid", notes: "Pagado" },
+      { id: "h8", name: "Bogotá regreso (1 noche - Nov 20)", cop: 120000, eur: 30.00, status: "missing", notes: "⚠️ PENDIENTE POR RESERVAR" }
     ]
   },
   experiencias: {
@@ -584,39 +586,145 @@ const expensesData = [
     method: "Tarjeta de Crédito",
     status: "Pagado",
     city: "Italia"
+  },
+  {
+    id: "g-007",
+    date: "2026-09-15",
+    description: "Vuelo Vueling Barcelona → Milán (VY6044, 2 pax)",
+    category: "Vuelos",
+    amountCOP: 238744,
+    amountEUR: 59.69,
+    payer: "Alan / Hillary",
+    method: "Tarjeta de Crédito",
+    status: "Pagado",
+    city: "España / Italia"
+  },
+  {
+    id: "g-008",
+    date: "2026-09-15",
+    description: "Vuelo Wizz Air Roma → París (W4 6215 Priority, 2 pax)",
+    category: "Vuelos",
+    amountCOP: 525467,
+    amountEUR: 131.37,
+    payer: "Alan / Hillary",
+    method: "Tarjeta de Crédito",
+    status: "Pagado",
+    city: "Italia / Francia"
+  },
+  {
+    id: "g-009",
+    date: "2026-09-15",
+    description: "Vuelo Barranquilla → Bogotá (Nov 1, 2 pax)",
+    category: "Vuelos",
+    amountCOP: 245232,
+    amountEUR: 61.31,
+    payer: "Alan",
+    method: "Tarjeta de Crédito",
+    status: "Pagado",
+    city: "Colombia"
+  },
+  {
+    id: "g-010",
+    date: "2026-10-07",
+    description: "Alojamiento París - 3 noches (Nov 14-17)",
+    category: "Hospedaje",
+    amountCOP: 990522,
+    amountEUR: 247.63,
+    payer: "Alan / Hillary",
+    method: "Tarjeta de Crédito",
+    status: "Pagado",
+    city: "París"
+  },
+  {
+    id: "g-011",
+    date: "2026-10-10",
+    description: "Alojamiento Roma - 4 noches (Nov 10-14)",
+    category: "Hospedaje",
+    amountCOP: 1091900,
+    amountEUR: 272.98,
+    payer: "Alan / Hillary",
+    method: "Tarjeta de Crédito",
+    status: "Pagado",
+    city: "Roma"
+  },
+  {
+    id: "g-012",
+    date: "2026-10-12",
+    description: "Vuelo París → Madrid (Nov 17, 2 pax)",
+    category: "Vuelos",
+    amountCOP: 631400,
+    amountEUR: 157.85,
+    payer: "Alan / Hillary",
+    method: "Tarjeta de Crédito",
+    status: "Pagado",
+    city: "Francia / España"
+  },
+  {
+    id: "g-013",
+    date: "2026-10-14",
+    description: "Alojamiento Madrid II - 3 noches (Nov 17-20)",
+    category: "Hospedaje",
+    amountCOP: 929547,
+    amountEUR: 232.39,
+    payer: "Alan / Hillary",
+    method: "Tarjeta de Crédito",
+    status: "Pagado",
+    city: "Madrid"
+  },
+  {
+    id: "g-014",
+    date: "2026-10-16",
+    description: "Maletas Trolley Cabina + Morrales (Medidas Vueling)",
+    category: "Equipaje",
+    amountCOP: 500000,
+    amountEUR: 125.00,
+    payer: "Alan / Hillary",
+    method: "Tarjeta Débito/Crédito",
+    status: "Pagado",
+    city: "Barranquilla"
   }
 ];
 
 const todoListData = [
   {
     id: "todo-1",
-    task: "Comprar vuelos Barranquilla - Bogotá (ida Nov 1 y vuelta Nov 20)",
+    task: "Comprar vuelo Bogotá → Barranquilla de regreso (Nov 21)",
     category: "Transporte",
     priority: "Alta",
     completed: false,
     dueDate: "2026-10-25",
     assignedTo: "Alan",
-    notes: "Coordinar conexión con el vuelo Avianca transatlántico."
+    notes: "⚠️ Falta comprar el tiquete de regreso BOG-BAQ (el de ida BAQ-BOG Nov 1 ya está comprado por $245.232)."
+  },
+  {
+    id: "todo-1b",
+    task: "Reservar 1 noche de hotel en Bogotá de regreso (Nov 20 al 21)",
+    category: "Alojamiento",
+    priority: "Alta",
+    completed: false,
+    dueDate: "2026-10-28",
+    assignedTo: "Alan & Hillary",
+    notes: "⚠️ Falta reservar la noche en Bogotá al regresar de Madrid el 20 de noviembre."
   },
   {
     id: "todo-2",
     task: "Reservar hotel/Airbnb Madrid II (3 noches: Nov 17-20)",
     category: "Alojamiento",
     priority: "Alta",
-    completed: false,
-    dueDate: "2026-10-24",
-    assignedTo: "Hillary",
-    notes: "Buscar zona céntrica (Gran Vía, Malasaña, Sol o Salamanca) con cancelación gratis."
+    completed: true,
+    dueDate: "2026-10-14",
+    assignedTo: "Hillary & Alan",
+    notes: "✅ Ya reservado y pagado ($929.547 COP)."
   },
   {
     id: "todo-3",
     task: "Comprar vuelo París → Madrid (Nov 17)",
     category: "Transporte",
     priority: "Alta",
-    completed: false,
-    dueDate: "2026-10-23",
-    assignedTo: "Alan",
-    notes: "Revisar Iberia, Transavia o Air France. Atento a franquicia de equipaje de mano."
+    completed: true,
+    dueDate: "2026-10-12",
+    assignedTo: "Alan & Hillary",
+    notes: "✅ Comprado y pagado ($631.400 COP)."
   },
   {
     id: "todo-4",

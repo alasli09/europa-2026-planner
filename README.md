@@ -77,35 +77,34 @@
 
 *Tasa de referencia fija para el viaje:* **1 EUR = 4.000 COP**
 
-### 🟢 Pagado hasta la fecha
+### 🟢 Pagado hasta la fecha (¡Casi todo listo!)
 | Concepto | Categoría | Monto (COP) | Monto (EUR) |
 |:---|:---|---:|---:|
 | Vuelo Internacional Avianca BOG-MAD-BOG (2 pax) | Vuelos | $6.125.542 | 1.531,39 € |
-| Tren Iryo Madrid - Barcelona (2 pax) | Trenes | $292.240 | 73,06 € |
-| Tren Trenitalia Milán - Roma (2 pax) | Trenes | $303.200 | 75,80 € |
+| Vuelo Barranquilla → Bogotá (Nov 1, 2 pax) | Vuelos | $245.232 | 61,31 € |
+| Tren Iryo Madrid - Barcelona (2 pax) | Trenes | $280.637 | 70,16 € |
+| Vuelo Vueling Barcelona → Milán (VY6044, 2 pax) | Vuelos | $238.744 | 59,69 € |
+| Tren Trenitalia Milán - Roma (2 pax) | Trenes | $288.050 | 72,01 € |
+| Vuelo Wizz Air Roma → París (W4 6215, 2 pax) | Vuelos | $525.467 | 131,37 € |
+| Vuelo París → Madrid (Nov 17, 2 pax) | Vuelos | $631.400 | 157,85 € |
 | Alojamiento Bogotá (1 noche - Nov 1) | Hospedaje | $105.736 | 26,43 € |
 | Alojamiento Madrid I (3 noches - Nov 2-5) | Hospedaje | $1.065.613 | 266,40 € |
 | Alojamiento Barcelona (2 noches - Nov 5-7) | Hospedaje | $763.579 | 190,90 € |
 | Alojamiento Milán (3 noches - Casa de amigo) | Hospedaje | $0 | 0,00 € |
-| **TOTAL YA PAGADO** | — | **$8.655.910** | **2.163,98 €** |
+| Alojamiento Roma (4 noches - Nov 10-14) | Hospedaje | $1.091.900 | 272,98 € |
+| Alojamiento París (3 noches - Nov 14-17) | Hospedaje | $990.522 | 247,63 € |
+| Alojamiento Madrid II (3 noches - Nov 17-20) | Hospedaje | $929.547 | 232,39 € |
+| Maletas Trolley Cabina + Morrales (Medidas Vueling) | Equipaje | $500.000 | 125,00 € |
+| **TOTAL YA PAGADO / ASEGURADO** | — | **$13.781.969** | **3.445,49 €** |
 
-### 🟡 Reservado (Pago Pendiente en Destino/Fecha límite)
-| Concepto | Monto (COP) | Monto (EUR) | Estado |
-|:---|---:|---:|:---|
-| Hospedaje Roma (4 noches - Nov 10-14) | $1.091.900 | 272,98 € | Reservado en Booking / Airbnb |
-| Hospedaje París (3 noches - Nov 14-17) | $990.522 | 247,63 € | Reservado en Booking / Airbnb |
-| **TOTAL RESERVADO PENDIENTE** | **$2.082.422** | **520,61 €** | Por debitar antes/al llegar |
+### 🔴 Pendiente Único por Comprar / Reservar
+- [ ] **Vuelo Bogotá → Barranquilla** de regreso (Nov 21)
+- [ ] **Alojamiento Bogotá** (1 noche de regreso - Nov 20 al 21)
 
-### 🔴 Pendiente por Comprar / Reservar
-- [ ] Vuelos Barranquilla - Bogotá - Barranquilla (2 personas)
-- [ ] Vuelo Vueling Barcelona - Milán
-- [ ] Vuelo Wizz Air Roma - París
-- [ ] Vuelo París - Madrid (Nov 17)
-- [ ] Hospedaje Madrid II (3 noches - Nov 17-20)
-- [ ] Entradas Inter de Milán vs Como
+### ⚪ Planes y Actividades por Definir en Destino
+- [ ] Entradas Inter de Milán vs Como (Nov 7 u 8)
 - [ ] Tour Estadio Santiago Bernabéu & Tour San Siro
-- [ ] Seguro Médico Internacional de Viaje
-- [ ] Equipaje trolley cabina (55x35x20 cm)
+- [ ] Seguro Médico Internacional de Viaje (Cobertura Schengen)
 
 ---
 
