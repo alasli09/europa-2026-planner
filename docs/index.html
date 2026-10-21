@@ -104,25 +104,36 @@
         </button>
       </div>
 
-      <!-- RESUMEN DE CUENTAS: ALAN vs HILLARY (QUIÉN PAGÓ Y CUÁNTO DEBE CADA UNO) -->
-      <div class="bg-surface-card rounded-2xl p-4 border border-surface-border space-y-3">
+      <!-- RESUMEN DE CUENTAS: ALAN vs HILLARY (TOCA PARA ABRIR Y FILTRAR GASTOS) -->
+      <div id="cardBalanceAlanHill" onclick="scrollToExpenses('Todos')" class="bg-surface-card rounded-2xl p-4 border border-surface-border space-y-3 cursor-pointer hover:border-brand-500/60 transition shadow-lg relative group">
         <div class="flex items-center justify-between border-b border-surface-border/60 pb-2">
           <span class="text-xs font-bold text-white flex items-center gap-1.5">
             <span>⚖️</span> Balance Alan & Hillary (Bitácora)
           </span>
-          <span id="debtSummaryBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-surface-dark border border-surface-border text-slate-300">
-            Al día
-          </span>
+          <div class="flex items-center gap-1.5">
+            <span id="debtSummaryBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-surface-dark border border-surface-border text-slate-300">
+              Al día
+            </span>
+            <span class="text-[10px] text-brand-400 font-bold flex items-center gap-0.5 group-hover:underline">
+              Ver lista ▾
+            </span>
+          </div>
         </div>
 
         <div class="grid grid-cols-2 gap-2 text-center text-xs">
-          <div class="bg-surface-dark p-2.5 rounded-xl border border-surface-border/50">
-            <p class="text-[10px] text-slate-400 font-semibold">Desembolsó Alan</p>
+          <div onclick="event.stopPropagation(); scrollToExpenses('Alan')" class="bg-surface-dark p-2.5 rounded-xl border border-surface-border/50 hover:border-indigo-500 active:scale-95 transition">
+            <div class="flex items-center justify-between mb-0.5">
+              <p class="text-[10px] text-indigo-400 font-bold">👨 Desembolsó Alan</p>
+              <span class="text-[8px] bg-indigo-500/20 text-indigo-300 px-1 py-0.5 rounded font-semibold">Ver ▾</span>
+            </div>
             <p id="balAlanPaid" class="text-xs font-extrabold text-indigo-300 mt-0.5">$0</p>
             <p class="text-[10px] text-slate-400 mt-1">Gasto real: <span id="balAlanShare" class="text-slate-200 font-bold">$0</span></p>
           </div>
-          <div class="bg-surface-dark p-2.5 rounded-xl border border-surface-border/50">
-            <p class="text-[10px] text-slate-400 font-semibold">Desembolsó Hillary</p>
+          <div onclick="event.stopPropagation(); scrollToExpenses('Hillary')" class="bg-surface-dark p-2.5 rounded-xl border border-surface-border/50 hover:border-pink-500 active:scale-95 transition">
+            <div class="flex items-center justify-between mb-0.5">
+              <p class="text-[10px] text-pink-400 font-bold">👩 Desembolsó Hillary</p>
+              <span class="text-[8px] bg-pink-500/20 text-pink-300 px-1 py-0.5 rounded font-semibold">Ver ▾</span>
+            </div>
             <p id="balHillPaid" class="text-xs font-extrabold text-pink-300 mt-0.5">$0</p>
             <p class="text-[10px] text-slate-400 mt-1">Gasto real: <span id="balHillShare" class="text-slate-200 font-bold">$0</span></p>
           </div>
@@ -131,6 +142,11 @@
         <!-- Conclusión de deuda en lenguaje natural -->
         <div id="debtConclusionBox" class="bg-surface-darker/70 p-2.5 rounded-xl border border-surface-border/40 text-center text-xs font-bold text-slate-300">
           Cuentas al día
+        </div>
+
+        <!-- Indicador visual explícito -->
+        <div class="flex items-center justify-center gap-1.5 pt-0.5 text-[11px] text-brand-400 font-bold">
+          <span>👇 Toca aquí para ver todos los gastos anotados</span>
         </div>
       </div>
 
@@ -147,17 +163,46 @@
         </div>
       </div>
 
-      <!-- Filtro rápido de bitácora -->
-      <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1 text-xs font-semibold pt-1">
-        <button onclick="filterExpenses('Todas')" class="filter-btn active bg-brand-600 text-white px-3 py-1.5 rounded-xl transition" data-city="Todas">Todos</button>
-        <button onclick="filterExpenses('España')" class="filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-city="España">🇪🇸 España</button>
-        <button onclick="filterExpenses('Italia')" class="filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-city="Italia">🇮🇹 Italia</button>
-        <button onclick="filterExpenses('Francia')" class="filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-city="Francia">🇫🇷 Francia</button>
-        <button onclick="filterExpenses('Colombia')" class="filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-city="Colombia">🇨🇴 Colombia</button>
+      <!-- ENCABEZADO Y CONTROLES DE LA LISTA DE GASTOS -->
+      <div id="expensesSectionHeader" class="pt-2 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+              <span>🧾</span> Lista de Gastos
+            </h3>
+            <span id="expensesTotalBadge" class="text-[10px] bg-brand-500/20 text-brand-300 font-bold px-2 py-0.5 rounded-full">0 gastos</span>
+          </div>
+          <div id="activePayerFilterIndicator" class="text-[10px] font-semibold text-slate-400">
+            <!-- Dinámico -->
+          </div>
+        </div>
+
+        <!-- Buscador de Gastos en Bitácora -->
+        <div class="relative">
+          <input type="text" id="expenseSearchInput" oninput="handleExpenseSearch(this.value)" placeholder="🔍 Buscar gasto (ej: comida, taxi, metro, café)..." class="w-full bg-surface-dark border border-surface-border text-white text-xs rounded-xl pl-3 pr-8 py-2 focus:border-brand-500 focus:outline-none">
+          <button id="clearExpenseSearch" onclick="clearExpenseSearchInput()" class="hidden absolute right-2.5 top-2 text-slate-400 hover:text-white text-xs">✕</button>
+        </div>
+
+        <!-- Filtro por Pagador -->
+        <div class="flex items-center gap-1.5 text-xs">
+          <span class="text-[10px] text-slate-400 font-semibold shrink-0">Pagó:</span>
+          <button onclick="setExpensePayerFilter('Todos')" id="ep-Todos" class="payer-filter-btn active bg-brand-600 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg transition">Todos</button>
+          <button onclick="setExpensePayerFilter('Alan')" id="ep-Alan" class="payer-filter-btn bg-surface-dark text-indigo-300 border border-surface-border text-[11px] font-semibold px-2.5 py-1 rounded-lg transition">👨 Alan</button>
+          <button onclick="setExpensePayerFilter('Hillary')" id="ep-Hillary" class="payer-filter-btn bg-surface-dark text-pink-300 border border-surface-border text-[11px] font-semibold px-2.5 py-1 rounded-lg transition">👩 Hillary</button>
+        </div>
+
+        <!-- Filtro rápido de bitácora por país -->
+        <div class="flex gap-1.5 overflow-x-auto hide-scrollbar pb-1 text-xs font-semibold">
+          <button onclick="filterExpenses('Todas')" class="filter-btn active bg-brand-600 text-white px-2.5 py-1 rounded-lg transition" data-city="Todas">Todos países</button>
+          <button onclick="filterExpenses('España')" class="filter-btn bg-surface-card text-slate-300 px-2.5 py-1 rounded-lg border border-surface-border transition" data-city="España">🇪🇸 España</button>
+          <button onclick="filterExpenses('Italia')" class="filter-btn bg-surface-card text-slate-300 px-2.5 py-1 rounded-lg border border-surface-border transition" data-city="Italia">🇮🇹 Italia</button>
+          <button onclick="filterExpenses('Francia')" class="filter-btn bg-surface-card text-slate-300 px-2.5 py-1 rounded-lg border border-surface-border transition" data-city="Francia">🇫🇷 Francia</button>
+          <button onclick="filterExpenses('Colombia')" class="filter-btn bg-surface-card text-slate-300 px-2.5 py-1 rounded-lg border border-surface-border transition" data-city="Colombia">🇨🇴 Colombia</button>
+        </div>
       </div>
 
       <!-- Lista de Gastos Registrados -->
-      <div id="expensesList" class="space-y-2.5">
+      <div id="expensesList" class="space-y-2.5 transition duration-300">
         <!-- Renderizado dinámicamente con JavaScript -->
       </div>
 
@@ -222,7 +267,7 @@
     </section>
 
     <!-- SECCIÓN 3: PRESUPUESTO BASE CONSOLIDADO -->
-    <section id="tab-presupuesto" class="tab-content hidden space-y-4">
+    <section id="tab-presupuesto" class="tab-content hidden space-y-3">
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-base font-bold text-white flex items-center gap-1.5">
@@ -235,8 +280,41 @@
         </button>
       </div>
 
+      <!-- Buscador en tiempo real de presupuesto -->
+      <div class="relative">
+        <input type="text" id="budgetSearchInput" oninput="handleBudgetSearch(this.value)" placeholder="🔍 Buscar vuelo, airbnb, roma, tren, cuota..." class="w-full bg-surface-dark border border-surface-border text-white text-xs rounded-xl pl-3 pr-8 py-2.5 focus:border-brand-500 focus:outline-none">
+        <button id="clearBudgetSearch" onclick="clearBudgetSearchInput()" class="hidden absolute right-2.5 top-2.5 text-slate-400 hover:text-white text-xs">✕</button>
+      </div>
+
+      <!-- Filtros rápidos de estado y categoría -->
+      <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1 text-xs font-semibold">
+        <button onclick="setBudgetFilter('todos')" id="bf-todos" class="budget-filter-btn active bg-brand-600 text-white px-3 py-1.5 rounded-xl transition whitespace-nowrap">
+          Todos (<span id="bCountTodos">0</span>)
+        </button>
+        <button onclick="setBudgetFilter('pendiente')" id="bf-pendiente" class="budget-filter-btn bg-surface-card text-amber-300 px-3 py-1.5 rounded-xl border border-amber-500/30 hover:border-amber-500/60 transition whitespace-nowrap flex items-center gap-1">
+          <span>⏳</span> Solo Pendientes (<span id="bCountPendiente">0</span>)
+        </button>
+        <button onclick="setBudgetFilter('pagado')" id="bf-pagado" class="budget-filter-btn bg-surface-card text-emerald-300 px-3 py-1.5 rounded-xl border border-emerald-500/30 hover:border-emerald-500/60 transition whitespace-nowrap flex items-center gap-1">
+          <span>✅</span> Solo Pagados (<span id="bCountPagado">0</span>)
+        </button>
+        <button onclick="setBudgetFilter('transportes')" id="bf-transportes" class="budget-filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition whitespace-nowrap flex items-center gap-1">
+          <span>✈️</span> Transportes
+        </button>
+        <button onclick="setBudgetFilter('alojamientos')" id="bf-alojamientos" class="budget-filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition whitespace-nowrap flex items-center gap-1">
+          <span>🛏️</span> Alojamientos
+        </button>
+        <button onclick="setBudgetFilter('otrosFijos')" id="bf-otrosFijos" class="budget-filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition whitespace-nowrap flex items-center gap-1">
+          <span>🎟️</span> Experiencias
+        </button>
+      </div>
+
+      <!-- Banner dinámico del filtro activo -->
+      <div id="budgetFilterSummaryBanner" class="p-2.5 rounded-xl text-xs bg-surface-dark border border-surface-border/60">
+        <!-- JS -->
+      </div>
+
       <!-- Desglose Transportes -->
-      <div class="bg-surface-card rounded-2xl p-4 border border-surface-border space-y-3">
+      <div id="cardTransportes" class="bg-surface-card rounded-2xl p-4 border border-surface-border space-y-3 transition">
         <div class="flex items-center justify-between border-b border-surface-border/60 pb-2">
           <span class="text-xs font-bold text-indigo-400 flex items-center gap-1.5">
             <span>✈️</span> Transportes y Vuelos
@@ -249,7 +327,7 @@
       </div>
 
       <!-- Desglose Alojamientos -->
-      <div class="bg-surface-card rounded-2xl p-4 border border-surface-border space-y-3">
+      <div id="cardAlojamientos" class="bg-surface-card rounded-2xl p-4 border border-surface-border space-y-3 transition">
         <div class="flex items-center justify-between border-b border-surface-border/60 pb-2">
           <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
             <span>🛏️</span> Alojamientos (18 noches)
@@ -262,7 +340,7 @@
       </div>
 
       <!-- Desglose Otros Fijos -->
-      <div class="bg-surface-card rounded-2xl p-4 border border-surface-border space-y-3">
+      <div id="cardOtrosFijos" class="bg-surface-card rounded-2xl p-4 border border-surface-border space-y-3 transition">
         <div class="flex items-center justify-between border-b border-surface-border/60 pb-2">
           <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
             <span>🎟️</span> Experiencias & Maletas Compradas
@@ -694,7 +772,11 @@
 
     // Variables en memoria
     let currentCityFilter = "Todas";
+    let currentPayerFilter = "Todos";
+    let currentExpenseSearchQuery = "";
     let currentCatCityFilter = "Madrid";
+    let currentBudgetFilter = "todos";
+    let currentBudgetSearchQuery = "";
     let recordedExpenses = [];
     let currentBudget = null;
     let scheduledPlans = [];
@@ -1003,27 +1085,148 @@
       }
     }
 
-    // 4. Renderizar Bitácora
+    // 4. Renderizar Bitácora con Búsqueda y Filtros
+    function scrollToExpenses(payer) {
+      switchTab('bitacora');
+      if (payer && payer !== 'all') {
+        currentPayerFilter = payer;
+      } else {
+        currentPayerFilter = 'Todos';
+      }
+      updatePayerFilterButtons();
+      renderExpensesList();
+
+      setTimeout(() => {
+        const header = document.getElementById("expensesSectionHeader");
+        if (header) {
+          header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        const list = document.getElementById("expensesList");
+        if (list) {
+          list.classList.add("ring-2", "ring-brand-500", "p-1.5", "rounded-2xl");
+          setTimeout(() => {
+            list.classList.remove("ring-2", "ring-brand-500", "p-1.5");
+          }, 1500);
+        }
+      }, 100);
+    }
+
+    function setExpensePayerFilter(payer) {
+      currentPayerFilter = payer;
+      updatePayerFilterButtons();
+      renderExpensesList();
+    }
+
+    function updatePayerFilterButtons() {
+      ["Todos", "Alan", "Hillary"].forEach(p => {
+        const btn = document.getElementById("ep-" + p);
+        if (!btn) return;
+        if (p === currentPayerFilter) {
+          btn.classList.add("bg-brand-600", "text-white");
+          btn.classList.remove("bg-surface-dark", "text-indigo-300", "text-pink-300", "text-slate-300");
+        } else {
+          btn.classList.remove("bg-brand-600", "text-white");
+          btn.classList.add("bg-surface-dark");
+          if (p === "Alan") btn.classList.add("text-indigo-300");
+          else if (p === "Hillary") btn.classList.add("text-pink-300");
+          else btn.classList.add("text-slate-300");
+        }
+      });
+    }
+
+    function handleExpenseSearch(query) {
+      currentExpenseSearchQuery = query || "";
+      const clearBtn = document.getElementById("clearExpenseSearch");
+      if (clearBtn) {
+        if (currentExpenseSearchQuery.trim().length > 0) clearBtn.classList.remove("hidden");
+        else clearBtn.classList.add("hidden");
+      }
+      renderExpensesList();
+    }
+
+    function clearExpenseSearchInput() {
+      const input = document.getElementById("expenseSearchInput");
+      if (input) input.value = "";
+      handleExpenseSearch("");
+    }
+
+    function resetExpenseFilters() {
+      currentCityFilter = "Todas";
+      currentPayerFilter = "Todos";
+      currentExpenseSearchQuery = "";
+      const searchInput = document.getElementById("expenseSearchInput");
+      if (searchInput) searchInput.value = "";
+      const clearBtn = document.getElementById("clearExpenseSearch");
+      if (clearBtn) clearBtn.classList.add("hidden");
+
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        if (btn.getAttribute("data-city") === "Todas") {
+          btn.classList.add("bg-brand-600", "text-white");
+          btn.classList.remove("bg-surface-card", "text-slate-300");
+        } else {
+          btn.classList.remove("bg-brand-600", "text-white");
+          btn.classList.add("bg-surface-card", "text-slate-300");
+        }
+      });
+      updatePayerFilterButtons();
+      renderExpensesList();
+    }
+
     function renderExpensesList() {
       const container = document.getElementById("expensesList");
+      const badge = document.getElementById("expensesTotalBadge");
+      const indicator = document.getElementById("activePayerFilterIndicator");
+
       const filtered = recordedExpenses.filter(e => {
+        // Filtro por país
         const country = e.pais || getCountryByCity(e.ciudad);
-        if (currentCityFilter === "Todas") return true;
-        return country === currentCityFilter;
+        const matchCountry = (currentCityFilter === "Todas") || (country === currentCityFilter);
+
+        // Filtro por pagador
+        const matchPayer = (currentPayerFilter === "Todos") || (e.pagador === currentPayerFilter);
+
+        // Filtro por texto de búsqueda
+        const q = currentExpenseSearchQuery.trim().toLowerCase();
+        const matchSearch = !q || (
+          (e.desc && e.desc.toLowerCase().includes(q)) ||
+          (e.ciudad && e.ciudad.toLowerCase().includes(q)) ||
+          (e.cat && e.cat.toLowerCase().includes(q)) ||
+          (e.metodo && e.metodo.toLowerCase().includes(q)) ||
+          (e.deudor && e.deudor.toLowerCase().includes(q))
+        );
+
+        return matchCountry && matchPayer && matchSearch;
       });
+
+      if (badge) {
+        badge.innerText = `${filtered.length} gasto${filtered.length === 1 ? '' : 's'}`;
+      }
+
+      if (indicator) {
+        if (currentPayerFilter !== "Todos" || currentCityFilter !== "Todas" || currentExpenseSearchQuery.trim().length > 0) {
+          indicator.innerHTML = `
+            <button onclick="resetExpenseFilters()" class="text-[10px] text-brand-400 hover:text-white underline flex items-center gap-1">
+              <span>Filtro activo</span> • <span>Limpiar ✕</span>
+            </button>
+          `;
+        } else {
+          indicator.innerHTML = "";
+        }
+      }
 
       if (filtered.length === 0) {
         container.innerHTML = `
-          <div class="text-center py-6 bg-surface-card/40 rounded-2xl border border-surface-border/50 text-slate-400">
-            <span class="text-2xl block mb-1">☕</span>
-            <p class="text-xs">No hay gastos anotados en ${currentCityFilter}.</p>
+          <div class="text-center py-6 bg-surface-card/40 rounded-2xl border border-surface-border/50 text-slate-400 space-y-2">
+            <span class="text-2xl block">☕</span>
+            <p class="text-xs">No hay gastos anotados que coincidan con estos filtros.</p>
+            <button onclick="resetExpenseFilters()" class="text-xs text-brand-400 hover:underline font-bold">Ver todos los gastos</button>
           </div>
         `;
         return;
       }
 
       container.innerHTML = filtered.map(e => `
-        <div class="bg-surface-card p-3 rounded-2xl border border-surface-border flex items-center justify-between gap-2 shadow-sm">
+        <div class="bg-surface-card p-3 rounded-2xl border border-surface-border flex items-center justify-between gap-2 shadow-sm hover:border-surface-border/80 transition">
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-1.5 mb-0.5 flex-wrap">
               <span class="text-[9px] bg-surface-dark font-semibold text-slate-300 px-2 py-0.5 rounded-full border border-surface-border">${e.ciudad}</span>
@@ -1032,7 +1235,10 @@
               <span class="text-[9px] text-slate-500">${e.fecha}</span>
             </div>
             <p class="text-xs font-bold text-white truncate">${e.desc}</p>
-            <p class="text-[10px] text-slate-400">Pagó: <span class="text-slate-200 font-bold">${e.pagador}</span> • Reparto: <span class="text-slate-300 font-semibold">${e.division === '50_50' ? 'Mitad (50/50)' : (e.division === 'solo_alan' ? '100% Alan' : '100% Hillary')}</span></p>
+            <p class="text-[10px] text-slate-400">
+              Pagó: <span class="${e.pagador === 'Alan' ? 'text-indigo-300' : 'text-pink-300'} font-bold">${e.pagador}</span> • 
+              Reparto: <span class="text-slate-300 font-semibold">${e.division === '50_50' ? 'Mitad (50/50)' : (e.division === 'solo_alan' ? '100% Alan' : '100% Hillary')}</span>
+            </p>
           </div>
           <div class="text-right flex items-center gap-2">
             <div>
@@ -1101,6 +1307,9 @@
       closeModal("modalNuevoGasto");
       document.getElementById("formGasto").reset();
       renderAll();
+      setTimeout(() => {
+        scrollToExpenses('Todos');
+      }, 200);
     }
 
     function deleteExpense(id) {
@@ -1474,75 +1683,309 @@
       }
     }
 
-    // 7. Renderizar Presupuesto Base
+    // 7. Filtros y Búsqueda del Presupuesto Base
+    function setBudgetFilter(filter) {
+      currentBudgetFilter = filter;
+      document.querySelectorAll(".budget-filter-btn").forEach(btn => {
+        btn.classList.remove("bg-brand-600", "text-white");
+        btn.classList.add("bg-surface-card");
+      });
+      const activeBtn = document.getElementById("bf-" + filter);
+      if (activeBtn) {
+        activeBtn.classList.add("bg-brand-600", "text-white");
+        activeBtn.classList.remove("bg-surface-card");
+      }
+      renderBaseBudget();
+    }
+
+    function handleBudgetSearch(query) {
+      currentBudgetSearchQuery = (query || "").trim().toLowerCase();
+      const clearBtn = document.getElementById("clearBudgetSearch");
+      if (clearBtn) {
+        if (currentBudgetSearchQuery.length > 0) clearBtn.classList.remove("hidden");
+        else clearBtn.classList.add("hidden");
+      }
+      renderBaseBudget();
+    }
+
+    function clearBudgetSearchInput() {
+      const input = document.getElementById("budgetSearchInput");
+      if (input) input.value = "";
+      handleBudgetSearch("");
+    }
+
+    function isItemPending(item) {
+      return item.estado === 'pendiente' || 
+             item.estado === 'reservado_por_pagar' || 
+             item.estado === 'cuota_nov' || 
+             item.estado === 'por_comprar' ||
+             item.estado === 'por_reservar';
+    }
+
+    function isItemPaid(item) {
+      return item.estado === 'pagado' || 
+             item.estado === 'gratis' || 
+             item.estado === 'cuota_nov';
+    }
+
+    function matchesBudgetFilter(item, categoryKey) {
+      // 1. Filtro por categoría específica
+      if (['transportes', 'alojamientos', 'otrosFijos'].includes(currentBudgetFilter)) {
+        if (categoryKey !== currentBudgetFilter) return false;
+      }
+
+      // 2. Filtro por estado
+      if (currentBudgetFilter === 'pendiente' && !isItemPending(item)) return false;
+      if (currentBudgetFilter === 'pagado' && !isItemPaid(item)) return false;
+
+      // 3. Filtro por texto de búsqueda
+      if (currentBudgetSearchQuery.length > 0) {
+        const text = `${item.concepto || ''} ${item.notas || ''} ${item.ciudad || ''} ${item.categoria || ''}`.toLowerCase();
+        if (!text.includes(currentBudgetSearchQuery)) return false;
+      }
+
+      return true;
+    }
+
     function renderBaseBudget() {
+      if (!currentBudget) return;
+
+      // Conteos globales para badges
+      let totalItems = 0;
+      let pendingItems = 0;
+      let paidItems = 0;
+      let totalCOPAll = 0;
+      let totalPendingCOP = 0;
+      let totalPaidCOP = 0;
+
+      const allItems = [
+        ...currentBudget.transportes.map(i => ({ ...i, _cat: 'transportes' })),
+        ...currentBudget.alojamientos.map(i => ({ ...i, _cat: 'alojamientos' })),
+        ...currentBudget.otrosFijos.map(i => ({ ...i, _cat: 'otrosFijos' }))
+      ];
+
+      allItems.forEach(i => {
+        totalItems++;
+        totalCOPAll += i.cop;
+
+        if (isItemPending(i)) {
+          pendingItems++;
+          if (i.estado === 'cuota_nov') {
+            totalPendingCOP += (i.pendienteCOP || 1075129);
+          } else {
+            totalPendingCOP += i.cop;
+          }
+        }
+
+        if (isItemPaid(i)) {
+          paidItems++;
+          if (i.estado === 'cuota_nov') {
+            totalPaidCOP += (i.pagadoCOP || 5050413);
+          } else {
+            totalPaidCOP += i.cop;
+          }
+        }
+      });
+
+      // Actualizar conteos de botones
+      const bTodos = document.getElementById("bCountTodos");
+      const bPend = document.getElementById("bCountPendiente");
+      const bPag = document.getElementById("bCountPagado");
+      if (bTodos) bTodos.innerText = totalItems;
+      if (bPend) bPend.innerText = pendingItems;
+      if (bPag) bPag.innerText = paidItems;
+
+      // Banner según filtro activo
+      const banner = document.getElementById("budgetFilterSummaryBanner");
+      if (banner) {
+        if (currentBudgetFilter === 'pendiente') {
+          banner.innerHTML = `
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-amber-400 font-bold flex items-center gap-1">
+                  <span>⏳</span> ${pendingItems} compromisos pendientes por saldar
+                </p>
+                <p class="text-[10px] text-slate-400 mt-0.5">Avianca cuota nov, vuelo BOG-BAQ regreso, Airbnb Roma y Bogotá</p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="font-extrabold text-amber-300 text-sm">${formatCOP(totalPendingCOP)}</p>
+                <p class="text-[10px] text-slate-400">${formatEUR(totalPendingCOP / TRM)}</p>
+              </div>
+            </div>
+          `;
+        } else if (currentBudgetFilter === 'pagado') {
+          banner.innerHTML = `
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-emerald-400 font-bold flex items-center gap-1">
+                  <span>✅</span> ${paidItems} ítems pagados o cubiertos gratis
+                </p>
+                <p class="text-[10px] text-slate-400 mt-0.5">Vuelos y trenes pagos, Airbnbs pagos, Disney, Inter-Como, Maletas</p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="font-extrabold text-emerald-300 text-sm">${formatCOP(totalPaidCOP)}</p>
+                <p class="text-[10px] text-slate-400">${formatEUR(totalPaidCOP / TRM)}</p>
+              </div>
+            </div>
+          `;
+        } else {
+          banner.innerHTML = `
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-white font-bold flex items-center gap-1">
+                  <span>📊</span> Presupuesto Base Total: <span class="text-brand-300">${formatCOP(totalCOPAll)}</span>
+                </p>
+                <p class="text-[10px] text-slate-400 mt-0.5">
+                  <span class="text-emerald-400 font-semibold">${formatCOP(totalPaidCOP)} pagado</span> • 
+                  <span class="text-amber-400 font-semibold">${formatCOP(totalPendingCOP)} por pagar</span>
+                </p>
+              </div>
+              <div class="text-right shrink-0">
+                <span class="text-[10px] bg-surface-card border border-surface-border font-bold text-slate-300 px-2 py-1 rounded-lg">
+                  ${Math.round((totalPaidCOP / totalCOPAll) * 100)}% Cubierto
+                </span>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      // Visibilidad de tarjetas por categoría
+      const cardT = document.getElementById("cardTransportes");
+      const cardA = document.getElementById("cardAlojamientos");
+      const cardO = document.getElementById("cardOtrosFijos");
+
+      if (['alojamientos', 'otrosFijos'].includes(currentBudgetFilter)) {
+        if (cardT) cardT.classList.add("hidden");
+      } else {
+        if (cardT) cardT.classList.remove("hidden");
+      }
+
+      if (['transportes', 'otrosFijos'].includes(currentBudgetFilter)) {
+        if (cardA) cardA.classList.add("hidden");
+      } else {
+        if (cardA) cardA.classList.remove("hidden");
+      }
+
+      if (['transportes', 'alojamientos'].includes(currentBudgetFilter)) {
+        if (cardO) cardO.classList.add("hidden");
+      } else {
+        if (cardO) cardO.classList.remove("hidden");
+      }
+
+      // 1. Transportes
+      const filteredTransportes = currentBudget.transportes.filter(t => matchesBudgetFilter(t, 'transportes'));
       let subT = 0;
-      document.getElementById("listTransportes").innerHTML = currentBudget.transportes.map(t => {
-        subT += t.cop;
-        return `
-          <div onclick="promptEditBudget('${t.id}', 'transportes')" class="flex items-center justify-between py-1.5 border-b border-surface-border/40 last:border-none cursor-pointer hover:bg-surface-hover/40 px-1 rounded-lg transition">
-            <div class="min-w-0 pr-2">
-              <p class="font-semibold text-slate-200 truncate">${t.concepto}</p>
-              <p class="text-[10px] text-slate-400">${t.notas}</p>
-            </div>
-            <div class="text-right shrink-0">
-              <p class="font-extrabold text-white">${formatCOP(t.cop)}</p>
-              ${t.estado === 'pagado' ? `
-                <span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-1.5 py-0.5 rounded">PAGADO</span>
-              ` : (t.estado === 'cuota_nov' ? `
-                <span class="text-[9px] bg-amber-500/20 text-amber-400 font-bold px-1.5 py-0.5 rounded">1 CUOTA PDTE</span>
-              ` : `
-                <span class="text-[9px] bg-rose-500/20 text-rose-400 font-bold px-1.5 py-0.5 rounded">POR COMPRAR</span>
-              `)}
-            </div>
-          </div>
-        `;
-      }).join("");
-      document.getElementById("subtotalTransportes").innerText = formatCOP(subT);
+      filteredTransportes.forEach(t => {
+        if (currentBudgetFilter === 'pendiente' && t.estado === 'cuota_nov') subT += (t.pendienteCOP || 1075129);
+        else if (currentBudgetFilter === 'pagado' && t.estado === 'cuota_nov') subT += (t.pagadoCOP || 5050413);
+        else subT += t.cop;
+      });
 
+      const listT = document.getElementById("listTransportes");
+      if (listT) {
+        if (filteredTransportes.length === 0) {
+          listT.innerHTML = `<p class="text-center text-slate-500 py-3 italic">Sin transportes que coincidan con este filtro.</p>`;
+        } else {
+          listT.innerHTML = filteredTransportes.map(t => {
+            let displayAmount = t.cop;
+            let displayBadge = "";
+
+            if (t.estado === 'pagado') {
+              displayBadge = `<span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-1.5 py-0.5 rounded">PAGADO</span>`;
+            } else if (t.estado === 'cuota_nov') {
+              if (currentBudgetFilter === 'pendiente') {
+                displayAmount = t.pendienteCOP || 1075129;
+                displayBadge = `<span class="text-[9px] bg-amber-500/20 text-amber-400 font-bold px-1.5 py-0.5 rounded">FALTA CUOTA NOV</span>`;
+              } else if (currentBudgetFilter === 'pagado') {
+                displayAmount = t.pagadoCOP || 5050413;
+                displayBadge = `<span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-1.5 py-0.5 rounded">11 CUOTAS PAGAS</span>`;
+              } else {
+                displayBadge = `<span class="text-[9px] bg-amber-500/20 text-amber-400 font-bold px-1.5 py-0.5 rounded">1 CUOTA PDTE ($1.07M)</span>`;
+              }
+            } else {
+              displayBadge = `<span class="text-[9px] bg-rose-500/20 text-rose-400 font-bold px-1.5 py-0.5 rounded">POR COMPRAR</span>`;
+            }
+
+            return `
+              <div onclick="promptEditBudget('${t.id}', 'transportes')" class="flex items-center justify-between py-1.5 border-b border-surface-border/40 last:border-none cursor-pointer hover:bg-surface-hover/40 px-1 rounded-lg transition">
+                <div class="min-w-0 pr-2">
+                  <p class="font-semibold text-slate-200 truncate">${t.concepto}</p>
+                  <p class="text-[10px] text-slate-400">${t.notas}</p>
+                </div>
+                <div class="text-right shrink-0">
+                  <p class="font-extrabold ${t.estado === 'pagado' ? 'text-white' : 'text-amber-300'}">${formatCOP(displayAmount)}</p>
+                  ${displayBadge}
+                </div>
+              </div>
+            `;
+          }).join("");
+        }
+      }
+      const subTEl = document.getElementById("subtotalTransportes");
+      if (subTEl) subTEl.innerText = formatCOP(subT);
+
+      // 2. Alojamientos
+      const filteredAlojamientos = currentBudget.alojamientos.filter(a => matchesBudgetFilter(a, 'alojamientos'));
       let subA = 0;
-      document.getElementById("listAlojamientos").innerHTML = currentBudget.alojamientos.map(a => {
-        subA += a.cop;
-        return `
-          <div onclick="promptEditBudget('${a.id}', 'alojamientos')" class="flex items-center justify-between py-1.5 border-b border-surface-border/40 last:border-none cursor-pointer hover:bg-surface-hover/40 px-1 rounded-lg transition">
-            <div class="min-w-0 pr-2">
-              <p class="font-semibold text-slate-200 truncate">${a.concepto}</p>
-              <p class="text-[10px] text-slate-400">${a.notas}</p>
-            </div>
-            <div class="text-right shrink-0">
-              <p class="font-extrabold text-white">${formatCOP(a.cop)}</p>
-              ${a.estado === 'pagado' ? `
-                <span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-1.5 py-0.5 rounded">PAGADO</span>
-              ` : (a.estado === 'gratis' ? `
-                <span class="text-[9px] bg-blue-500/20 text-blue-400 font-bold px-1.5 py-0.5 rounded">GRATIS</span>
-              ` : (a.estado === 'reservado_por_pagar' ? `
-                <span class="text-[9px] bg-amber-500/20 text-amber-400 font-bold px-1.5 py-0.5 rounded">RESERVADO (PDTE)</span>
-              ` : `
-                <span class="text-[9px] bg-rose-500/20 text-rose-400 font-bold px-1.5 py-0.5 rounded">POR RESERVAR</span>
-              `))}
-            </div>
-          </div>
-        `;
-      }).join("");
-      document.getElementById("subtotalAlojamientos").innerText = formatCOP(subA);
+      filteredAlojamientos.forEach(a => subA += a.cop);
 
+      const listA = document.getElementById("listAlojamientos");
+      if (listA) {
+        if (filteredAlojamientos.length === 0) {
+          listA.innerHTML = `<p class="text-center text-slate-500 py-3 italic">Sin alojamientos que coincidan con este filtro.</p>`;
+        } else {
+          listA.innerHTML = filteredAlojamientos.map(a => `
+            <div onclick="promptEditBudget('${a.id}', 'alojamientos')" class="flex items-center justify-between py-1.5 border-b border-surface-border/40 last:border-none cursor-pointer hover:bg-surface-hover/40 px-1 rounded-lg transition">
+              <div class="min-w-0 pr-2">
+                <p class="font-semibold text-slate-200 truncate">${a.concepto}</p>
+                <p class="text-[10px] text-slate-400">${a.notas}</p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="font-extrabold ${a.estado === 'pagado' || a.estado === 'gratis' ? 'text-white' : 'text-amber-300'}">${formatCOP(a.cop)}</p>
+                ${a.estado === 'pagado' ? `
+                  <span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-1.5 py-0.5 rounded">PAGADO</span>
+                ` : (a.estado === 'gratis' ? `
+                  <span class="text-[9px] bg-blue-500/20 text-blue-400 font-bold px-1.5 py-0.5 rounded">GRATIS</span>
+                ` : (a.estado === 'reservado_por_pagar' ? `
+                  <span class="text-[9px] bg-amber-500/20 text-amber-400 font-bold px-1.5 py-0.5 rounded">RESERVADO (PDTE)</span>
+                ` : `
+                  <span class="text-[9px] bg-rose-500/20 text-rose-400 font-bold px-1.5 py-0.5 rounded">POR RESERVAR</span>
+                `))}
+              </div>
+            </div>
+          `).join("");
+        }
+      }
+      const subAEl = document.getElementById("subtotalAlojamientos");
+      if (subAEl) subAEl.innerText = formatCOP(subA);
+
+      // 3. Otros Fijos
+      const filteredOtros = currentBudget.otrosFijos.filter(o => matchesBudgetFilter(o, 'otrosFijos'));
       let subO = 0;
-      document.getElementById("listOtrosFijos").innerHTML = currentBudget.otrosFijos.map(o => {
-        subO += o.cop;
-        return `
-          <div onclick="promptEditBudget('${o.id}', 'otrosFijos')" class="flex items-center justify-between py-1.5 border-b border-surface-border/40 last:border-none cursor-pointer hover:bg-surface-hover/40 px-1 rounded-lg transition">
-            <div class="min-w-0 pr-2">
-              <p class="font-semibold text-slate-200 truncate">${o.concepto}</p>
-              <p class="text-[10px] text-slate-400">${o.notas}</p>
+      filteredOtros.forEach(o => subO += o.cop);
+
+      const listO = document.getElementById("listOtrosFijos");
+      if (listO) {
+        if (filteredOtros.length === 0) {
+          listO.innerHTML = `<p class="text-center text-slate-500 py-3 italic">Sin experiencias que coincidan con este filtro.</p>`;
+        } else {
+          listO.innerHTML = filteredOtros.map(o => `
+            <div onclick="promptEditBudget('${o.id}', 'otrosFijos')" class="flex items-center justify-between py-1.5 border-b border-surface-border/40 last:border-none cursor-pointer hover:bg-surface-hover/40 px-1 rounded-lg transition">
+              <div class="min-w-0 pr-2">
+                <p class="font-semibold text-slate-200 truncate">${o.concepto}</p>
+                <p class="text-[10px] text-slate-400">${o.notas}</p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="font-extrabold text-white">${formatCOP(o.cop)}</p>
+                <span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-1.5 py-0.5 rounded">PAGADO</span>
+              </div>
             </div>
-            <div class="text-right shrink-0">
-              <p class="font-extrabold text-white">${formatCOP(o.cop)}</p>
-              <span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-1.5 py-0.5 rounded">PAGADO</span>
-            </div>
-          </div>
-        `;
-      }).join("");
-      document.getElementById("subtotalOtros").innerText = formatCOP(subO);
+          `).join("");
+        }
+      }
+      const subOEl = document.getElementById("subtotalOtros");
+      if (subOEl) subOEl.innerText = formatCOP(subO);
     }
 
     function promptEditBudget(id, type) {
