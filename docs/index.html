@@ -32,7 +32,6 @@
     }
   </script>
   <style>
-    /* Estilos móviles suaves */
     body {
       -webkit-tap-highlight-color: transparent;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -70,7 +69,7 @@
     <!-- TARJETAS DE TOTALES RÁPIDOS EN TIEMPO REAL -->
     <div class="max-w-md mx-auto grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-surface-border/50 text-center">
       <div class="bg-surface-card/60 p-2 rounded-xl border border-surface-border/50">
-        <p class="text-[10px] text-emerald-400 font-semibold uppercase">Pagado</p>
+        <p class="text-[10px] text-emerald-400 font-semibold uppercase">Pagado Base</p>
         <p id="headerPaidCOP" class="text-xs font-extrabold text-white mt-0.5">$0</p>
         <p id="headerPaidEUR" class="text-[10px] text-slate-400">0 €</p>
       </div>
@@ -97,7 +96,7 @@
           <h2 class="text-base font-bold text-white flex items-center gap-1.5">
             <span>📝</span> Bitácora de Gastos en Vivo
           </h2>
-          <p class="text-xs text-slate-400">Toca el botón (+) para anotar lo que gastes al instante</p>
+          <p class="text-xs text-slate-400">Anota comidas, compras o cafés al instante</p>
         </div>
         <button onclick="openModal('modalNuevoGasto')" class="bg-brand-600 hover:bg-brand-500 active:scale-95 text-white font-bold text-xs px-3 py-2 rounded-xl flex items-center gap-1 shadow-lg shadow-brand-600/30 transition">
           <span class="text-base font-bold">+</span>
@@ -146,10 +145,19 @@
 
       <!-- Botón de Backup / Exportar datos -->
       <div class="pt-4 flex items-center justify-between text-xs text-slate-400 border-t border-surface-border">
-        <span>Datos guardados en tu celular</span>
-        <button onclick="exportDataJSON()" class="text-brand-400 font-semibold underline flex items-center gap-1">
-          <span>💾</span> Descargar Backup
-        </button>
+        <div>
+          <span class="block text-slate-300 font-semibold">Copia de Seguridad</span>
+          <span class="text-[11px] text-slate-500">Descarga o restaura tu archivo JSON</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="exportDataJSON()" class="bg-surface-dark border border-surface-border text-brand-400 hover:text-white font-semibold px-2.5 py-1.5 rounded-xl flex items-center gap-1 active:scale-95 transition">
+            <span>💾</span> Exportar
+          </button>
+          <label class="bg-surface-dark border border-surface-border text-slate-300 hover:text-white font-semibold px-2.5 py-1.5 rounded-xl flex items-center gap-1 cursor-pointer active:scale-95 transition">
+            <span>📥</span> Restaurar
+            <input type="file" id="importFileInput" accept=".json" onchange="importDataJSON(event)" class="hidden">
+          </label>
+        </div>
       </div>
     </section>
 
@@ -160,8 +168,11 @@
           <h2 class="text-base font-bold text-white flex items-center gap-1.5">
             <span>🏛️</span> Explorador de Planes & Precios
           </h2>
-          <p class="text-xs text-slate-400">Precios promedio oficiales por persona (EUR / COP)</p>
+          <p class="text-xs text-slate-400">Precios por persona • Agrega al itinerario con 1 toque</p>
         </div>
+        <button onclick="openModal('modalNuevoPlanCustom')" class="bg-surface-dark hover:bg-surface-card border border-surface-border text-brand-400 font-bold text-xs px-2.5 py-1.5 rounded-xl flex items-center gap-1 transition">
+          <span>+</span> Crear Plan
+        </button>
       </div>
 
       <!-- Selector de Ciudad -->
@@ -171,7 +182,7 @@
         <button onclick="filterCatalog('Milán')" class="cat-filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-catcity="Milán">🇮🇹 Milán</button>
         <button onclick="filterCatalog('Como')" class="cat-filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-catcity="Como">⛵ Como</button>
         <button onclick="filterCatalog('Roma')" class="cat-filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-catcity="Roma">🇮🇹 Roma</button>
-        <button onclick="filterCatalog('Florencia')" class="cat-filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-catcity="Florencia">🏛️ Florencia/Pisa</button>
+        <button onclick="filterCatalog('Florencia')" class="cat-filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-catcity="Florencia">🏛️ Florencia</button>
         <button onclick="filterCatalog('París')" class="cat-filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-catcity="París">🇫🇷 París</button>
       </div>
 
@@ -183,11 +194,16 @@
 
     <!-- SECCIÓN 3: PRESUPUESTO BASE CONSOLIDADO -->
     <section id="tab-presupuesto" class="tab-content hidden space-y-4">
-      <div>
-        <h2 class="text-base font-bold text-white flex items-center gap-1.5">
-          <span>💰</span> Presupuesto Base (Piso)
-        </h2>
-        <p class="text-xs text-slate-400">Transportes, estadías y compromisos fijos del viaje</p>
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center gap-1.5">
+            <span>💰</span> Presupuesto Base (Piso)
+          </h2>
+          <p class="text-xs text-slate-400">Toca cualquier ítem para editar su valor o estado</p>
+        </div>
+        <button onclick="resetBudgetToDefault()" class="text-slate-400 hover:text-white text-xs underline">
+          Restablecer
+        </button>
       </div>
 
       <!-- Desglose Transportes -->
@@ -216,11 +232,11 @@
         </div>
       </div>
 
-      <!-- Desglose Otros Fijos (Disney, Inter, Maletas) -->
+      <!-- Desglose Otros Fijos -->
       <div class="bg-surface-card rounded-2xl p-4 border border-surface-border space-y-3">
         <div class="flex items-center justify-between border-b border-surface-border/60 pb-2">
           <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
-            <span>🎟️</span> Experiencias & Equipaje Comprado
+            <span>🎟️</span> Experiencias & Maletas Compradas
           </span>
           <span id="subtotalOtros" class="text-xs font-extrabold text-white">$0</span>
         </div>
@@ -230,16 +246,18 @@
       </div>
     </section>
 
-    <!-- SECCIÓN 4: ITINERARIO DÍA A DÍA -->
+    <!-- SECCIÓN 4: ITINERARIO CON HORARIOS Y PLANES DINÁMICOS -->
     <section id="tab-itinerario" class="tab-content hidden space-y-3">
-      <div>
-        <h2 class="text-base font-bold text-white flex items-center gap-1.5">
-          <span>🗺️</span> Itinerario Cronológico (20 Días)
-        </h2>
-        <p class="text-xs text-slate-400">Del domingo 1 al viernes 20 de noviembre de 2026</p>
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center gap-1.5">
+            <span>🗺️</span> Itinerario con Horas Locales
+          </h2>
+          <p class="text-xs text-slate-400">20 días con traslados, vuelos y tus planes agendados</p>
+        </div>
       </div>
 
-      <div id="itineraryTimeline" class="space-y-2.5">
+      <div id="itineraryTimeline" class="space-y-3">
         <!-- Renderizado dinámico -->
       </div>
     </section>
@@ -268,7 +286,7 @@
     </div>
   </nav>
 
-  <!-- MODAL: REGISTRAR NUEVO GASTO EN CALIENTE -->
+  <!-- MODAL: REGISTRAR NUEVO GASTO EN BITÁCORA -->
   <div id="modalNuevoGasto" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-surface-card w-full max-w-md rounded-t-3xl sm:rounded-3xl border border-surface-border p-5 space-y-4 shadow-2xl animate-fade-in">
       <div class="flex items-center justify-between border-b border-surface-border/60 pb-3">
@@ -348,6 +366,177 @@
     </div>
   </div>
 
+  <!-- MODAL: AGREGAR PLAN AL ITINERARIO -->
+  <div id="modalAddPlanToItinerary" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-surface-card w-full max-w-md rounded-t-3xl sm:rounded-3xl border border-surface-border p-5 space-y-4 shadow-2xl animate-fade-in">
+      <div class="flex items-center justify-between border-b border-surface-border/60 pb-3">
+        <h3 class="text-sm font-bold text-white flex items-center gap-1.5">
+          <span>📅</span> Agendar Plan en el Itinerario
+        </h3>
+        <button onclick="closeModal('modalAddPlanToItinerary')" class="text-slate-400 hover:text-white text-lg p-1">✕</button>
+      </div>
+
+      <form id="formAddPlan" onsubmit="handleConfirmAddToItinerary(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="addPlanId">
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Nombre del Plan</label>
+          <input type="text" id="addPlanName" readonly class="w-full bg-surface-dark/70 border border-surface-border rounded-xl px-3 py-2.5 text-slate-200 font-bold text-xs">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Día del Viaje</label>
+            <select id="addPlanDay" class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-brand-500 text-xs">
+              <!-- Se llena con JS -->
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Hora Estimada</label>
+            <input type="time" id="addPlanTime" value="10:30" class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-brand-500 text-xs">
+          </div>
+        </div>
+
+        <div class="bg-surface-dark p-3 rounded-xl border border-surface-border text-slate-300 space-y-1">
+          <p class="text-[11px] font-semibold text-brand-300">Costo total para 2 personas:</p>
+          <p id="addPlanCostPreview" class="text-sm font-extrabold text-white">$0 COP (0 €)</p>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+          <input type="checkbox" id="addPlanAlsoExpense" class="rounded bg-surface-dark border-surface-border text-brand-600 focus:ring-0">
+          <label for="addPlanAlsoExpense" class="text-slate-300 text-[11px]">Anotar este costo de una vez en mi Bitácora</label>
+        </div>
+
+        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 active:scale-95 text-white font-bold py-3 rounded-xl shadow-lg shadow-brand-600/30 transition text-sm">
+          Confirmar y Guardar en Itinerario
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CREAR PLAN PERSONALIZADO -->
+  <div id="modalNuevoPlanCustom" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-surface-card w-full max-w-md rounded-t-3xl sm:rounded-3xl border border-surface-border p-5 space-y-4 shadow-2xl animate-fade-in">
+      <div class="flex items-center justify-between border-b border-surface-border/60 pb-3">
+        <h3 class="text-sm font-bold text-white flex items-center gap-1.5">
+          <span>✨</span> Crear Nuevo Plan a Tu Gusto
+        </h3>
+        <button onclick="closeModal('modalNuevoPlanCustom')" class="text-slate-400 hover:text-white text-lg p-1">✕</button>
+      </div>
+
+      <form id="formPlanCustom" onsubmit="handleSaveCustomPlan(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Nombre de la actividad o restaurante</label>
+          <input type="text" id="customPlanName" placeholder="Ej: Cena romántica en Torre Eiffel" required
+            class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 text-xs">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Ciudad</label>
+            <select id="customPlanCity" class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-brand-500 text-xs">
+              <option value="Madrid">Madrid</option>
+              <option value="Barcelona">Barcelona</option>
+              <option value="Milán">Milán</option>
+              <option value="Como">Como</option>
+              <option value="Roma">Roma</option>
+              <option value="Florencia">Florencia</option>
+              <option value="Pisa">Pisa</option>
+              <option value="París">París</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Categoría</label>
+            <select id="customPlanCat" class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-brand-500 text-xs">
+              <option value="Monumentos">Monumentos</option>
+              <option value="Comida">Restaurante / Comida</option>
+              <option value="Fútbol">Fútbol & Deportes</option>
+              <option value="Vistas y Calles">Vistas y Paseos</option>
+              <option value="Museos">Museos</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Precio por persona (€)</label>
+            <input type="number" step="any" id="customPlanEUR" placeholder="0 si es gratis"
+              class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 text-xs font-bold">
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Día asignado (1 al 20)</label>
+            <input type="number" min="1" max="20" id="customPlanDay" placeholder="Ej: 4" required
+              class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 text-xs font-bold">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Notas o tips</label>
+          <input type="text" id="customPlanNotes" placeholder="Ej: Reservar con mesa exterior"
+            class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 text-xs">
+        </div>
+
+        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 active:scale-95 text-white font-bold py-3 rounded-xl shadow-lg shadow-brand-600/30 transition text-sm">
+          Guardar Plan
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: EDITAR ÍTEM DEL PRESUPUESTO -->
+  <div id="modalEditBudget" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-surface-card w-full max-w-md rounded-t-3xl sm:rounded-3xl border border-surface-border p-5 space-y-4 shadow-2xl animate-fade-in">
+      <div class="flex items-center justify-between border-b border-surface-border/60 pb-3">
+        <h3 class="text-sm font-bold text-white flex items-center gap-1.5">
+          <span>✏️</span> Modificar Ítem del Presupuesto
+        </h3>
+        <button onclick="closeModal('modalEditBudget')" class="text-slate-400 hover:text-white text-lg p-1">✕</button>
+      </div>
+
+      <form id="formEditBudget" onsubmit="handleSaveBudgetItem(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="editBudgetId">
+        <input type="hidden" id="editBudgetType">
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Concepto</label>
+          <input type="text" id="editBudgetConcept" class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white font-semibold text-xs">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Monto COP ($)</label>
+            <input type="number" id="editBudgetCOP" required oninput="convertBudgetCurrency('COP')"
+              class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white font-bold text-xs">
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Monto EUR (€)</label>
+            <input type="number" step="any" id="editBudgetEUR" oninput="convertBudgetCurrency('EUR')"
+              class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white font-bold text-xs">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Estado</label>
+          <select id="editBudgetStatus" class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white font-semibold text-xs">
+            <option value="pagado">🟢 Pagado</option>
+            <option value="reservado_por_pagar">🟡 Reservado (Cobro pendiente)</option>
+            <option value="cuota_nov">🟡 En cuotas (Falta cuota Nov)</option>
+            <option value="pendiente">🔴 Pendiente por reservar/comprar</option>
+            <option value="gratis">🔵 Gratis</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Notas</label>
+          <input type="text" id="editBudgetNotes" class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white text-xs">
+        </div>
+
+        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 active:scale-95 text-white font-bold py-3 rounded-xl shadow-lg shadow-brand-600/30 transition text-sm">
+          Actualizar Presupuesto
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL: TARJETA DE ALERGIAS (3 IDIOMAS) -->
   <div id="modalAlergias" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-surface-card w-full max-w-md rounded-t-3xl sm:rounded-3xl border border-surface-border p-5 space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto">
@@ -394,45 +583,44 @@
 
   <!-- LÓGICA PRINCIPAL DE LA APLICACIÓN -->
   <script>
-    // LocalStorage keys
-    const STORAGE_EXPENSES_KEY = "eurotrip_expenses_v2";
-    const STORAGE_PLANS_KEY = "eurotrip_custom_plans_v2";
+    // Storage Keys
+    const STORAGE_EXPENSES_KEY = "eurotrip_expenses_v3";
+    const STORAGE_BUDGET_KEY = "eurotrip_budget_v3";
+    const STORAGE_SCHEDULED_PLANS_KEY = "eurotrip_scheduled_plans_v3";
+    const STORAGE_CUSTOM_CATALOG_KEY = "eurotrip_custom_catalog_v3";
 
-    // Variables de estado
+    // Variables en memoria
     let currentCityFilter = "Todas";
     let currentCatCityFilter = "Madrid";
     let recordedExpenses = [];
+    let currentBudget = null;
+    let scheduledPlans = []; // Planes asignados a días del itinerario
+    let customCatalog = [];
 
-    // Inicializar app
     document.addEventListener("DOMContentLoaded", () => {
-      loadStoredExpenses();
+      initAppStorage();
+      populateDaySelect();
       renderAll();
     });
 
-    // Formateadores de moneda
     function formatCOP(num) {
-      return "$" + Math.round(num).toLocaleString("es-CO");
+      return "$" + Math.round(num || 0).toLocaleString("es-CO");
     }
     function formatEUR(num) {
-      return Math.round(num).toLocaleString("es-CO") + " €";
+      return Math.round(num || 0).toLocaleString("es-CO") + " €";
     }
 
-    // Cargar gastos de localStorage o predeterminados
-    function loadStoredExpenses() {
-      const stored = localStorage.getItem(STORAGE_EXPENSES_KEY);
-      if (stored) {
-        try {
-          recordedExpenses = JSON.parse(stored);
-        } catch (e) {
-          console.error("Error parseando gastos:", e);
-          recordedExpenses = [];
-        }
+    // Inicializar LocalStorage con datos base si no existen
+    function initAppStorage() {
+      // 1. Gastos
+      const storedExp = localStorage.getItem(STORAGE_EXPENSES_KEY);
+      if (storedExp) {
+        try { recordedExpenses = JSON.parse(storedExp); } catch(e) { recordedExpenses = []; }
       } else {
-        // Gastos iniciales ya realizados
         recordedExpenses = [
           {
             id: "exp-init-1",
-            fecha: "16 Oct 2026",
+            fecha: "16 Oct",
             desc: "2 Maletas Trolley ($305.920 c/u) + 2 Maletines ($74.823 c/u)",
             ciudad: "Barranquilla",
             cat: "Compras",
@@ -442,15 +630,68 @@
             isBase: true
           }
         ];
-        saveStoredExpenses();
+        localStorage.setItem(STORAGE_EXPENSES_KEY, JSON.stringify(recordedExpenses));
+      }
+
+      // 2. Presupuesto Base
+      const storedBud = localStorage.getItem(STORAGE_BUDGET_KEY);
+      if (storedBud) {
+        try { currentBudget = JSON.parse(storedBud); } catch(e) { currentBudget = null; }
+      }
+      if (!currentBudget) {
+        currentBudget = JSON.parse(JSON.stringify(initialBaseBudget));
+        localStorage.setItem(STORAGE_BUDGET_KEY, JSON.stringify(currentBudget));
+      }
+
+      // 3. Planes Agendados en Itinerario
+      const storedSched = localStorage.getItem(STORAGE_SCHEDULED_PLANS_KEY);
+      if (storedSched) {
+        try { scheduledPlans = JSON.parse(storedSched); } catch(e) { scheduledPlans = []; }
+      } else {
+        // Planes agendados por defecto
+        scheduledPlans = [
+          {
+            id: "sched-inter",
+            planId: "o-inter",
+            nombre: "⚽ Partido INTER DE MILÁN vs COMO en San Siro",
+            dia: 8,
+            hora: "15:00",
+            ciudad: "Milán",
+            costoCOP: 539853,
+            costoEUR: 134.96,
+            notas: "Entradas ya pagadas"
+          },
+          {
+            id: "sched-disney",
+            planId: "o-disney",
+            nombre: "🏰 Día completo en Disneyland París",
+            dia: 16,
+            hora: "09:30",
+            ciudad: "París",
+            costoCOP: 803214,
+            costoEUR: 200.80,
+            notas: "Entradas ya pagadas"
+          }
+        ];
+        localStorage.setItem(STORAGE_SCHEDULED_PLANS_KEY, JSON.stringify(scheduledPlans));
+      }
+
+      // 4. Catálogo Personalizado
+      const storedCat = localStorage.getItem(STORAGE_CUSTOM_CATALOG_KEY);
+      if (storedCat) {
+        try { customCatalog = JSON.parse(storedCat); } catch(e) { customCatalog = []; }
+      } else {
+        customCatalog = [];
       }
     }
 
-    function saveStoredExpenses() {
-      localStorage.setItem(STORAGE_EXPENSES_KEY, JSON.stringify(recordedExpenses));
+    function populateDaySelect() {
+      const select = document.getElementById("addPlanDay");
+      select.innerHTML = defaultItineraryDays.map(d => `
+        <option value="${d.day}">Día ${d.day < 10 ? '0' + d.day : d.day} (${d.date}): ${d.ciudad}</option>
+      `).join("");
     }
 
-    // Renderizar todo
     function renderAll() {
       renderHeaderTotals();
       renderExpensesList();
@@ -459,14 +700,13 @@
       renderItinerary();
     }
 
-    // Renderizar totales superiores
+    // Renderizar Totales Superiores
     function renderHeaderTotals() {
-      // 1. Pagado de la base
       let paidBaseCOP = 0;
       let pendingBaseCOP = 0;
 
       // Transportes
-      initialBaseBudget.transportes.forEach(t => {
+      currentBudget.transportes.forEach(t => {
         if (t.estado === "pagado") paidBaseCOP += t.cop;
         else if (t.estado === "cuota_nov") {
           paidBaseCOP += t.pagadoCOP;
@@ -477,7 +717,7 @@
       });
 
       // Alojamientos
-      initialBaseBudget.alojamientos.forEach(a => {
+      currentBudget.alojamientos.forEach(a => {
         if (a.estado === "pagado") paidBaseCOP += a.cop;
         else if (a.estado === "reservado_por_pagar" || a.estado === "pendiente") {
           pendingBaseCOP += a.cop;
@@ -485,11 +725,11 @@
       });
 
       // Otros
-      initialBaseBudget.otrosFijos.forEach(o => {
+      currentBudget.otrosFijos.forEach(o => {
         if (o.estado === "pagado") paidBaseCOP += o.cop;
       });
 
-      // Bitácora de gastos en destino (excluyendo lo que es base duplicada)
+      // Gastos de bitácora
       let customSpentCOP = 0;
       recordedExpenses.forEach(e => {
         if (!e.isBase) customSpentCOP += e.cop;
@@ -505,7 +745,7 @@
       document.getElementById("headerSpentEUR").innerText = formatEUR(customSpentCOP / TRM);
     }
 
-    // Renderizar Bitácora de Gastos
+    // Renderizar Bitácora
     function renderExpensesList() {
       const container = document.getElementById("expensesList");
       const filtered = recordedExpenses.filter(e => {
@@ -550,7 +790,6 @@
       `).join("");
     }
 
-    // Filtrar Gastos
     function filterExpenses(city) {
       currentCityFilter = city;
       document.querySelectorAll(".filter-btn").forEach(btn => {
@@ -565,7 +804,6 @@
       renderExpensesList();
     }
 
-    // Guardar nuevo gasto desde modal
     function handleSaveExpense(e) {
       e.preventDefault();
       const desc = document.getElementById("gastoDesc").value.trim();
@@ -588,22 +826,20 @@
       };
 
       recordedExpenses.unshift(newExpense);
-      saveStoredExpenses();
+      localStorage.setItem(STORAGE_EXPENSES_KEY, JSON.stringify(recordedExpenses));
       closeModal("modalNuevoGasto");
       document.getElementById("formGasto").reset();
       renderAll();
     }
 
-    // Eliminar gasto
     function deleteExpense(id) {
       if (confirm("¿Eliminar este gasto de la bitácora?")) {
         recordedExpenses = recordedExpenses.filter(e => e.id !== id);
-        saveStoredExpenses();
+        localStorage.setItem(STORAGE_EXPENSES_KEY, JSON.stringify(recordedExpenses));
         renderAll();
       }
     }
 
-    // Conversor automático EUR <-> COP en el formulario
     function convertCurrency(source) {
       if (source === 'EUR') {
         const eurVal = parseFloat(document.getElementById("gastoEUR").value);
@@ -621,50 +857,63 @@
     // Renderizar Catálogo de Planes
     function renderCatalog() {
       const container = document.getElementById("catalogList");
-      const filtered = catalogPlans.filter(p => {
+      const allPlans = [...catalogPlans, ...customCatalog];
+      const filtered = allPlans.filter(p => {
         if (currentCatCityFilter === "Florencia") return p.ciudad === "Florencia" || p.ciudad === "Pisa";
         return p.ciudad === currentCatCityFilter;
       });
 
-      container.innerHTML = filtered.map(plan => `
-        <div class="bg-surface-card p-3.5 rounded-2xl border border-surface-border space-y-2 shadow-sm">
-          <div class="flex items-start justify-between gap-2">
-            <div>
-              <div class="flex items-center gap-1.5 mb-1">
-                <span class="text-[10px] bg-surface-dark font-semibold text-slate-300 px-2 py-0.5 rounded-full border border-surface-border">${plan.categoria}</span>
-                <span class="text-[10px] text-slate-400">⏱️ ${plan.duracion}</span>
+      container.innerHTML = filtered.map(plan => {
+        // Verificar si este plan ya está en el itinerario
+        const isAlreadyScheduled = scheduledPlans.some(s => s.planId === plan.id || s.nombre.includes(plan.nombre));
+
+        return `
+          <div class="bg-surface-card p-3.5 rounded-2xl border border-surface-border space-y-2 shadow-sm">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-1.5 mb-1">
+                  <span class="text-[10px] bg-surface-dark font-semibold text-slate-300 px-2 py-0.5 rounded-full border border-surface-border">${plan.categoria}</span>
+                  <span class="text-[10px] text-slate-400">⏱️ ${plan.duracion}</span>
+                </div>
+                <h3 class="text-xs font-bold text-white">${plan.nombre}</h3>
               </div>
-              <h3 class="text-xs font-bold text-white">${plan.nombre}</h3>
+              <div class="text-right">
+                ${plan.precioEUR_pp === 0 ? `
+                  <span class="text-xs font-extrabold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/30">GRATIS</span>
+                ` : `
+                  <p class="text-xs font-extrabold text-white">${plan.precioEUR_pp} € <span class="text-[10px] font-normal text-slate-400">/ pers</span></p>
+                  <p class="text-[10px] font-semibold text-slate-400">${formatCOP(plan.precioCOP_pp * 2)} (x2 pax)</p>
+                `}
+              </div>
             </div>
-            <div class="text-right">
-              ${plan.precioEUR_pp === 0 ? `
-                <span class="text-xs font-extrabold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/30">GRATIS</span>
-              ` : `
-                <p class="text-xs font-extrabold text-white">${plan.precioEUR_pp} € <span class="text-[10px] font-normal text-slate-400">/ pers</span></p>
-                <p class="text-[10px] font-semibold text-slate-400">${formatCOP(plan.precioCOP_pp * 2)} (x2 pax)</p>
-              `}
+
+            <p class="text-[11px] text-slate-300 leading-relaxed">${plan.descripcion}</p>
+
+            ${plan.tips ? `
+              <div class="bg-surface-darker/60 p-2 rounded-xl text-[10px] text-slate-400 border border-surface-border/40">
+                💡 <span class="text-slate-300">${plan.tips}</span>
+              </div>
+            ` : ''}
+
+            <!-- Botones de Acción -->
+            <div class="pt-1 flex items-center justify-between gap-2">
+              <span class="text-[10px] text-slate-500">${plan.verPorFueraGratis ? '✓ Gratis por fuera' : 'Requiere entrada'}</span>
+              <div class="flex items-center gap-1.5">
+                ${isAlreadyScheduled ? `
+                  <span class="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-1 rounded-xl">✓ En Itinerario</span>
+                ` : `
+                  <button onclick="promptAddToItinerary('${plan.id}')" class="bg-brand-600 hover:bg-brand-500 text-white font-bold text-[10px] px-3 py-1.5 rounded-xl shadow-md transition flex items-center gap-1 active:scale-95">
+                    <span>📅</span>
+                    <span>Agendar</span>
+                  </button>
+                `}
+              </div>
             </div>
           </div>
-
-          <p class="text-[11px] text-slate-300 leading-relaxed">${plan.descripcion}</p>
-
-          <div class="bg-surface-darker/60 p-2 rounded-xl text-[10px] text-slate-400 border border-surface-border/40">
-            💡 <span class="text-slate-300">${plan.tips}</span>
-          </div>
-
-          <!-- Botón de Acción rápida: Agregar a bitácora -->
-          <div class="pt-1 flex items-center justify-between">
-            <span class="text-[10px] text-slate-500">${plan.verPorFueraGratis ? '✓ Se disfruta gratis por fuera' : 'Requiere entrada'}</span>
-            <button onclick="quickAddPlanToExpense('${plan.id}')" class="bg-surface-dark hover:bg-brand-600 border border-surface-border hover:border-brand-500 active:scale-95 text-slate-200 hover:text-white font-bold text-[10px] px-3 py-1.5 rounded-xl transition flex items-center gap-1">
-              <span>+</span>
-              <span>Anotar este gasto</span>
-            </button>
-          </div>
-        </div>
-      `).join("");
+        `;
+      }).join("");
     }
 
-    // Filtrar catálogo por ciudad
     function filterCatalog(city) {
       currentCatCityFilter = city;
       document.querySelectorAll(".cat-filter-btn").forEach(btn => {
@@ -679,31 +928,131 @@
       renderCatalog();
     }
 
-    // Agregar plan del catálogo a la bitácora automáticamente
-    function quickAddPlanToExpense(planId) {
-      const plan = catalogPlans.find(p => p.id === planId);
+    // Modal Agendar Plan en Itinerario
+    function promptAddToItinerary(planId) {
+      const allPlans = [...catalogPlans, ...customCatalog];
+      const plan = allPlans.find(p => p.id === planId);
       if (!plan) return;
 
-      const totalCOP = plan.precioCOP_pp * 2; // Para los 2
+      document.getElementById("addPlanId").value = plan.id;
+      document.getElementById("addPlanName").value = plan.nombre;
+      if (plan.diaSugerido) {
+        document.getElementById("addPlanDay").value = plan.diaSugerido;
+      }
+      if (plan.horaSugerida) {
+        document.getElementById("addPlanTime").value = plan.horaSugerida;
+      }
+
+      const totalCOP = plan.precioCOP_pp * 2;
+      const totalEUR = plan.precioEUR_pp * 2;
+      document.getElementById("addPlanCostPreview").innerText = `${formatCOP(totalCOP)} (${formatEUR(totalEUR)})`;
+
+      openModal("modalAddPlanToItinerary");
+    }
+
+    function handleConfirmAddToItinerary(e) {
+      e.preventDefault();
+      const planId = document.getElementById("addPlanId").value;
+      const allPlans = [...catalogPlans, ...customCatalog];
+      const plan = allPlans.find(p => p.id === planId);
+      if (!plan) return;
+
+      const dia = parseInt(document.getElementById("addPlanDay").value);
+      const hora = document.getElementById("addPlanTime").value;
+      const alsoExpense = document.getElementById("addPlanAlsoExpense").checked;
+
+      const totalCOP = plan.precioCOP_pp * 2;
       const totalEUR = plan.precioEUR_pp * 2;
 
-      document.getElementById("gastoDesc").value = plan.nombre + " (2 pax)";
-      document.getElementById("gastoCOP").value = totalCOP;
-      document.getElementById("gastoEUR").value = totalEUR;
-      document.getElementById("gastoCiudad").value = (plan.ciudad === "Como" ? "Como" : (plan.ciudad === "Florencia" ? "Florencia" : plan.ciudad));
-      document.getElementById("gastoCat").value = "Tours";
+      // Guardar en scheduledPlans
+      const newSched = {
+        id: "sched-" + Date.now(),
+        planId: plan.id,
+        nombre: plan.nombre,
+        dia: dia,
+        hora: hora,
+        ciudad: plan.ciudad,
+        costoCOP: totalCOP,
+        costoEUR: totalEUR,
+        notas: plan.descripcion
+      };
 
-      openModal("modalNuevoGasto");
+      scheduledPlans.push(newSched);
+      localStorage.setItem(STORAGE_SCHEDULED_PLANS_KEY, JSON.stringify(scheduledPlans));
+
+      // Si también marcó registrar en bitácora
+      if (alsoExpense && totalCOP > 0) {
+        const newExpense = {
+          id: "exp-" + Date.now(),
+          fecha: `Día ${dia}`,
+          desc: plan.nombre + " (2 pax)",
+          cop: totalCOP,
+          eur: totalEUR,
+          ciudad: plan.ciudad,
+          cat: "Tours",
+          pagador: "Ambos",
+          isBase: false
+        };
+        recordedExpenses.unshift(newExpense);
+        localStorage.setItem(STORAGE_EXPENSES_KEY, JSON.stringify(recordedExpenses));
+      }
+
+      closeModal("modalAddPlanToItinerary");
+      renderAll();
+      alert(`¡"${plan.nombre}" agendado con éxito en el Día ${dia} del itinerario!`);
+    }
+
+    // Crear plan personalizado
+    function handleSaveCustomPlan(e) {
+      e.preventDefault();
+      const nombre = document.getElementById("customPlanName").value.trim();
+      const ciudad = document.getElementById("customPlanCity").value;
+      const categoria = document.getElementById("customPlanCat").value;
+      const precioEUR_pp = parseFloat(document.getElementById("customPlanEUR").value) || 0;
+      const diaSugerido = parseInt(document.getElementById("customPlanDay").value);
+      const tips = document.getElementById("customPlanNotes").value.trim();
+
+      const newPlan = {
+        id: "custom-" + Date.now(),
+        ciudad,
+        nombre,
+        categoria,
+        precioEUR_pp,
+        precioCOP_pp: Math.round(precioEUR_pp * TRM),
+        duracion: "2 horas",
+        diaSugerido,
+        horaSugerida: "11:00",
+        descripcion: tips || "Plan personalizado creado por Alan & Hillary",
+        tips,
+        verPorFueraGratis: precioEUR_pp === 0
+      };
+
+      customCatalog.push(newPlan);
+      localStorage.setItem(STORAGE_CUSTOM_CATALOG_KEY, JSON.stringify(customCatalog));
+
+      closeModal("modalNuevoPlanCustom");
+      document.getElementById("formPlanCustom").reset();
+      filterCatalog(ciudad);
+      renderAll();
+    }
+
+    // Quitar plan agendado del itinerario
+    function removeScheduledPlan(schedId) {
+      if (confirm("¿Quitar este plan del itinerario?")) {
+        scheduledPlans = scheduledPlans.filter(s => s.id !== schedId);
+        localStorage.setItem(STORAGE_SCHEDULED_PLANS_KEY, JSON.stringify(scheduledPlans));
+        renderAll();
+      }
     }
 
     // Renderizar Presupuesto Base
     function renderBaseBudget() {
       // Transportes
       let subT = 0;
-      document.getElementById("listTransportes").innerHTML = initialBaseBudget.transportes.map(t => {
+      document.getElementById("listTransportes").innerHTML = currentBudget.transportes.map(t => {
         subT += t.cop;
         return `
-          <div class="flex items-center justify-between py-1.5 border-b border-surface-border/40 last:border-none">
+          <div onclick="promptEditBudget('${t.id}', 'transportes')" class="flex items-center justify-between py-1.5 border-b border-surface-border/40 last:border-none cursor-pointer hover:bg-surface-hover/40 px-1 rounded-lg transition">
             <div class="min-w-0 pr-2">
               <p class="font-semibold text-slate-200 truncate">${t.concepto}</p>
               <p class="text-[10px] text-slate-400">${t.notas}</p>
@@ -713,7 +1062,7 @@
               ${t.estado === 'pagado' ? `
                 <span class="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-1.5 py-0.5 rounded">PAGADO</span>
               ` : (t.estado === 'cuota_nov' ? `
-                <span class="text-[9px] bg-amber-500/20 text-amber-400 font-bold px-1.5 py-0.5 rounded">1 CUOTA PENDIENTE</span>
+                <span class="text-[9px] bg-amber-500/20 text-amber-400 font-bold px-1.5 py-0.5 rounded">1 CUOTA PDTE</span>
               ` : `
                 <span class="text-[9px] bg-rose-500/20 text-rose-400 font-bold px-1.5 py-0.5 rounded">POR COMPRAR</span>
               `)}
@@ -725,10 +1074,10 @@
 
       // Alojamientos
       let subA = 0;
-      document.getElementById("listAlojamientos").innerHTML = initialBaseBudget.alojamientos.map(a => {
+      document.getElementById("listAlojamientos").innerHTML = currentBudget.alojamientos.map(a => {
         subA += a.cop;
         return `
-          <div class="flex items-center justify-between py-1.5 border-b border-surface-border/40 last:border-none">
+          <div onclick="promptEditBudget('${a.id}', 'alojamientos')" class="flex items-center justify-between py-1.5 border-b border-surface-border/40 last:border-none cursor-pointer hover:bg-surface-hover/40 px-1 rounded-lg transition">
             <div class="min-w-0 pr-2">
               <p class="font-semibold text-slate-200 truncate">${a.concepto}</p>
               <p class="text-[10px] text-slate-400">${a.notas}</p>
@@ -740,7 +1089,7 @@
               ` : (a.estado === 'gratis' ? `
                 <span class="text-[9px] bg-blue-500/20 text-blue-400 font-bold px-1.5 py-0.5 rounded">GRATIS</span>
               ` : (a.estado === 'reservado_por_pagar' ? `
-                <span class="text-[9px] bg-amber-500/20 text-amber-400 font-bold px-1.5 py-0.5 rounded">RESERVADO (PENDIENTE)</span>
+                <span class="text-[9px] bg-amber-500/20 text-amber-400 font-bold px-1.5 py-0.5 rounded">RESERVADO (PDTE)</span>
               ` : `
                 <span class="text-[9px] bg-rose-500/20 text-rose-400 font-bold px-1.5 py-0.5 rounded">POR RESERVAR</span>
               `))}
@@ -752,10 +1101,10 @@
 
       // Otros
       let subO = 0;
-      document.getElementById("listOtrosFijos").innerHTML = initialBaseBudget.otrosFijos.map(o => {
+      document.getElementById("listOtrosFijos").innerHTML = currentBudget.otrosFijos.map(o => {
         subO += o.cop;
         return `
-          <div class="flex items-center justify-between py-1.5 border-b border-surface-border/40 last:border-none">
+          <div onclick="promptEditBudget('${o.id}', 'otrosFijos')" class="flex items-center justify-between py-1.5 border-b border-surface-border/40 last:border-none cursor-pointer hover:bg-surface-hover/40 px-1 rounded-lg transition">
             <div class="min-w-0 pr-2">
               <p class="font-semibold text-slate-200 truncate">${o.concepto}</p>
               <p class="text-[10px] text-slate-400">${o.notas}</p>
@@ -770,36 +1119,127 @@
       document.getElementById("subtotalOtros").innerText = formatCOP(subO);
     }
 
+    // Modal Editar Presupuesto
+    function promptEditBudget(id, type) {
+      const item = currentBudget[type].find(i => i.id === id);
+      if (!item) return;
+
+      document.getElementById("editBudgetId").value = id;
+      document.getElementById("editBudgetType").value = type;
+      document.getElementById("editBudgetConcept").value = item.concepto;
+      document.getElementById("editBudgetCOP").value = item.cop;
+      document.getElementById("editBudgetEUR").value = item.eur || (item.cop / TRM).toFixed(2);
+      document.getElementById("editBudgetStatus").value = item.estado;
+      document.getElementById("editBudgetNotes").value = item.notas || "";
+
+      openModal("modalEditBudget");
+    }
+
+    function handleSaveBudgetItem(e) {
+      e.preventDefault();
+      const id = document.getElementById("editBudgetId").value;
+      const type = document.getElementById("editBudgetType").value;
+      const cop = parseFloat(document.getElementById("editBudgetCOP").value) || 0;
+      const eur = parseFloat(document.getElementById("editBudgetEUR").value) || (cop / TRM);
+      const estado = document.getElementById("editBudgetStatus").value;
+      const notas = document.getElementById("editBudgetNotes").value.trim();
+      const concepto = document.getElementById("editBudgetConcept").value.trim();
+
+      const item = currentBudget[type].find(i => i.id === id);
+      if (item) {
+        item.concepto = concepto;
+        item.cop = cop;
+        item.eur = eur;
+        item.estado = estado;
+        item.notas = notas;
+        localStorage.setItem(STORAGE_BUDGET_KEY, JSON.stringify(currentBudget));
+      }
+
+      closeModal("modalEditBudget");
+      renderAll();
+    }
+
+    function convertBudgetCurrency(source) {
+      if (source === 'EUR') {
+        const eur = parseFloat(document.getElementById("editBudgetEUR").value);
+        if (!isNaN(eur)) document.getElementById("editBudgetCOP").value = Math.round(eur * TRM);
+      } else {
+        const cop = parseFloat(document.getElementById("editBudgetCOP").value);
+        if (!isNaN(cop)) document.getElementById("editBudgetEUR").value = (cop / TRM).toFixed(2);
+      }
+    }
+
+    function resetBudgetToDefault() {
+      if (confirm("¿Restablecer el presupuesto a los valores originales pre-cargados?")) {
+        currentBudget = JSON.parse(JSON.stringify(initialBaseBudget));
+        localStorage.setItem(STORAGE_BUDGET_KEY, JSON.stringify(currentBudget));
+        renderAll();
+      }
+    }
+
     // Renderizar Itinerario
     function renderItinerary() {
       const container = document.getElementById("itineraryTimeline");
-      container.innerHTML = itineraryDays.map(d => `
-        <div class="bg-surface-card p-3 rounded-2xl border border-surface-border flex items-start gap-3 shadow-sm">
-          <div class="text-center bg-surface-dark border border-surface-border rounded-xl px-2.5 py-1.5 shrink-0">
-            <span class="text-xs font-extrabold text-brand-400 block">D${d.day < 10 ? '0' + d.day : d.day}</span>
-            <span class="text-[9px] text-slate-400 block">${d.date.split(" ")[0]}</span>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between gap-1 mb-0.5">
-              <h3 class="text-xs font-bold text-white flex items-center gap-1 truncate">
-                <span>${d.flag}</span>
-                <span>${d.ciudad}</span>
-              </h3>
-              ${d.estado === 'pagado' ? `
-                <span class="text-[8px] bg-emerald-500/20 text-emerald-300 font-bold px-1.5 py-0.5 rounded shrink-0">Listo</span>
-              ` : (d.estado === 'en_destino' ? `
-                <span class="text-[8px] bg-blue-500/20 text-blue-300 font-bold px-1.5 py-0.5 rounded shrink-0">En Destino</span>
-              ` : `
-                <span class="text-[8px] bg-amber-500/20 text-amber-300 font-bold px-1.5 py-0.5 rounded shrink-0">Pendiente</span>
-              `)}
+
+      container.innerHTML = defaultItineraryDays.map(d => {
+        // Filtrar planes agendados para este día
+        const dayPlans = scheduledPlans.filter(s => s.dia === d.day);
+
+        return `
+          <div class="bg-surface-card p-3.5 rounded-2xl border border-surface-border space-y-2.5 shadow-sm">
+            <!-- Encabezado del Día -->
+            <div class="flex items-start justify-between gap-2 border-b border-surface-border/50 pb-2">
+              <div class="flex items-center gap-2">
+                <div class="text-center bg-surface-dark border border-surface-border rounded-xl px-2 py-1 shrink-0">
+                  <span class="text-xs font-black text-brand-400 block">D${d.day < 10 ? '0' + d.day : d.day}</span>
+                  <span class="text-[9px] text-slate-400 block">${d.date.split(" ")[0]}</span>
+                </div>
+                <div>
+                  <h3 class="text-xs font-bold text-white flex items-center gap-1">
+                    <span>${d.flag}</span>
+                    <span>${d.ciudad}</span>
+                  </h3>
+                  <p class="text-[10px] text-slate-400">${d.date}</p>
+                </div>
+              </div>
+              <span class="text-[9px] bg-surface-dark font-semibold text-slate-300 px-2 py-0.5 rounded-full border border-surface-border">${d.hospedaje}</span>
             </div>
+
+            <!-- Transporte / Vuelo / Horarios -->
+            <div class="bg-surface-dark/70 p-2 rounded-xl text-xs space-y-1 border border-surface-border/60">
+              <p class="font-bold text-indigo-300 text-[11px]">${d.transporte}</p>
+              <p class="text-[10px] text-slate-400">🕒 <span class="text-slate-300 font-medium">${d.horarios}</span></p>
+            </div>
+
             <p class="text-[11px] text-slate-300 leading-snug">${d.desc}</p>
+
+            <!-- PLANES FIJOS Y PLANES AGENDADOS DEL DÍA -->
+            <div class="space-y-1.5 pt-1">
+              ${d.planesFijos && d.planesFijos.length > 0 ? d.planesFijos.map(f => `
+                <div class="bg-brand-500/10 border border-brand-500/30 p-2 rounded-xl text-[11px] font-bold text-brand-300 flex items-center justify-between">
+                  <span>${f}</span>
+                  <span class="text-[9px] bg-brand-500/20 px-2 py-0.5 rounded-full">Fijo</span>
+                </div>
+              `).join("") : ''}
+
+              ${dayPlans.map(p => `
+                <div class="bg-surface-dark p-2 rounded-xl text-[11px] border border-surface-border flex items-center justify-between gap-2">
+                  <div class="min-w-0">
+                    <p class="font-bold text-white truncate">⏰ ${p.hora || '10:00'} • ${p.nombre}</p>
+                    <p class="text-[10px] text-slate-400">${formatCOP(p.costoCOP)} (${formatEUR(p.costoEUR)})</p>
+                  </div>
+                  <button onclick="removeScheduledPlan('${p.id}')" class="text-slate-500 hover:text-rose-400 text-xs p-1" title="Quitar del itinerario">
+                    ✕
+                  </button>
+                </div>
+              `).join("")}
+            </div>
           </div>
-        </div>
-      `).join("");
+        `;
+      }).join("");
     }
 
-    // Navegación entre pestañas
+    // Navegación
     function switchTab(tabId) {
       document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
       document.querySelectorAll(".nav-tab").forEach(el => {
@@ -814,7 +1254,6 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    // Modales
     function openModal(id) {
       document.getElementById(id).classList.remove("hidden");
     }
@@ -822,20 +1261,56 @@
       document.getElementById(id).classList.add("hidden");
     }
 
-    // Exportar JSON de backup
+    // Backup: Exportar e Importar
     function exportDataJSON() {
       const exportObj = {
         fechaExportacion: new Date().toISOString(),
         trm: TRM,
-        gastosBitacora: recordedExpenses
+        gastosBitacora: recordedExpenses,
+        presupuestoBase: currentBudget,
+        planesItinerario: scheduledPlans,
+        catalogoPersonalizado: customCatalog
       };
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj, null, 2));
       const downloadAnchor = document.createElement("a");
       downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `eurotrip_gastos_backup_${Date.now()}.json`);
+      downloadAnchor.setAttribute("download", `eurotrip_backup_${Date.now()}.json`);
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();
+    }
+
+    function importDataJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (data.gastosBitacora) {
+            recordedExpenses = data.gastosBitacora;
+            localStorage.setItem(STORAGE_EXPENSES_KEY, JSON.stringify(recordedExpenses));
+          }
+          if (data.presupuestoBase) {
+            currentBudget = data.presupuestoBase;
+            localStorage.setItem(STORAGE_BUDGET_KEY, JSON.stringify(currentBudget));
+          }
+          if (data.planesItinerario) {
+            scheduledPlans = data.planesItinerario;
+            localStorage.setItem(STORAGE_SCHEDULED_PLANS_KEY, JSON.stringify(scheduledPlans));
+          }
+          if (data.catalogoPersonalizado) {
+            customCatalog = data.catalogoPersonalizado;
+            localStorage.setItem(STORAGE_CUSTOM_CATALOG_KEY, JSON.stringify(customCatalog));
+          }
+          renderAll();
+          alert("¡Copia de seguridad restaurada con éxito en tu teléfono!");
+        } catch (err) {
+          alert("Error al leer el archivo de copia de seguridad.");
+        }
+      };
+      reader.readAsText(file);
     }
   </script>
 </body>
