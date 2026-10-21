@@ -192,22 +192,28 @@ const initialBaseBudget = {
   ]
 };
 
-// Catálogo de Planes sugeridos y Precios promedio por Ciudad
+// Catálogo de Planes sugeridos y Precios promedio por Ciudad con COMPARACIÓN DE FUENTES
 const catalogPlans = [
   // MADRID
   {
     id: "cat-mad-1",
     ciudad: "Madrid",
-    nombre: "Palacio Real de Madrid (Entrada General)",
+    nombre: "Palacio Real de Madrid",
     categoria: "Monumentos",
     precioEUR_pp: 14,
     precioCOP_pp: 56000,
     duracion: "2 horas",
     diaSugerido: 4,
     horaSugerida: "10:30",
-    descripcion: "Residencia oficial de los reyes de España. Salón del Trono, Armería Real y jardines.",
-    tips: "Recomendado sacar online para evitar fila en taquilla. Horario de tarde suele tener menos gente.",
-    verPorFueraGratis: true
+    descripcion: "Residencia oficial de los reyes de España. Salón del Trono, Armería Real y jardines de Sabatini.",
+    tips: "Recomendado comprar en la web oficial para evitar fila en taquilla. Horario de tarde suele tener menos gente.",
+    verPorFueraGratis: true,
+    fuentePrincipal: "Patrimonio Nacional Oficial",
+    comparativa: [
+      { canal: "Web Oficial (Patrimonio Nacional)", precio: "14 €", tipo: "Entrada básica sin guía" },
+      { canal: "Civitatis / GetYourGuide", precio: "28 € - 35 €", tipo: "Visita guiada en español" },
+      { canal: "Por fuera (Plaza de Oriente)", precio: "0 €", tipo: "Fotos y jardines gratis" }
+    ]
   },
   {
     id: "cat-mad-2",
@@ -221,7 +227,13 @@ const catalogPlans = [
     horaSugerida: "11:00",
     descripcion: "Museo interactivo, vestuarios, palco de honor y panorámica del nuevo Bernabéu techado.",
     tips: "37€ online vs 40€ en taquilla. Abre de 09:30 a 19:00.",
-    verPorFueraGratis: true
+    verPorFueraGratis: true,
+    fuentePrincipal: "Real Madrid Oficial",
+    comparativa: [
+      { canal: "Web Oficial (realmadrid.com)", precio: "37 €", tipo: "Tour Classic con fecha/hora" },
+      { canal: "Taquilla Bernabéu", precio: "40 €", tipo: "Sujeto a cola" },
+      { canal: "Civitatis / Tiqets", precio: "38 € - 42 €", tipo: "Revendedores autorizados" }
+    ]
   },
   {
     id: "cat-mad-3",
@@ -235,7 +247,13 @@ const catalogPlans = [
     horaSugerida: "16:00",
     descripcion: "Obras maestras de Velázquez (Las Meninas), Goya, El Bosco y Rubens.",
     tips: "Entrada gratis de lunes a sábado de 18:00 a 20:00 (hay fila larga).",
-    verPorFueraGratis: true
+    verPorFueraGratis: true,
+    fuentePrincipal: "Museo del Prado Oficial",
+    comparativa: [
+      { canal: "Web Oficial (museodelprado.es)", precio: "15 €", tipo: "Entrada general anticipada" },
+      { canal: "Entrada Gratis", precio: "0 €", tipo: "Lun-Sáb 18:00 - 20:00" },
+      { canal: "GetYourGuide con guía", precio: "35 € - 45 €", tipo: "Guía historiador de arte" }
+    ]
   },
   {
     id: "cat-mad-4",
@@ -249,7 +267,11 @@ const catalogPlans = [
     horaSugerida: "17:00",
     descripcion: "Templo egipcio original al aire libre. El mejor atardecer de Madrid con vistas a la Casa de Campo.",
     tips: "Gratis. Llegar 40 min antes de la puesta de sol (17:30 en noviembre).",
-    verPorFueraGratis: true
+    verPorFueraGratis: true,
+    fuentePrincipal: "Acceso Público Gratuito",
+    comparativa: [
+      { canal: "Acceso Libre", precio: "0 €", tipo: "Mirador público 100% gratuito" }
+    ]
   },
   {
     id: "cat-mad-5",
@@ -263,7 +285,11 @@ const catalogPlans = [
     horaSugerida: "21:30",
     descripcion: "La chocolatería más icónica de Madrid (fundada en 1894).",
     tips: "Abierto casi 24h. Alérgeno: verificar que no usen aceite con trazas.",
-    verPorFueraGratis: false
+    verPorFueraGratis: false,
+    fuentePrincipal: "Carta San Ginés",
+    comparativa: [
+      { canal: "En el local", precio: "5,90 €", tipo: "Porción de 6 churros + chocolate caliente" }
+    ]
   },
   {
     id: "cat-mad-6",
@@ -277,7 +303,11 @@ const catalogPlans = [
     horaSugerida: "13:30",
     descripcion: "Tapas gourmet, jamón ibérico, quesos manchegos y vinos al lado de la Plaza Mayor.",
     tips: "Comer de pie en ambiente vivo. Precio por persona aprox.",
-    verPorFueraGratis: true
+    verPorFueraGratis: true,
+    fuentePrincipal: "Promedio puestos mercado",
+    comparativa: [
+      { canal: "Tapeo libre", precio: "20 € - 30 €", tipo: "3-4 tapas variadas + vino/cerveza" }
+    ]
   },
 
   // BARCELONA
@@ -293,7 +323,14 @@ const catalogPlans = [
     horaSugerida: "10:00",
     descripcion: "Obra maestra de Gaudí. Columnas de bosque de piedra y vitrales impresionantes de luz.",
     tips: "Por fuera es gratis y espectacular. Si entran, comprar con semanas de anticipación.",
-    verPorFueraGratis: true
+    verPorFueraGratis: true,
+    fuentePrincipal: "Sagrada Família Oficial",
+    comparativa: [
+      { canal: "Web Oficial (sagradafamilia.org)", precio: "26 €", tipo: "Entrada básica con audioguía app" },
+      { canal: "Oficial con Torres", precio: "36 €", tipo: "Sube a torre Pasión o Nacimiento" },
+      { canal: "GetYourGuide / Civitatis", precio: "40 € - 50 €", tipo: "Visita guiada sin filas" },
+      { canal: "Por fuera (Plaza Gaudí)", precio: "0 €", tipo: "Fotos de reflejo en el lago gratis" }
+    ]
   },
   {
     id: "cat-bcn-2",
@@ -307,21 +344,12 @@ const catalogPlans = [
     horaSugerida: "15:30",
     descripcion: "Parque modernista con la salamandra de mosaico y banco ondulado con vista a Barcelona.",
     tips: "Exige hora fija. Llevar calzado cómodo para subidas.",
-    verPorFueraGratis: false
-  },
-  {
-    id: "cat-bcn-3",
-    ciudad: "Barcelona",
-    nombre: "Paseo de Gràcia: Casa Batlló & La Pedrera",
-    categoria: "Vistas y Calles",
-    precioEUR_pp: 0,
-    precioCOP_pp: 0,
-    duracion: "1.5 horas",
-    diaSugerido: 5,
-    horaSugerida: "16:00",
-    descripcion: "Paseo por las fachadas más famosas de Gaudí en la avenida más elegante de la ciudad.",
-    tips: "Entrar cuesta ~35€ c/u. Se recomienda admirarlas gratis por fuera.",
-    verPorFueraGratis: true
+    verPorFueraGratis: false,
+    fuentePrincipal: "Park Güell Oficial",
+    comparativa: [
+      { canal: "Web Oficial (parkguell.barcelona)", precio: "10 €", tipo: "Entrada general franja horaria" },
+      { canal: "Civitatis", precio: "24 €", tipo: "Tour guiado en grupo" }
+    ]
   },
 
   // MILÁN & COMO
@@ -337,21 +365,13 @@ const catalogPlans = [
     horaSugerida: "11:00",
     descripcion: "Caminar entre las agujas de mármol blanco del techo del Duomo con vista panorámica de Milán.",
     tips: "La plaza por fuera es gratis. Subir a terrazas vale totalmente la pena.",
-    verPorFueraGratis: true
-  },
-  {
-    id: "cat-mil-2",
-    ciudad: "Milán",
-    nombre: "Aperitivo Tradicional en Navigli",
-    categoria: "Comida",
-    precioEUR_pp: 15,
-    precioCOP_pp: 60000,
-    duracion: "2 horas",
-    diaSugerido: 8,
-    horaSugerida: "19:00",
-    descripcion: "Canales iluminados de Milán. Pides un Spritz/vino y viene buffet o tabla de comida incluida.",
-    tips: "Plan nocturno obligado. Horario típico: 18:30 a 21:00.",
-    verPorFueraGratis: false
+    verPorFueraGratis: true,
+    fuentePrincipal: "Duomo di Milano Oficial",
+    comparativa: [
+      { canal: "Web Oficial (duomomilano.it)", precio: "22 €", tipo: "Pase completo con ascensor a terrazas" },
+      { canal: "Oficial por escaleras", precio: "16 €", tipo: "Subiendo 250 escalones a pie" },
+      { canal: "Civitatis / Tiqets", precio: "26 € - 30 €", tipo: "Entrada rápida con audioguía" }
+    ]
   },
   {
     id: "cat-com-1",
@@ -365,7 +385,12 @@ const catalogPlans = [
     horaSugerida: "09:00",
     descripcion: "Tren regional Milano Centrale o Cadorna directo a Como Lago (1 hora de viaje).",
     tips: "Se compra en taquilla o app Trenitalia el mismo día sin recargo.",
-    verPorFueraGratis: true
+    verPorFueraGratis: true,
+    fuentePrincipal: "Trenitalia / Trenord",
+    comparativa: [
+      { canal: "Trenitalia / Trenord Oficial", precio: "5,20 € / trayecto", tipo: "Tarifa fija regional fija" },
+      { canal: "Omio / Trainline", precio: "5,80 € - 6,50 €", tipo: "Con comisión de servicio" }
+    ]
   },
   {
     id: "cat-com-2",
@@ -379,7 +404,12 @@ const catalogPlans = [
     horaSugerida: "11:30",
     descripcion: "Subida en funicular a mirador de los Alpes y navegación en ferry por el lago.",
     tips: "Vistas espectaculares. El ferry se compra directo en el muelle de Como.",
-    verPorFueraGratis: false
+    verPorFueraGratis: false,
+    fuentePrincipal: "Navigazione Laghi & Funicolare",
+    comparativa: [
+      { canal: "Funicular Taquilla", precio: "6,60 € i/v", tipo: "Subida y bajada Brunate" },
+      { canal: "Ferry Lago Muelle", precio: "9 € - 12 €", tipo: "Paseo en barco por el lago" }
+    ]
   },
 
   // ROMA, FLORENCIA & PISA
@@ -395,7 +425,13 @@ const catalogPlans = [
     horaSugerida: "09:30",
     descripcion: "Boleto combinado oficial para las 3 atracciones arqueológicas cumbre de Roma.",
     tips: "Comprar en el sitio oficial parcocolosseo.it a precio base sin sobrecostos de reventa.",
-    verPorFueraGratis: true
+    verPorFueraGratis: true,
+    fuentePrincipal: "Parco Archeologico del Colosseo",
+    comparativa: [
+      { canal: "Web Oficial (parcocolosseo.it)", precio: "18 €", tipo: "Entrada oficial 24h" },
+      { canal: "GetYourGuide / Tiqets", precio: "35 € - 45 €", tipo: "Revendedores con acceso prioritario" },
+      { canal: "Por fuera (Via dei Fori Imperiali)", precio: "0 €", tipo: "Vista panorámica gratis del Coliseo y Foro" }
+    ]
   },
   {
     id: "cat-rom-2",
@@ -409,35 +445,13 @@ const catalogPlans = [
     horaSugerida: "09:00",
     descripcion: "Frescos de Miguel Ángel, Galerías de los Mapas y tapices.",
     tips: "La Plaza de San Pedro y la Basílica son GRATIS. El boleto es solo para museos y Sixtina.",
-    verPorFueraGratis: true
-  },
-  {
-    id: "cat-rom-3",
-    ciudad: "Roma",
-    nombre: "Fontana di Trevi, Panteón y Piazza Navona",
-    categoria: "Vistas y Calles",
-    precioEUR_pp: 5,
-    precioCOP_pp: 20000,
-    duracion: "3 horas",
-    diaSugerido: 10,
-    horaSugerida: "20:00",
-    descripcion: "Paseo nocturno por el centro histórico romano. Panteón (entrada 5€), Trevi gratis.",
-    tips: "Ir a la Fontana di Trevi tarde en la noche (~23:00) para verla iluminada con poca gente.",
-    verPorFueraGratis: true
-  },
-  {
-    id: "cat-rom-4",
-    ciudad: "Roma",
-    nombre: "Cena de Pastas en Trastevere (Tonnarello / Da Enzo)",
-    categoria: "Comida",
-    precioEUR_pp: 25,
-    precioCOP_pp: 100000,
-    duracion: "2 horas",
-    diaSugerido: 11,
-    horaSugerida: "20:30",
-    descripcion: "Cacio e Pepe, Carbonara, Amatriciana y vino de la casa en el barrio más romántico.",
-    tips: "Alergias: indicar 'Grave allergia alle arachidi'. No mariscos para Alan.",
-    verPorFueraGratis: false
+    verPorFueraGratis: true,
+    fuentePrincipal: "Musei Vaticani Oficial",
+    comparativa: [
+      { canal: "Web Oficial (museivaticani.va)", precio: "20 € (+ 5€ reserva)", tipo: "Entrada oficial anticipada" },
+      { canal: "Civitatis / GetYourGuide", precio: "42 € - 55 €", tipo: "Tour guiado en español sin colas" },
+      { canal: "Basílica y Plaza San Pedro", precio: "0 €", tipo: "100% Gratis sin entrada" }
+    ]
   },
   {
     id: "cat-flo-1",
@@ -451,21 +465,13 @@ const catalogPlans = [
     horaSugerida: "07:30",
     descripcion: "Frecciarossa o Italo directo de Roma Termini a Firenze Santa Maria Novella.",
     tips: "Comprando con días de antelación en Trenitalia o Italo se consiguen tarifas promo.",
-    verPorFueraGratis: true
-  },
-  {
-    id: "cat-flo-2",
-    ciudad: "Florencia",
-    nombre: "Duomo de Florencia, Ponte Vecchio y Centro Histórico",
-    categoria: "Vistas y Calles",
-    precioEUR_pp: 0,
-    precioCOP_pp: 0,
-    duracion: "Día completo",
-    diaSugerido: 12,
-    horaSugerida: "10:00",
-    descripcion: "El museo al aire libre más impresionante de Europa. Fachada del Duomo, esculturas y río Arno.",
-    tips: "Caminar por la ciudad es 100% gratis. Almorzar schiacciata toscana (All'Antico Vinaio ~8€).",
-    verPorFueraGratis: true
+    verPorFueraGratis: true,
+    fuentePrincipal: "Trenitalia / Italo",
+    comparativa: [
+      { canal: "Trenitalia / Italo Promo", precio: "19,90 € - 29 € / tramo", tipo: "Comprando anticipado online" },
+      { canal: "Taquilla el mismo día", precio: "45 € - 55 € / tramo", tipo: "Tarifa base sin descuento" },
+      { canal: "Omio", precio: "+ 3€ a 5€", tipo: "Comisión de app" }
+    ]
   },
 
   // PARÍS
@@ -481,7 +487,13 @@ const catalogPlans = [
     horaSugerida: "18:30",
     descripcion: "Vistas icónicas desde Trocadéro y picnic/paseo en el parque bajo la torre iluminada cada hora.",
     tips: "Verla destellar de noche es gratis. Subir a la cima cuesta ~29€ si deciden entrar.",
-    verPorFueraGratis: true
+    verPorFueraGratis: true,
+    fuentePrincipal: "Acceso Libre / Torre Eiffel Oficial",
+    comparativa: [
+      { canal: "Ver por fuera (Trocadéro)", precio: "0 €", tipo: "La vista más famosa del mundo gratis" },
+      { canal: "Web Oficial Cima con Ascensor", precio: "35,30 €", tipo: "Entrada hasta el punto más alto" },
+      { canal: "Web Oficial 2° piso por escaleras", precio: "14,20 €", tipo: "Opción económica activa" }
+    ]
   },
   {
     id: "cat-par-2",
@@ -495,7 +507,13 @@ const catalogPlans = [
     horaSugerida: "10:00",
     descripcion: "La Gioconda (Mona Lisa), Venus de Milo, Victoria de Samotracia y pirámide de cristal.",
     tips: "Pirámide por fuera gratis de noche. Reserva horaria obligatoria online.",
-    verPorFueraGratis: true
+    verPorFueraGratis: true,
+    fuentePrincipal: "Louvre Oficial",
+    comparativa: [
+      { canal: "Web Oficial (louvre.fr)", precio: "22 €", tipo: "Franja horaria reservada" },
+      { canal: "Civitatis / GetYourGuide", precio: "35 € - 45 €", tipo: "Acceso asistido con guía" },
+      { canal: "Pirámide y Patio de noche", precio: "0 €", tipo: "Fotos iluminadas gratis" }
+    ]
   },
   {
     id: "cat-par-3",
@@ -509,21 +527,13 @@ const catalogPlans = [
     horaSugerida: "20:00",
     descripcion: "Paseo en barco con vista a Notre Dame, Museo de Orsay, puentes de París y Torre Eiffel.",
     tips: "Hacerlo al anochecer para ver todos los monumentos iluminados desde el agua.",
-    verPorFueraGratis: false
-  },
-  {
-    id: "cat-par-4",
-    ciudad: "París",
-    nombre: "Montmartre, Sacré-Cœur y Plaza de los Pintores",
-    categoria: "Vistas y Calles",
-    precioEUR_pp: 0,
-    precioCOP_pp: 0,
-    duracion: "3 horas",
-    diaSugerido: 16,
-    horaSugerida: "15:00",
-    descripcion: "Barrio bohemio en lo alto de la colina. Vista panorámica gratuita de todo París desde las escaleras.",
-    tips: "Gratis. Ojo con estafas de la 'cuerdita en la muñeca' en las escaleras.",
-    verPorFueraGratis: true
+    verPorFueraGratis: false,
+    fuentePrincipal: "Bateaux Mouches / Vedettes de Paris",
+    comparativa: [
+      { canal: "Web Bateaux Mouches", precio: "16 €", tipo: "Paseo estándar 70 min" },
+      { canal: "Vedettes de Paris", precio: "18 €", tipo: "Salida al pie de la Torre Eiffel" },
+      { canal: "GetYourGuide", precio: "17 €", tipo: "Ticket digital con cancelación 24h" }
+    ]
   }
 ];
 

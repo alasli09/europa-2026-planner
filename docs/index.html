@@ -79,7 +79,7 @@
         <p id="headerPendingEUR" class="text-[10px] text-slate-400">0 €</p>
       </div>
       <div class="bg-surface-card/60 p-2 rounded-xl border border-surface-border/50">
-        <p class="text-[10px] text-indigo-400 font-semibold uppercase">En Bitácora</p>
+        <p class="text-[10px] text-indigo-400 font-semibold uppercase">Bitácora Viaje</p>
         <p id="headerSpentCOP" class="text-xs font-extrabold text-white mt-0.5">$0</p>
         <p id="headerSpentEUR" class="text-[10px] text-slate-400">0 €</p>
       </div>
@@ -94,9 +94,9 @@
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-base font-bold text-white flex items-center gap-1.5">
-            <span>📝</span> Bitácora de Gastos en Vivo
+            <span>📝</span> Bitácora & Cuentas Claras
           </h2>
-          <p class="text-xs text-slate-400">Anota comidas, compras o cafés al instante</p>
+          <p class="text-xs text-slate-400">Gastos divididos, métodos de pago y deudas</p>
         </div>
         <button onclick="openModal('modalNuevoGasto')" class="bg-brand-600 hover:bg-brand-500 active:scale-95 text-white font-bold text-xs px-3 py-2 rounded-xl flex items-center gap-1 shadow-lg shadow-brand-600/30 transition">
           <span class="text-base font-bold">+</span>
@@ -104,38 +104,56 @@
         </button>
       </div>
 
-      <!-- Alertas críticas pendientes -->
-      <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3.5 space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
-            <span>⚠️</span> Pendientes Clave por Pagar
+      <!-- RESUMEN DE CUENTAS: ALAN vs HILLARY (QUIÉN PAGÓ Y CUÁNTO DEBE CADA UNO) -->
+      <div class="bg-surface-card rounded-2xl p-4 border border-surface-border space-y-3">
+        <div class="flex items-center justify-between border-b border-surface-border/60 pb-2">
+          <span class="text-xs font-bold text-white flex items-center gap-1.5">
+            <span>⚖️</span> Balance Alan & Hillary (Bitácora)
           </span>
-          <span class="text-[10px] bg-amber-500/20 text-amber-300 font-semibold px-2 py-0.5 rounded-full">3 ítems</span>
+          <span id="debtSummaryBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-surface-dark border border-surface-border text-slate-300">
+            Al día
+          </span>
         </div>
-        <div class="text-xs space-y-1.5 text-slate-300">
-          <div class="flex justify-between items-center py-1 border-b border-amber-500/20">
-            <span>1. Airbnb Roma (saldo por debitar)</span>
-            <span class="font-bold text-white">$1.091.900 (~273 €)</span>
+
+        <div class="grid grid-cols-2 gap-2 text-center text-xs">
+          <div class="bg-surface-dark p-2.5 rounded-xl border border-surface-border/50">
+            <p class="text-[10px] text-slate-400 font-semibold">Desembolsó Alan</p>
+            <p id="balAlanPaid" class="text-xs font-extrabold text-indigo-300 mt-0.5">$0</p>
+            <p class="text-[10px] text-slate-400 mt-1">Gasto real: <span id="balAlanShare" class="text-slate-200 font-bold">$0</span></p>
           </div>
-          <div class="flex justify-between items-center py-1 border-b border-amber-500/20">
-            <span>2. Cuota Noviembre Avianca (BOG-MAD-BOG)</span>
-            <span class="font-bold text-white">$2.041.847 (~510 €)</span>
+          <div class="bg-surface-dark p-2.5 rounded-xl border border-surface-border/50">
+            <p class="text-[10px] text-slate-400 font-semibold">Desembolsó Hillary</p>
+            <p id="balHillPaid" class="text-xs font-extrabold text-pink-300 mt-0.5">$0</p>
+            <p class="text-[10px] text-slate-400 mt-1">Gasto real: <span id="balHillShare" class="text-slate-200 font-bold">$0</span></p>
           </div>
-          <div class="flex justify-between items-center py-1">
-            <span>3. Vuelo Regreso Bogotá → Barranquilla + Airbnb BOG</span>
-            <span class="font-bold text-amber-300">Por Reservar</span>
-          </div>
+        </div>
+
+        <!-- Conclusión de deuda en lenguaje natural -->
+        <div id="debtConclusionBox" class="bg-surface-darker/70 p-2.5 rounded-xl border border-surface-border/40 text-center text-xs font-bold text-slate-300">
+          Cuentas al día
+        </div>
+      </div>
+
+      <!-- DESGLOSE POR PAÍSES / CIUDADES CON "VER DETALLE" -->
+      <div class="bg-surface-card rounded-2xl p-3.5 border border-surface-border space-y-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-white flex items-center gap-1.5">
+            <span>🗺️</span> Gastos por País
+          </span>
+          <span class="text-[10px] text-slate-400">Toca para desplegar</span>
+        </div>
+        <div id="countryBreakdownList" class="space-y-1.5 text-xs">
+          <!-- Dinámico -->
         </div>
       </div>
 
       <!-- Filtro rápido de bitácora -->
-      <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1 text-xs font-semibold">
-        <button onclick="filterExpenses('Todas')" class="filter-btn active bg-brand-600 text-white px-3 py-1.5 rounded-xl transition" data-city="Todas">Todas</button>
-        <button onclick="filterExpenses('Madrid')" class="filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-city="Madrid">Madrid</button>
-        <button onclick="filterExpenses('Barcelona')" class="filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-city="Barcelona">Barcelona</button>
-        <button onclick="filterExpenses('Milán')" class="filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-city="Milán">Milán/Como</button>
-        <button onclick="filterExpenses('Roma')" class="filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-city="Roma">Roma/Florencia</button>
-        <button onclick="filterExpenses('París')" class="filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-city="París">París</button>
+      <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1 text-xs font-semibold pt-1">
+        <button onclick="filterExpenses('Todas')" class="filter-btn active bg-brand-600 text-white px-3 py-1.5 rounded-xl transition" data-city="Todas">Todos</button>
+        <button onclick="filterExpenses('España')" class="filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-city="España">🇪🇸 España</button>
+        <button onclick="filterExpenses('Italia')" class="filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-city="Italia">🇮🇹 Italia</button>
+        <button onclick="filterExpenses('Francia')" class="filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-city="Francia">🇫🇷 Francia</button>
+        <button onclick="filterExpenses('Colombia')" class="filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-city="Colombia">🇨🇴 Colombia</button>
       </div>
 
       <!-- Lista de Gastos Registrados -->
@@ -143,32 +161,43 @@
         <!-- Renderizado dinámicamente con JavaScript -->
       </div>
 
-      <!-- Botón de Backup / Exportar datos -->
-      <div class="pt-4 flex items-center justify-between text-xs text-slate-400 border-t border-surface-border">
-        <div>
-          <span class="block text-slate-300 font-semibold">Copia de Seguridad</span>
-          <span class="text-[11px] text-slate-500">Descarga o restaura tu archivo JSON</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <button onclick="exportDataJSON()" class="bg-surface-dark border border-surface-border text-brand-400 hover:text-white font-semibold px-2.5 py-1.5 rounded-xl flex items-center gap-1 active:scale-95 transition">
-            <span>💾</span> Exportar
+      <!-- HERRAMIENTAS DE EXPORTACIÓN Y COPIA PARA TU EXCEL PERSONAL -->
+      <div class="bg-surface-card rounded-2xl p-4 border border-surface-border space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-xs font-bold text-white flex items-center gap-1">
+              <span>📋</span> Exportar a tu Excel Personal
+            </h3>
+            <p class="text-[10px] text-slate-400">Formato: Fecha, Monto, Deudor, Observación, Método</p>
+          </div>
+          <button onclick="copyExpensesForExcel()" class="bg-brand-600 hover:bg-brand-500 active:scale-95 text-white font-bold text-[10px] px-2.5 py-1.5 rounded-xl transition shadow">
+            Copiar Filas
           </button>
-          <label class="bg-surface-dark border border-surface-border text-slate-300 hover:text-white font-semibold px-2.5 py-1.5 rounded-xl flex items-center gap-1 cursor-pointer active:scale-95 transition">
-            <span>📥</span> Restaurar
-            <input type="file" id="importFileInput" accept=".json" onchange="importDataJSON(event)" class="hidden">
-          </label>
+        </div>
+
+        <div class="flex items-center justify-between pt-2 border-t border-surface-border/60 text-xs text-slate-400">
+          <span>Backup completo (.json)</span>
+          <div class="flex items-center gap-2">
+            <button onclick="exportDataJSON()" class="bg-surface-dark border border-surface-border text-brand-400 hover:text-white font-semibold px-2 py-1 rounded-lg flex items-center gap-1">
+              <span>💾</span> Exportar
+            </button>
+            <label class="bg-surface-dark border border-surface-border text-slate-300 hover:text-white font-semibold px-2 py-1 rounded-lg flex items-center gap-1 cursor-pointer">
+              <span>📥</span> Restaurar
+              <input type="file" id="importFileInput" accept=".json" onchange="importDataJSON(event)" class="hidden">
+            </label>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- SECCIÓN 2: PLANES & PRECIOS PROMEDIO POR CIUDAD -->
+    <!-- SECCIÓN 2: PLANES & PRECIOS PROMEDIO CON COMPARATIVAS -->
     <section id="tab-planes" class="tab-content hidden space-y-4">
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-base font-bold text-white flex items-center gap-1.5">
-            <span>🏛️</span> Explorador de Planes & Precios
+            <span>🏛️</span> Explorador de Planes & Comparativa
           </h2>
-          <p class="text-xs text-slate-400">Precios por persona • Agrega al itinerario con 1 toque</p>
+          <p class="text-xs text-slate-400">Fuentes oficiales, Civitatis, GetYourGuide, Omio</p>
         </div>
         <button onclick="openModal('modalNuevoPlanCustom')" class="bg-surface-dark hover:bg-surface-card border border-surface-border text-brand-400 font-bold text-xs px-2.5 py-1.5 rounded-xl flex items-center gap-1 transition">
           <span>+</span> Crear Plan
@@ -186,7 +215,7 @@
         <button onclick="filterCatalog('París')" class="cat-filter-btn bg-surface-card text-slate-300 px-3 py-1.5 rounded-xl border border-surface-border transition" data-catcity="París">🇫🇷 París</button>
       </div>
 
-      <!-- Lista del catálogo -->
+      <!-- Lista del catálogo con comparativas -->
       <div id="catalogList" class="space-y-3">
         <!-- Renderizado dinámico -->
       </div>
@@ -246,19 +275,34 @@
       </div>
     </section>
 
-    <!-- SECCIÓN 4: ITINERARIO CON HORARIOS Y PLANES DINÁMICOS -->
+    <!-- SECCIÓN 4: ITINERARIO CON HORARIOS Y GESTIÓN DE DÍAS PASADOS -->
     <section id="tab-itinerario" class="tab-content hidden space-y-3">
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-base font-bold text-white flex items-center gap-1.5">
             <span>🗺️</span> Itinerario con Horas Locales
           </h2>
-          <p class="text-xs text-slate-400">20 días con traslados, vuelos y tus planes agendados</p>
+          <p class="text-xs text-slate-400">20 días • Marca días como "Pasados" para archivar</p>
         </div>
       </div>
 
-      <div id="itineraryTimeline" class="space-y-3">
-        <!-- Renderizado dinámico -->
+      <!-- DÍAS ACTIVOS -->
+      <div id="itineraryTimelineActive" class="space-y-3">
+        <!-- Dinámico -->
+      </div>
+
+      <!-- CONTENEDOR COLAPSIBLE DE DÍAS PASADOS -->
+      <div id="pastDaysWrapper" class="pt-2 hidden">
+        <button onclick="togglePastDays()" class="w-full bg-surface-card border border-surface-border py-2.5 px-3 rounded-2xl flex items-center justify-between text-xs font-bold text-slate-400 hover:text-white transition">
+          <span class="flex items-center gap-1.5">
+            <span>📦</span> <span id="pastDaysCountLabel">Ver días pasados (0)</span>
+          </span>
+          <span id="pastDaysChevron">▼</span>
+        </button>
+
+        <div id="itineraryTimelinePast" class="space-y-3 pt-3 hidden">
+          <!-- Dinámico -->
+        </div>
       </div>
     </section>
 
@@ -288,7 +332,7 @@
 
   <!-- MODAL: REGISTRAR NUEVO GASTO EN BITÁCORA -->
   <div id="modalNuevoGasto" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-surface-card w-full max-w-md rounded-t-3xl sm:rounded-3xl border border-surface-border p-5 space-y-4 shadow-2xl animate-fade-in">
+    <div class="bg-surface-card w-full max-w-md rounded-t-3xl sm:rounded-3xl border border-surface-border p-5 space-y-4 shadow-2xl animate-fade-in max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-surface-border/60 pb-3">
         <h3 class="text-sm font-bold text-white flex items-center gap-1.5">
           <span>➕</span> Registrar Gasto en Bitácora
@@ -298,8 +342,8 @@
 
       <form id="formGasto" onsubmit="handleSaveExpense(event)" class="space-y-3 text-xs">
         <div>
-          <label class="block text-slate-300 font-semibold mb-1">Descripción / Lugar</label>
-          <input type="text" id="gastoDesc" placeholder="Ej: Almuerzo pastas en Trastevere" required
+          <label class="block text-slate-300 font-semibold mb-1">Descripción / Observación</label>
+          <input type="text" id="gastoDesc" placeholder="Ej: Cena pastas en Trastevere" required
             class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 text-xs">
         </div>
 
@@ -320,43 +364,75 @@
           <div>
             <label class="block text-slate-300 font-semibold mb-1">Ciudad</label>
             <select id="gastoCiudad" class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-brand-500 text-xs">
-              <option value="Madrid">Madrid</option>
-              <option value="Barcelona">Barcelona</option>
-              <option value="Milán">Milán</option>
-              <option value="Como">Como</option>
-              <option value="Roma">Roma</option>
-              <option value="Florencia">Florencia</option>
-              <option value="Pisa">Pisa</option>
-              <option value="París">París</option>
-              <option value="Bogotá">Bogotá</option>
+              <option value="Madrid">Madrid (España)</option>
+              <option value="Barcelona">Barcelona (España)</option>
+              <option value="Milán">Milán (Italia)</option>
+              <option value="Como">Como (Italia)</option>
+              <option value="Roma">Roma (Italia)</option>
+              <option value="Florencia">Florencia (Italia)</option>
+              <option value="Pisa">Pisa (Italia)</option>
+              <option value="París">París (Francia)</option>
+              <option value="Bogotá">Bogotá (Colombia)</option>
+              <option value="Barranquilla">Barranquilla (Colombia)</option>
             </select>
           </div>
           <div>
             <label class="block text-slate-300 font-semibold mb-1">Categoría</label>
             <select id="gastoCat" class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-brand-500 text-xs">
-              <option value="Comida">Comida & Tapas</option>
-              <option value="Transporte">Transporte Local (Metro/Taxi)</option>
+              <option value="Comida">Comida & Restaurantes</option>
+              <option value="Transporte">Transporte Local / Metro</option>
               <option value="Tours">Tours & Entradas</option>
-              <option value="Compras">Compras & Souvenirs</option>
+              <option value="Compras">Compras & Ropa</option>
               <option value="Supermercado">Supermercado & Snacks</option>
               <option value="Otros">Otros</option>
             </select>
           </div>
         </div>
 
+        <!-- OPCIONES DE PAGO ESPECÍFICAS DE ALAN -->
         <div>
-          <label class="block text-slate-300 font-semibold mb-1">Pagado Por</label>
-          <div class="grid grid-cols-3 gap-2 text-center">
-            <label class="flex items-center justify-center p-2 rounded-xl border border-surface-border bg-surface-dark cursor-pointer has-[:checked]:border-brand-500 has-[:checked]:bg-brand-500/20 text-xs">
-              <input type="radio" name="pagador" value="Ambos" checked class="hidden"> Ambos
+          <div class="flex items-center justify-between mb-1">
+            <label class="text-slate-300 font-semibold">Método de Pago</label>
+            <button type="button" onclick="promptAddNewPaymentMethod()" class="text-[10px] text-brand-400 hover:underline">+ Crear Nuevo</button>
+          </div>
+          <select id="gastoMetodo" class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-brand-500 text-xs font-semibold">
+            <option value="Banco de Bogotá">Banco de Bogotá</option>
+            <option value="Nubank">Nubank</option>
+            <option value="BBVA">BBVA</option>
+            <option value="Bancolombia">Bancolombia</option>
+            <option value="ARQ">ARQ</option>
+            <option value="Efectivo Euros">Efectivo Euros</option>
+          </select>
+        </div>
+
+        <!-- ¿QUIÉN PAGÓ? -->
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">¿Quién desembolsó el dinero?</label>
+          <div class="grid grid-cols-2 gap-2 text-center">
+            <label class="flex items-center justify-center p-2.5 rounded-xl border border-surface-border bg-surface-dark cursor-pointer has-[:checked]:border-brand-500 has-[:checked]:bg-brand-500/20 text-xs font-bold text-indigo-300">
+              <input type="radio" name="pagador" value="Alan" checked class="hidden"> Alan Pagó
             </label>
-            <label class="flex items-center justify-center p-2 rounded-xl border border-surface-border bg-surface-dark cursor-pointer has-[:checked]:border-brand-500 has-[:checked]:bg-brand-500/20 text-xs">
-              <input type="radio" name="pagador" value="Alan" class="hidden"> Alan
-            </label>
-            <label class="flex items-center justify-center p-2 rounded-xl border border-surface-border bg-surface-dark cursor-pointer has-[:checked]:border-brand-500 has-[:checked]:bg-brand-500/20 text-xs">
-              <input type="radio" name="pagador" value="Hillary" class="hidden"> Hillary
+            <label class="flex items-center justify-center p-2.5 rounded-xl border border-surface-border bg-surface-dark cursor-pointer has-[:checked]:border-brand-500 has-[:checked]:bg-brand-500/20 text-xs font-bold text-pink-300">
+              <input type="radio" name="pagador" value="Hillary" class="hidden"> Hillary Pagó
             </label>
           </div>
+        </div>
+
+        <!-- DIVISIÓN DEL GASTO (DEUDOR) -->
+        <div class="bg-surface-dark p-3 rounded-xl border border-surface-border space-y-2">
+          <label class="block text-slate-300 font-semibold">¿Cómo se reparte este gasto?</label>
+          <div class="grid grid-cols-3 gap-1.5 text-center text-[11px]">
+            <label class="p-2 rounded-lg border border-surface-border bg-surface-card cursor-pointer has-[:checked]:border-brand-500 has-[:checked]:bg-brand-500/20 font-semibold">
+              <input type="radio" name="division" value="50_50" checked class="hidden"> Mitad y Mitad (50/50)
+            </label>
+            <label class="p-2 rounded-lg border border-surface-border bg-surface-card cursor-pointer has-[:checked]:border-brand-500 has-[:checked]:bg-brand-500/20 font-semibold">
+              <input type="radio" name="division" value="solo_alan" class="hidden"> 100% de Alan
+            </label>
+            <label class="p-2 rounded-lg border border-surface-border bg-surface-card cursor-pointer has-[:checked]:border-brand-500 has-[:checked]:bg-brand-500/20 font-semibold">
+              <input type="radio" name="division" value="solo_hillary" class="hidden"> 100% de Hillary
+            </label>
+          </div>
+          <p class="text-[10px] text-slate-400">Si se divide 50/50, el sistema calcula automáticamente la deuda entre ambos.</p>
         </div>
 
         <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 active:scale-95 text-white font-bold py-3 rounded-xl mt-2 shadow-lg shadow-brand-600/30 transition text-sm">
@@ -366,9 +442,9 @@
     </div>
   </div>
 
-  <!-- MODAL: AGREGAR PLAN AL ITINERARIO -->
+  <!-- MODAL: AGENDAR PLAN EN EL ITINERARIO (CON PRECIOS Y FUENTES) -->
   <div id="modalAddPlanToItinerary" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-surface-card w-full max-w-md rounded-t-3xl sm:rounded-3xl border border-surface-border p-5 space-y-4 shadow-2xl animate-fade-in">
+    <div class="bg-surface-card w-full max-w-md rounded-t-3xl sm:rounded-3xl border border-surface-border p-5 space-y-4 shadow-2xl animate-fade-in max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-surface-border/60 pb-3">
         <h3 class="text-sm font-bold text-white flex items-center gap-1.5">
           <span>📅</span> Agendar Plan en el Itinerario
@@ -379,7 +455,7 @@
       <form id="formAddPlan" onsubmit="handleConfirmAddToItinerary(event)" class="space-y-3 text-xs">
         <input type="hidden" id="addPlanId">
         <div>
-          <label class="block text-slate-300 font-semibold mb-1">Nombre del Plan</label>
+          <label class="block text-slate-300 font-semibold mb-1">Actividad</label>
           <input type="text" id="addPlanName" readonly class="w-full bg-surface-dark/70 border border-surface-border rounded-xl px-3 py-2.5 text-slate-200 font-bold text-xs">
         </div>
 
@@ -387,7 +463,7 @@
           <div>
             <label class="block text-slate-300 font-semibold mb-1">Día del Viaje</label>
             <select id="addPlanDay" class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-brand-500 text-xs">
-              <!-- Se llena con JS -->
+              <!-- JS -->
             </select>
           </div>
           <div>
@@ -401,13 +477,38 @@
           <p id="addPlanCostPreview" class="text-sm font-extrabold text-white">$0 COP (0 €)</p>
         </div>
 
-        <div class="flex items-center gap-2 pt-1">
-          <input type="checkbox" id="addPlanAlsoExpense" class="rounded bg-surface-dark border-surface-border text-brand-600 focus:ring-0">
-          <label for="addPlanAlsoExpense" class="text-slate-300 text-[11px]">Anotar este costo de una vez en mi Bitácora</label>
+        <!-- Opción explícita para registrar gasto futuro si se compra anticipado -->
+        <div class="bg-surface-darker/60 p-3 rounded-xl border border-surface-border/50 space-y-2">
+          <div class="flex items-center gap-2">
+            <input type="checkbox" id="addPlanAlsoExpense" onchange="toggleAddPlanExpenseFields()" class="rounded bg-surface-dark border-surface-border text-brand-600 focus:ring-0">
+            <label for="addPlanAlsoExpense" class="text-slate-200 text-xs font-semibold">¿Ya pagaste o compraste este tour hoy?</label>
+          </div>
+          <div id="addPlanExpenseExtra" class="hidden space-y-2 pt-2 border-t border-surface-border/50 text-xs">
+            <p class="text-[11px] text-slate-400">Se agregará a tu bitácora de gastos:</p>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] text-slate-400">Método de Pago</label>
+                <select id="addPlanPaymentMethod" class="w-full bg-surface-dark border border-surface-border rounded-lg p-1.5 text-white text-xs">
+                  <option value="Banco de Bogotá">Banco de Bogotá</option>
+                  <option value="Nubank">Nubank</option>
+                  <option value="BBVA">BBVA</option>
+                  <option value="Bancolombia">Bancolombia</option>
+                  <option value="ARQ">ARQ</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] text-slate-400">Pagador</label>
+                <select id="addPlanPayer" class="w-full bg-surface-dark border border-surface-border rounded-lg p-1.5 text-white text-xs">
+                  <option value="Alan">Alan</option>
+                  <option value="Hillary">Hillary</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
 
         <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 active:scale-95 text-white font-bold py-3 rounded-xl shadow-lg shadow-brand-600/30 transition text-sm">
-          Confirmar y Guardar en Itinerario
+          Agendar en Itinerario
         </button>
       </form>
     </div>
@@ -426,7 +527,7 @@
       <form id="formPlanCustom" onsubmit="handleSaveCustomPlan(event)" class="space-y-3 text-xs">
         <div>
           <label class="block text-slate-300 font-semibold mb-1">Nombre de la actividad o restaurante</label>
-          <input type="text" id="customPlanName" placeholder="Ej: Cena romántica en Torre Eiffel" required
+          <input type="text" id="customPlanName" placeholder="Ej: Cena especial en Trastevere" required
             class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 text-xs">
         </div>
 
@@ -470,8 +571,8 @@
         </div>
 
         <div>
-          <label class="block text-slate-300 font-semibold mb-1">Notas o tips</label>
-          <input type="text" id="customPlanNotes" placeholder="Ej: Reservar con mesa exterior"
+          <label class="block text-slate-300 font-semibold mb-1">Fuente o comparativa de precio</label>
+          <input type="text" id="customPlanSource" placeholder="Ej: Civitatis / GetYourGuide / Web oficial"
             class="w-full bg-surface-dark border border-surface-border rounded-xl px-3 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 text-xs">
         </div>
 
@@ -562,7 +663,7 @@
         <!-- Italiano -->
         <div class="bg-surface-dark p-3 rounded-xl border border-surface-border">
           <p class="font-bold text-emerald-400">🇮🇹 In Italia (Mostrare al cameriere):</p>
-          <p class="italic text-slate-200 mt-1">"Lei è allergica alle arachidi, è un'allergia grave. Questo piatto contiene arachidi o tracce di arachidi? Inoltre non mangia gamberi, ma non è un'allergia."</p>
+          <p class="italic text-slate-200 mt-1">"Lei è allergica alle arachidi, è un'allergia grave. Questo piatto contiene arachidi o tracce di arachidi? Además non mangia gamberi, ma non è un'allergia."</p>
         </div>
 
         <!-- Francés -->
@@ -584,18 +685,22 @@
   <!-- LÓGICA PRINCIPAL DE LA APLICACIÓN -->
   <script>
     // Storage Keys
-    const STORAGE_EXPENSES_KEY = "eurotrip_expenses_v3";
-    const STORAGE_BUDGET_KEY = "eurotrip_budget_v3";
-    const STORAGE_SCHEDULED_PLANS_KEY = "eurotrip_scheduled_plans_v3";
-    const STORAGE_CUSTOM_CATALOG_KEY = "eurotrip_custom_catalog_v3";
+    const STORAGE_EXPENSES_KEY = "eurotrip_expenses_v4";
+    const STORAGE_BUDGET_KEY = "eurotrip_budget_v4";
+    const STORAGE_SCHEDULED_PLANS_KEY = "eurotrip_scheduled_plans_v4";
+    const STORAGE_CUSTOM_CATALOG_KEY = "eurotrip_custom_catalog_v4";
+    const STORAGE_PAST_DAYS_KEY = "eurotrip_past_days_v4";
+    const STORAGE_CUSTOM_PAYMENTS_KEY = "eurotrip_custom_payments_v4";
 
     // Variables en memoria
     let currentCityFilter = "Todas";
     let currentCatCityFilter = "Madrid";
     let recordedExpenses = [];
     let currentBudget = null;
-    let scheduledPlans = []; // Planes asignados a días del itinerario
+    let scheduledPlans = [];
     let customCatalog = [];
+    let pastDaysSet = new Set();
+    let customPaymentMethods = ["Banco de Bogotá", "Nubank", "BBVA", "Bancolombia", "ARQ", "Efectivo Euros"];
 
     document.addEventListener("DOMContentLoaded", () => {
       initAppStorage();
@@ -610,7 +715,13 @@
       return Math.round(num || 0).toLocaleString("es-CO") + " €";
     }
 
-    // Inicializar LocalStorage con datos base si no existen
+    function getCountryByCity(city) {
+      if (["Madrid", "Barcelona"].includes(city)) return "España";
+      if (["Milán", "Como", "Roma", "Florencia", "Pisa"].includes(city)) return "Italia";
+      if (["París"].includes(city)) return "Francia";
+      return "Colombia";
+    }
+
     function initAppStorage() {
       // 1. Gastos
       const storedExp = localStorage.getItem(STORAGE_EXPENSES_KEY);
@@ -620,13 +731,17 @@
         recordedExpenses = [
           {
             id: "exp-init-1",
-            fecha: "16 Oct",
+            fecha: "2026-10-16",
             desc: "2 Maletas Trolley ($305.920 c/u) + 2 Maletines ($74.823 c/u)",
             ciudad: "Barranquilla",
+            pais: "Colombia",
             cat: "Compras",
             eur: 190.37,
             cop: 761486,
-            pagador: "Ambos",
+            pagador: "Alan",
+            division: "50_50",
+            metodo: "Banco de Bogotá",
+            deudor: "Alan/Hill",
             isBase: true
           }
         ];
@@ -648,7 +763,6 @@
       if (storedSched) {
         try { scheduledPlans = JSON.parse(storedSched); } catch(e) { scheduledPlans = []; }
       } else {
-        // Planes agendados por defecto
         scheduledPlans = [
           {
             id: "sched-inter",
@@ -683,6 +797,37 @@
       } else {
         customCatalog = [];
       }
+
+      // 5. Días Pasados
+      const storedPast = localStorage.getItem(STORAGE_PAST_DAYS_KEY);
+      if (storedPast) {
+        try { pastDaysSet = new Set(JSON.parse(storedPast)); } catch(e) { pastDaysSet = new Set(); }
+      }
+
+      // 6. Métodos de Pago
+      const storedPay = localStorage.getItem(STORAGE_CUSTOM_PAYMENTS_KEY);
+      if (storedPay) {
+        try { customPaymentMethods = JSON.parse(storedPay); } catch(e) {}
+      }
+      refreshPaymentSelect();
+    }
+
+    function refreshPaymentSelect() {
+      const sel = document.getElementById("gastoMetodo");
+      sel.innerHTML = customPaymentMethods.map(m => `<option value="${m}">${m}</option>`).join("");
+    }
+
+    function promptAddNewPaymentMethod() {
+      const nuevo = prompt("Nombre del nuevo método de pago (ej: Tarjeta Rappi, Davivienda):");
+      if (nuevo && nuevo.trim()) {
+        const val = nuevo.trim();
+        if (!customPaymentMethods.includes(val)) {
+          customPaymentMethods.push(val);
+          localStorage.setItem(STORAGE_CUSTOM_PAYMENTS_KEY, JSON.stringify(customPaymentMethods));
+          refreshPaymentSelect();
+          document.getElementById("gastoMetodo").value = val;
+        }
+      }
     }
 
     function populateDaySelect() {
@@ -694,18 +839,19 @@
 
     function renderAll() {
       renderHeaderTotals();
+      renderBalanceAndDebts();
+      renderCountryBreakdown();
       renderExpensesList();
       renderCatalog();
       renderBaseBudget();
       renderItinerary();
     }
 
-    // Renderizar Totales Superiores
+    // 1. Renderizar Header Totales
     function renderHeaderTotals() {
       let paidBaseCOP = 0;
       let pendingBaseCOP = 0;
 
-      // Transportes
       currentBudget.transportes.forEach(t => {
         if (t.estado === "pagado") paidBaseCOP += t.cop;
         else if (t.estado === "cuota_nov") {
@@ -716,7 +862,6 @@
         }
       });
 
-      // Alojamientos
       currentBudget.alojamientos.forEach(a => {
         if (a.estado === "pagado") paidBaseCOP += a.cop;
         else if (a.estado === "reservado_por_pagar" || a.estado === "pendiente") {
@@ -724,12 +869,10 @@
         }
       });
 
-      // Otros
       currentBudget.otrosFijos.forEach(o => {
         if (o.estado === "pagado") paidBaseCOP += o.cop;
       });
 
-      // Gastos de bitácora
       let customSpentCOP = 0;
       recordedExpenses.forEach(e => {
         if (!e.isBase) customSpentCOP += e.cop;
@@ -745,22 +888,135 @@
       document.getElementById("headerSpentEUR").innerText = formatEUR(customSpentCOP / TRM);
     }
 
-    // Renderizar Bitácora
+    // 2. Balance Alan vs Hillary (Quién pagó y cuánto debe cada uno)
+    function renderBalanceAndDebts() {
+      let alanPaid = 0;
+      let hillPaid = 0;
+      let alanShare = 0;
+      let hillShare = 0;
+
+      recordedExpenses.forEach(e => {
+        // Excluimos compras pre-viaje que ya están saldadas en Excel
+        if (e.isBase) return;
+
+        const val = e.cop;
+        if (e.pagador === "Alan") alanPaid += val;
+        else if (e.pagador === "Hillary") hillPaid += val;
+
+        if (e.division === "50_50") {
+          alanShare += (val / 2);
+          hillShare += (val / 2);
+        } else if (e.division === "solo_alan") {
+          alanShare += val;
+        } else if (e.division === "solo_hillary") {
+          hillShare += val;
+        }
+      });
+
+      document.getElementById("balAlanPaid").innerText = formatCOP(alanPaid);
+      document.getElementById("balHillPaid").innerText = formatCOP(hillPaid);
+      document.getElementById("balAlanShare").innerText = formatCOP(alanShare);
+      document.getElementById("balHillShare").innerText = formatCOP(hillShare);
+
+      // Saldo neto: Alan pagó menos su parte correspondiente
+      // Si netoAlan > 0 significa que Alan pagó de más y Hillary le debe a Alan
+      const netoAlan = alanPaid - alanShare;
+      const box = document.getElementById("debtConclusionBox");
+      const badge = document.getElementById("debtSummaryBadge");
+
+      if (Math.abs(netoAlan) < 100) {
+        box.innerHTML = `<span class="text-emerald-400">✨ Cuentas cuadradas: ninguno se debe nada</span>`;
+        badge.innerText = "Al día";
+        badge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+      } else if (netoAlan > 0) {
+        box.innerHTML = `👩 <span class="text-pink-300 font-bold">Hillary le debe a Alan:</span> <span class="text-white font-extrabold">${formatCOP(netoAlan)}</span> (${formatEUR(netoAlan / TRM)})`;
+        badge.innerText = `Hill debe ${formatCOP(netoAlan)}`;
+        badge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/40";
+      } else {
+        const debt = Math.abs(netoAlan);
+        box.innerHTML = `👨 <span class="text-indigo-300 font-bold">Alan le debe a Hillary:</span> <span class="text-white font-extrabold">${formatCOP(debt)}</span> (${formatEUR(debt / TRM)})`;
+        badge.innerText = `Alan debe ${formatCOP(debt)}`;
+        badge.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40";
+      }
+    }
+
+    // 3. Desglose por País con "Ver Detalle" colapsable
+    function renderCountryBreakdown() {
+      const container = document.getElementById("countryBreakdownList");
+      const countries = ["España", "Italia", "Francia", "Colombia"];
+
+      const countryData = {};
+      countries.forEach(c => countryData[c] = { totalCOP: 0, items: [] });
+
+      recordedExpenses.forEach(e => {
+        const p = e.pais || getCountryByCity(e.ciudad);
+        if (!countryData[p]) countryData[p] = { totalCOP: 0, items: [] };
+        countryData[p].totalCOP += e.cop;
+        countryData[p].items.push(e);
+      });
+
+      container.innerHTML = Object.keys(countryData).map(country => {
+        const data = countryData[country];
+        const flag = country === "España" ? "🇪🇸" : (country === "Italia" ? "🇮🇹" : (country === "Francia" ? "🇫🇷" : "🇨🇴"));
+        const collapseId = "country-collapse-" + country.toLowerCase();
+
+        return `
+          <div class="bg-surface-dark border border-surface-border/50 rounded-xl overflow-hidden">
+            <div onclick="toggleCountryDetail('${collapseId}')" class="p-2.5 flex items-center justify-between cursor-pointer hover:bg-surface-hover/30 transition">
+              <div class="flex items-center gap-1.5 font-bold text-slate-200">
+                <span>${flag}</span>
+                <span>${country}</span>
+                <span class="text-[10px] text-slate-400 font-normal">(${data.items.length} gastos)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="font-extrabold text-white">${formatCOP(data.totalCOP)}</span>
+                <span id="icon-${collapseId}" class="text-[10px] text-slate-400">▼</span>
+              </div>
+            </div>
+
+            <div id="${collapseId}" class="hidden p-2.5 pt-0 border-t border-surface-border/30 space-y-1.5 text-[11px] bg-surface-darker/40">
+              ${data.items.length === 0 ? `<p class="text-slate-500 italic py-1">Sin gastos aún en ${country}.</p>` : ''}
+              ${data.items.map(i => `
+                <div class="flex items-center justify-between py-1 border-b border-surface-border/20 last:border-none">
+                  <div class="min-w-0 pr-2">
+                    <p class="font-medium text-slate-300 truncate">${i.desc}</p>
+                    <p class="text-[9px] text-slate-500">${i.fecha || 'Hoy'} • ${i.ciudad} • Pagó: ${i.pagador} (${i.metodo || 'BDB'})</p>
+                  </div>
+                  <span class="font-bold text-white shrink-0">${formatCOP(i.cop)}</span>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function toggleCountryDetail(id) {
+      const el = document.getElementById(id);
+      const icon = document.getElementById("icon-" + id);
+      if (el.classList.contains("hidden")) {
+        el.classList.remove("hidden");
+        icon.innerText = "▲";
+      } else {
+        el.classList.add("hidden");
+        icon.innerText = "▼";
+      }
+    }
+
+    // 4. Renderizar Bitácora
     function renderExpensesList() {
       const container = document.getElementById("expensesList");
       const filtered = recordedExpenses.filter(e => {
+        const country = e.pais || getCountryByCity(e.ciudad);
         if (currentCityFilter === "Todas") return true;
-        if (currentCityFilter === "Milán" && (e.ciudad === "Milán" || e.ciudad === "Como")) return true;
-        if (currentCityFilter === "Roma" && (e.ciudad === "Roma" || e.ciudad === "Florencia" || e.ciudad === "Pisa")) return true;
-        return e.ciudad === currentCityFilter;
+        return country === currentCityFilter;
       });
 
       if (filtered.length === 0) {
         container.innerHTML = `
-          <div class="text-center py-8 bg-surface-card/40 rounded-2xl border border-surface-border/50 text-slate-400">
+          <div class="text-center py-6 bg-surface-card/40 rounded-2xl border border-surface-border/50 text-slate-400">
             <span class="text-2xl block mb-1">☕</span>
             <p class="text-xs">No hay gastos anotados en ${currentCityFilter}.</p>
-            <p class="text-[11px] text-slate-500 mt-1">Toca "+ Anotar" para registrar cafés, comidas o compras.</p>
           </div>
         `;
         return;
@@ -769,13 +1025,14 @@
       container.innerHTML = filtered.map(e => `
         <div class="bg-surface-card p-3 rounded-2xl border border-surface-border flex items-center justify-between gap-2 shadow-sm">
           <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-1.5 mb-0.5">
-              <span class="text-[10px] bg-surface-dark font-semibold text-slate-300 px-2 py-0.5 rounded-full border border-surface-border">${e.ciudad}</span>
-              <span class="text-[10px] bg-brand-500/20 font-semibold text-brand-300 px-2 py-0.5 rounded-full">${e.cat}</span>
-              <span class="text-[10px] text-slate-500">${e.fecha || 'Hoy'}</span>
+            <div class="flex items-center gap-1.5 mb-0.5 flex-wrap">
+              <span class="text-[9px] bg-surface-dark font-semibold text-slate-300 px-2 py-0.5 rounded-full border border-surface-border">${e.ciudad}</span>
+              <span class="text-[9px] bg-brand-500/20 font-semibold text-brand-300 px-2 py-0.5 rounded-full">${e.cat}</span>
+              <span class="text-[9px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded-md font-semibold">${e.metodo || 'BDB'}</span>
+              <span class="text-[9px] text-slate-500">${e.fecha}</span>
             </div>
             <p class="text-xs font-bold text-white truncate">${e.desc}</p>
-            <p class="text-[10px] text-slate-400">Pagó: <span class="text-slate-300 font-semibold">${e.pagador}</span></p>
+            <p class="text-[10px] text-slate-400">Pagó: <span class="text-slate-200 font-bold">${e.pagador}</span> • Reparto: <span class="text-slate-300 font-semibold">${e.division === '50_50' ? 'Mitad (50/50)' : (e.division === 'solo_alan' ? '100% Alan' : '100% Hillary')}</span></p>
           </div>
           <div class="text-right flex items-center gap-2">
             <div>
@@ -783,7 +1040,7 @@
               <p class="text-[10px] text-emerald-400 font-semibold">${formatEUR(e.eur)}</p>
             </div>
             ${!e.isBase ? `
-              <button onclick="deleteExpense('${e.id}')" class="text-slate-500 hover:text-rose-400 text-xs p-1">🗑️</button>
+              <button onclick="deleteExpense('${e.id}')" class="text-slate-500 hover:text-rose-400 text-xs p-1" title="Eliminar gasto">🗑️</button>
             ` : ''}
           </div>
         </div>
@@ -811,17 +1068,31 @@
       const eur = parseFloat(document.getElementById("gastoEUR").value) || (cop / TRM);
       const ciudad = document.getElementById("gastoCiudad").value;
       const cat = document.getElementById("gastoCat").value;
+      const metodo = document.getElementById("gastoMetodo").value;
       const pagador = document.querySelector('input[name="pagador"]:checked').value;
+      const division = document.querySelector('input[name="division"]:checked').value;
+
+      const hoy = new Date();
+      const fechaStr = `${hoy.getDate()}/${hoy.getMonth() + 1}/${hoy.getFullYear()}`;
+
+      // Deudor según formato de tu Excel personal (Alan / Hill)
+      let deudorStr = "Alan";
+      if (division === "solo_hillary") deudorStr = "Hill";
+      else if (division === "50_50") deudorStr = "Alan/Hill";
 
       const newExpense = {
         id: "exp-" + Date.now(),
-        fecha: new Date().toLocaleDateString("es-ES", { day: "numeric", month: "short" }),
+        fecha: fechaStr,
         desc,
         cop,
         eur,
         ciudad,
+        pais: getCountryByCity(ciudad),
         cat,
+        metodo,
         pagador,
+        division,
+        deudor: deudorStr,
         isBase: false
       };
 
@@ -843,18 +1114,34 @@
     function convertCurrency(source) {
       if (source === 'EUR') {
         const eurVal = parseFloat(document.getElementById("gastoEUR").value);
-        if (!isNaN(eurVal)) {
-          document.getElementById("gastoCOP").value = Math.round(eurVal * TRM);
-        }
+        if (!isNaN(eurVal)) document.getElementById("gastoCOP").value = Math.round(eurVal * TRM);
       } else {
         const copVal = parseFloat(document.getElementById("gastoCOP").value);
-        if (!isNaN(copVal)) {
-          document.getElementById("gastoEUR").value = (copVal / TRM).toFixed(2);
-        }
+        if (!isNaN(copVal)) document.getElementById("gastoEUR").value = (copVal / TRM).toFixed(2);
       }
     }
 
-    // Renderizar Catálogo de Planes
+    // Copiar filas con el formato de tu Excel personal
+    // Formato exacto: FECHA \t MONTO \t DEUDOR \t OBSERVACIÓN \t MÉTODO
+    function copyExpensesForExcel() {
+      if (recordedExpenses.length === 0) {
+        alert("No hay gastos registrados en la bitácora para copiar.");
+        return;
+      }
+
+      const rows = recordedExpenses.map(e => {
+        return `${e.fecha}\t${Math.round(e.cop)}\t${e.deudor || e.pagador}\t${e.desc} (${e.ciudad})\t${e.metodo || 'BDB'}`;
+      });
+
+      const clipText = "Fecha\tMonto\tDeudor\tObservación\tMétodo\n" + rows.join("\n");
+      navigator.clipboard.writeText(clipText).then(() => {
+        alert("¡Copiado al portapapeles! 📋\n\nPuedes abrir tu Excel personal (hojas OCT 26 / SEP 26) y darle 'Pegar' (Ctrl + V). Las columnas ya vienen ordenadas: Fecha, Monto, Deudor, Observación, Método.");
+      }).catch(err => {
+        alert("Error al copiar automáticamente. Por favor descarga el archivo de backup.");
+      });
+    }
+
+    // 5. Renderizar Catálogo con Comparación de Fuentes
     function renderCatalog() {
       const container = document.getElementById("catalogList");
       const allPlans = [...catalogPlans, ...customCatalog];
@@ -864,30 +1151,43 @@
       });
 
       container.innerHTML = filtered.map(plan => {
-        // Verificar si este plan ya está en el itinerario
         const isAlreadyScheduled = scheduledPlans.some(s => s.planId === plan.id || s.nombre.includes(plan.nombre));
 
         return `
-          <div class="bg-surface-card p-3.5 rounded-2xl border border-surface-border space-y-2 shadow-sm">
+          <div class="bg-surface-card p-3.5 rounded-2xl border border-surface-border space-y-2.5 shadow-sm">
             <div class="flex items-start justify-between gap-2">
               <div>
-                <div class="flex items-center gap-1.5 mb-1">
-                  <span class="text-[10px] bg-surface-dark font-semibold text-slate-300 px-2 py-0.5 rounded-full border border-surface-border">${plan.categoria}</span>
-                  <span class="text-[10px] text-slate-400">⏱️ ${plan.duracion}</span>
+                <div class="flex items-center gap-1.5 mb-1 flex-wrap">
+                  <span class="text-[9px] bg-surface-dark font-semibold text-slate-300 px-2 py-0.5 rounded-full border border-surface-border">${plan.categoria}</span>
+                  <span class="text-[9px] text-slate-400">⏱️ ${plan.duracion}</span>
+                  <span class="text-[9px] bg-indigo-500/10 text-indigo-300 font-semibold px-2 py-0.5 rounded-full border border-indigo-500/20">📍 ${plan.fuentePrincipal || 'Oficial'}</span>
                 </div>
                 <h3 class="text-xs font-bold text-white">${plan.nombre}</h3>
               </div>
-              <div class="text-right">
+              <div class="text-right shrink-0">
                 ${plan.precioEUR_pp === 0 ? `
                   <span class="text-xs font-extrabold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-500/30">GRATIS</span>
                 ` : `
                   <p class="text-xs font-extrabold text-white">${plan.precioEUR_pp} € <span class="text-[10px] font-normal text-slate-400">/ pers</span></p>
-                  <p class="text-[10px] font-semibold text-slate-400">${formatCOP(plan.precioCOP_pp * 2)} (x2 pax)</p>
+                  <p class="text-[10px] font-semibold text-slate-400">${formatCOP(plan.precioCOP_pp * 2)} (x2)</p>
                 `}
               </div>
             </div>
 
             <p class="text-[11px] text-slate-300 leading-relaxed">${plan.descripcion}</p>
+
+            <!-- TABLA COMPARATIVA DE FUENTES (OFICIAL vs CIVITATIS vs GETYOURGUIDE) -->
+            ${plan.comparativa && plan.comparativa.length > 0 ? `
+              <div class="bg-surface-dark p-2.5 rounded-xl border border-surface-border/60 space-y-1 text-[10px]">
+                <p class="font-bold text-amber-400 mb-1">🔍 Comparación de Canales y Precios:</p>
+                ${plan.comparativa.map(c => `
+                  <div class="flex justify-between items-center py-0.5 border-b border-surface-border/30 last:border-none">
+                    <span class="text-slate-300 font-medium">${c.canal} <span class="text-slate-500">(${c.tipo})</span></span>
+                    <span class="font-bold text-white">${c.precio}</span>
+                  </div>
+                `).join("")}
+              </div>
+            ` : ''}
 
             ${plan.tips ? `
               <div class="bg-surface-darker/60 p-2 rounded-xl text-[10px] text-slate-400 border border-surface-border/40">
@@ -895,19 +1195,17 @@
               </div>
             ` : ''}
 
-            <!-- Botones de Acción -->
+            <!-- Botón de Agendar -->
             <div class="pt-1 flex items-center justify-between gap-2">
               <span class="text-[10px] text-slate-500">${plan.verPorFueraGratis ? '✓ Gratis por fuera' : 'Requiere entrada'}</span>
-              <div class="flex items-center gap-1.5">
-                ${isAlreadyScheduled ? `
-                  <span class="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-1 rounded-xl">✓ En Itinerario</span>
-                ` : `
-                  <button onclick="promptAddToItinerary('${plan.id}')" class="bg-brand-600 hover:bg-brand-500 text-white font-bold text-[10px] px-3 py-1.5 rounded-xl shadow-md transition flex items-center gap-1 active:scale-95">
-                    <span>📅</span>
-                    <span>Agendar</span>
-                  </button>
-                `}
-              </div>
+              ${isAlreadyScheduled ? `
+                <span class="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2.5 py-1 rounded-xl">✓ En Itinerario</span>
+              ` : `
+                <button onclick="promptAddToItinerary('${plan.id}')" class="bg-brand-600 hover:bg-brand-500 text-white font-bold text-[10px] px-3 py-1.5 rounded-xl shadow-md transition flex items-center gap-1 active:scale-95">
+                  <span>📅</span>
+                  <span>Agendar al Itinerario</span>
+                </button>
+              `}
             </div>
           </div>
         `;
@@ -928,7 +1226,7 @@
       renderCatalog();
     }
 
-    // Modal Agendar Plan en Itinerario
+    // Modal Agendar Plan
     function promptAddToItinerary(planId) {
       const allPlans = [...catalogPlans, ...customCatalog];
       const plan = allPlans.find(p => p.id === planId);
@@ -936,18 +1234,24 @@
 
       document.getElementById("addPlanId").value = plan.id;
       document.getElementById("addPlanName").value = plan.nombre;
-      if (plan.diaSugerido) {
-        document.getElementById("addPlanDay").value = plan.diaSugerido;
-      }
-      if (plan.horaSugerida) {
-        document.getElementById("addPlanTime").value = plan.horaSugerida;
-      }
+      if (plan.diaSugerido) document.getElementById("addPlanDay").value = plan.diaSugerido;
+      if (plan.horaSugerida) document.getElementById("addPlanTime").value = plan.horaSugerida;
 
       const totalCOP = plan.precioCOP_pp * 2;
       const totalEUR = plan.precioEUR_pp * 2;
       document.getElementById("addPlanCostPreview").innerText = `${formatCOP(totalCOP)} (${formatEUR(totalEUR)})`;
 
+      document.getElementById("addPlanAlsoExpense").checked = false;
+      document.getElementById("addPlanExpenseExtra").classList.add("hidden");
+
       openModal("modalAddPlanToItinerary");
+    }
+
+    function toggleAddPlanExpenseFields() {
+      const checked = document.getElementById("addPlanAlsoExpense").checked;
+      const extra = document.getElementById("addPlanExpenseExtra");
+      if (checked) extra.classList.remove("hidden");
+      else extra.classList.add("hidden");
     }
 
     function handleConfirmAddToItinerary(e) {
@@ -964,7 +1268,7 @@
       const totalCOP = plan.precioCOP_pp * 2;
       const totalEUR = plan.precioEUR_pp * 2;
 
-      // Guardar en scheduledPlans
+      // 1. Guardar en itinerario
       const newSched = {
         id: "sched-" + Date.now(),
         planId: plan.id,
@@ -980,17 +1284,26 @@
       scheduledPlans.push(newSched);
       localStorage.setItem(STORAGE_SCHEDULED_PLANS_KEY, JSON.stringify(scheduledPlans));
 
-      // Si también marcó registrar en bitácora
+      // 2. Si marcó que ya lo pagó hoy anticipado
       if (alsoExpense && totalCOP > 0) {
+        const metodo = document.getElementById("addPlanPaymentMethod").value;
+        const pagador = document.getElementById("addPlanPayer").value;
+        const hoy = new Date();
+        const fechaStr = `${hoy.getDate()}/${hoy.getMonth() + 1}/${hoy.getFullYear()}`;
+
         const newExpense = {
           id: "exp-" + Date.now(),
-          fecha: `Día ${dia}`,
-          desc: plan.nombre + " (2 pax)",
+          fecha: fechaStr,
+          desc: `Entradas ${plan.nombre} (2 pax)`,
           cop: totalCOP,
           eur: totalEUR,
           ciudad: plan.ciudad,
+          pais: getCountryByCity(plan.ciudad),
           cat: "Tours",
-          pagador: "Ambos",
+          metodo: metodo,
+          pagador: pagador,
+          division: "50_50",
+          deudor: "Alan/Hill",
           isBase: false
         };
         recordedExpenses.unshift(newExpense);
@@ -1002,7 +1315,6 @@
       alert(`¡"${plan.nombre}" agendado con éxito en el Día ${dia} del itinerario!`);
     }
 
-    // Crear plan personalizado
     function handleSaveCustomPlan(e) {
       e.preventDefault();
       const nombre = document.getElementById("customPlanName").value.trim();
@@ -1010,7 +1322,7 @@
       const categoria = document.getElementById("customPlanCat").value;
       const precioEUR_pp = parseFloat(document.getElementById("customPlanEUR").value) || 0;
       const diaSugerido = parseInt(document.getElementById("customPlanDay").value);
-      const tips = document.getElementById("customPlanNotes").value.trim();
+      const source = document.getElementById("customPlanSource").value.trim();
 
       const newPlan = {
         id: "custom-" + Date.now(),
@@ -1022,8 +1334,9 @@
         duracion: "2 horas",
         diaSugerido,
         horaSugerida: "11:00",
-        descripcion: tips || "Plan personalizado creado por Alan & Hillary",
-        tips,
+        descripcion: `Plan personalizado creado por Alan & Hillary`,
+        tips: source ? `Fuente de precios: ${source}` : '',
+        fuentePrincipal: source || 'Personalizado',
         verPorFueraGratis: precioEUR_pp === 0
       };
 
@@ -1036,7 +1349,6 @@
       renderAll();
     }
 
-    // Quitar plan agendado del itinerario
     function removeScheduledPlan(schedId) {
       if (confirm("¿Quitar este plan del itinerario?")) {
         scheduledPlans = scheduledPlans.filter(s => s.id !== schedId);
@@ -1045,9 +1357,117 @@
       }
     }
 
-    // Renderizar Presupuesto Base
+    // 6. Itinerario: Días Activos vs Días Pasados
+    function toggleDayPast(dayNum) {
+      if (pastDaysSet.has(dayNum)) {
+        pastDaysSet.delete(dayNum);
+      } else {
+        pastDaysSet.add(dayNum);
+      }
+      localStorage.setItem(STORAGE_PAST_DAYS_KEY, JSON.stringify(Array.from(pastDaysSet)));
+      renderItinerary();
+    }
+
+    function togglePastDays() {
+      const pastList = document.getElementById("itineraryTimelinePast");
+      const chevron = document.getElementById("pastDaysChevron");
+      if (pastList.classList.contains("hidden")) {
+        pastList.classList.remove("hidden");
+        chevron.innerText = "▲";
+      } else {
+        pastList.classList.add("hidden");
+        chevron.innerText = "▼";
+      }
+    }
+
+    function renderItinerary() {
+      const activeContainer = document.getElementById("itineraryTimelineActive");
+      const pastContainer = document.getElementById("itineraryTimelinePast");
+      const pastWrapper = document.getElementById("pastDaysWrapper");
+      const pastCountLabel = document.getElementById("pastDaysCountLabel");
+
+      let activeHTML = "";
+      let pastHTML = "";
+      let pastCount = 0;
+
+      defaultItineraryDays.forEach(d => {
+        const isPast = pastDaysSet.has(d.day);
+        const dayPlans = scheduledPlans.filter(s => s.dia === d.day);
+
+        const cardHTML = `
+          <div class="bg-surface-card p-3.5 rounded-2xl border ${isPast ? 'border-surface-border/40 opacity-70' : 'border-surface-border'} space-y-2.5 shadow-sm">
+            <div class="flex items-start justify-between gap-2 border-b border-surface-border/50 pb-2">
+              <div class="flex items-center gap-2">
+                <div class="text-center ${isPast ? 'bg-surface-darker text-slate-500' : 'bg-surface-dark text-brand-400'} border border-surface-border rounded-xl px-2 py-1 shrink-0">
+                  <span class="text-xs font-black block">D${d.day < 10 ? '0' + d.day : d.day}</span>
+                  <span class="text-[9px] text-slate-400 block">${d.date.split(" ")[0]}</span>
+                </div>
+                <div>
+                  <h3 class="text-xs font-bold text-white flex items-center gap-1">
+                    <span>${d.flag}</span>
+                    <span>${d.ciudad}</span>
+                  </h3>
+                  <p class="text-[10px] text-slate-400">${d.date}</p>
+                </div>
+              </div>
+
+              <!-- Botón Marcar Pasado / Activo -->
+              <button onclick="toggleDayPast(${d.day})" class="text-[10px] font-bold px-2 py-1 rounded-lg border transition ${isPast ? 'bg-surface-dark text-slate-400 border-surface-border hover:text-white' : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20'}">
+                ${isPast ? '↩️ Reactivar' : '✓ Pasado'}
+              </button>
+            </div>
+
+            <!-- Transporte / Vuelo / Horarios -->
+            <div class="bg-surface-dark/70 p-2 rounded-xl text-xs space-y-1 border border-surface-border/60">
+              <p class="font-bold text-indigo-300 text-[11px]">${d.transporte}</p>
+              <p class="text-[10px] text-slate-400">🕒 <span class="text-slate-300 font-medium">${d.horarios}</span></p>
+            </div>
+
+            <p class="text-[11px] text-slate-300 leading-snug">${d.desc}</p>
+
+            <!-- EVENTOS FIJOS Y PLANES AGENDADOS -->
+            <div class="space-y-1.5 pt-1">
+              ${d.planesFijos && d.planesFijos.length > 0 ? d.planesFijos.map(f => `
+                <div class="bg-brand-500/10 border border-brand-500/30 p-2 rounded-xl text-[11px] font-bold text-brand-300 flex items-center justify-between">
+                  <span>${f}</span>
+                  <span class="text-[9px] bg-brand-500/20 px-2 py-0.5 rounded-full">Fijo</span>
+                </div>
+              `).join("") : ''}
+
+              ${dayPlans.map(p => `
+                <div class="bg-surface-dark p-2 rounded-xl text-[11px] border border-surface-border flex items-center justify-between gap-2">
+                  <div class="min-w-0">
+                    <p class="font-bold text-white truncate">⏰ ${p.hora || '10:00'} • ${p.nombre}</p>
+                    <p class="text-[10px] text-slate-400">${formatCOP(p.costoCOP)} (${formatEUR(p.costoEUR)})</p>
+                  </div>
+                  <button onclick="removeScheduledPlan('${p.id}')" class="text-slate-500 hover:text-rose-400 text-xs p-1" title="Quitar">✕</button>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
+
+        if (isPast) {
+          pastHTML += cardHTML;
+          pastCount++;
+        } else {
+          activeHTML += cardHTML;
+        }
+      });
+
+      activeContainer.innerHTML = activeHTML || `<p class="text-center text-xs text-slate-400 py-6">Todos los días están archivados en 'Pasados'.</p>`;
+      pastContainer.innerHTML = pastHTML;
+
+      if (pastCount > 0) {
+        pastWrapper.classList.remove("hidden");
+        pastCountLabel.innerText = `Ver días pasados archivados (${pastCount})`;
+      } else {
+        pastWrapper.classList.add("hidden");
+      }
+    }
+
+    // 7. Renderizar Presupuesto Base
     function renderBaseBudget() {
-      // Transportes
       let subT = 0;
       document.getElementById("listTransportes").innerHTML = currentBudget.transportes.map(t => {
         subT += t.cop;
@@ -1072,7 +1492,6 @@
       }).join("");
       document.getElementById("subtotalTransportes").innerText = formatCOP(subT);
 
-      // Alojamientos
       let subA = 0;
       document.getElementById("listAlojamientos").innerHTML = currentBudget.alojamientos.map(a => {
         subA += a.cop;
@@ -1099,7 +1518,6 @@
       }).join("");
       document.getElementById("subtotalAlojamientos").innerText = formatCOP(subA);
 
-      // Otros
       let subO = 0;
       document.getElementById("listOtrosFijos").innerHTML = currentBudget.otrosFijos.map(o => {
         subO += o.cop;
@@ -1119,7 +1537,6 @@
       document.getElementById("subtotalOtros").innerText = formatCOP(subO);
     }
 
-    // Modal Editar Presupuesto
     function promptEditBudget(id, type) {
       const item = currentBudget[type].find(i => i.id === id);
       if (!item) return;
@@ -1177,69 +1594,6 @@
       }
     }
 
-    // Renderizar Itinerario
-    function renderItinerary() {
-      const container = document.getElementById("itineraryTimeline");
-
-      container.innerHTML = defaultItineraryDays.map(d => {
-        // Filtrar planes agendados para este día
-        const dayPlans = scheduledPlans.filter(s => s.dia === d.day);
-
-        return `
-          <div class="bg-surface-card p-3.5 rounded-2xl border border-surface-border space-y-2.5 shadow-sm">
-            <!-- Encabezado del Día -->
-            <div class="flex items-start justify-between gap-2 border-b border-surface-border/50 pb-2">
-              <div class="flex items-center gap-2">
-                <div class="text-center bg-surface-dark border border-surface-border rounded-xl px-2 py-1 shrink-0">
-                  <span class="text-xs font-black text-brand-400 block">D${d.day < 10 ? '0' + d.day : d.day}</span>
-                  <span class="text-[9px] text-slate-400 block">${d.date.split(" ")[0]}</span>
-                </div>
-                <div>
-                  <h3 class="text-xs font-bold text-white flex items-center gap-1">
-                    <span>${d.flag}</span>
-                    <span>${d.ciudad}</span>
-                  </h3>
-                  <p class="text-[10px] text-slate-400">${d.date}</p>
-                </div>
-              </div>
-              <span class="text-[9px] bg-surface-dark font-semibold text-slate-300 px-2 py-0.5 rounded-full border border-surface-border">${d.hospedaje}</span>
-            </div>
-
-            <!-- Transporte / Vuelo / Horarios -->
-            <div class="bg-surface-dark/70 p-2 rounded-xl text-xs space-y-1 border border-surface-border/60">
-              <p class="font-bold text-indigo-300 text-[11px]">${d.transporte}</p>
-              <p class="text-[10px] text-slate-400">🕒 <span class="text-slate-300 font-medium">${d.horarios}</span></p>
-            </div>
-
-            <p class="text-[11px] text-slate-300 leading-snug">${d.desc}</p>
-
-            <!-- PLANES FIJOS Y PLANES AGENDADOS DEL DÍA -->
-            <div class="space-y-1.5 pt-1">
-              ${d.planesFijos && d.planesFijos.length > 0 ? d.planesFijos.map(f => `
-                <div class="bg-brand-500/10 border border-brand-500/30 p-2 rounded-xl text-[11px] font-bold text-brand-300 flex items-center justify-between">
-                  <span>${f}</span>
-                  <span class="text-[9px] bg-brand-500/20 px-2 py-0.5 rounded-full">Fijo</span>
-                </div>
-              `).join("") : ''}
-
-              ${dayPlans.map(p => `
-                <div class="bg-surface-dark p-2 rounded-xl text-[11px] border border-surface-border flex items-center justify-between gap-2">
-                  <div class="min-w-0">
-                    <p class="font-bold text-white truncate">⏰ ${p.hora || '10:00'} • ${p.nombre}</p>
-                    <p class="text-[10px] text-slate-400">${formatCOP(p.costoCOP)} (${formatEUR(p.costoEUR)})</p>
-                  </div>
-                  <button onclick="removeScheduledPlan('${p.id}')" class="text-slate-500 hover:text-rose-400 text-xs p-1" title="Quitar del itinerario">
-                    ✕
-                  </button>
-                </div>
-              `).join("")}
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    // Navegación
     function switchTab(tabId) {
       document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
       document.querySelectorAll(".nav-tab").forEach(el => {
@@ -1254,14 +1608,9 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function openModal(id) {
-      document.getElementById(id).classList.remove("hidden");
-    }
-    function closeModal(id) {
-      document.getElementById(id).classList.add("hidden");
-    }
+    function openModal(id) { document.getElementById(id).classList.remove("hidden"); }
+    function closeModal(id) { document.getElementById(id).classList.add("hidden"); }
 
-    // Backup: Exportar e Importar
     function exportDataJSON() {
       const exportObj = {
         fechaExportacion: new Date().toISOString(),
@@ -1269,7 +1618,9 @@
         gastosBitacora: recordedExpenses,
         presupuestoBase: currentBudget,
         planesItinerario: scheduledPlans,
-        catalogoPersonalizado: customCatalog
+        catalogoPersonalizado: customCatalog,
+        diasPasados: Array.from(pastDaysSet),
+        metodosPago: customPaymentMethods
       };
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj, null, 2));
       const downloadAnchor = document.createElement("a");
@@ -1303,6 +1654,15 @@
           if (data.catalogoPersonalizado) {
             customCatalog = data.catalogoPersonalizado;
             localStorage.setItem(STORAGE_CUSTOM_CATALOG_KEY, JSON.stringify(customCatalog));
+          }
+          if (data.diasPasados) {
+            pastDaysSet = new Set(data.diasPasados);
+            localStorage.setItem(STORAGE_PAST_DAYS_KEY, JSON.stringify(Array.from(pastDaysSet)));
+          }
+          if (data.metodosPago) {
+            customPaymentMethods = data.metodosPago;
+            localStorage.setItem(STORAGE_CUSTOM_PAYMENTS_KEY, JSON.stringify(customPaymentMethods));
+            refreshPaymentSelect();
           }
           renderAll();
           alert("¡Copia de seguridad restaurada con éxito en tu teléfono!");
