@@ -1425,6 +1425,14 @@
 
             <p class="text-[11px] text-slate-300 leading-snug">${d.desc}</p>
 
+            <!-- OPORTUNIDAD GRATIS DESTACADA SI APLICA -->
+            ${d.oportunidadGratis ? `
+              <div class="bg-emerald-500/10 border border-emerald-500/30 p-2.5 rounded-xl text-[11px] font-bold text-emerald-300 flex items-start gap-1.5 shadow-sm">
+                <span class="text-sm shrink-0">🎁</span>
+                <span class="leading-snug">${d.oportunidadGratis}</span>
+              </div>
+            ` : ''}
+
             <!-- EVENTOS FIJOS Y PLANES AGENDADOS -->
             <div class="space-y-1.5 pt-1">
               ${d.planesFijos && d.planesFijos.length > 0 ? d.planesFijos.map(f => `
