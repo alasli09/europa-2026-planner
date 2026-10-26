@@ -10,12 +10,12 @@ const initialBaseBudget = {
   transportes: [
     {
       id: "t-baq-bog",
-      concepto: "Vuelo Barranquilla → Bogotá (1 Nov)",
+      concepto: "Vuelo Barranquilla → Bogotá (1 Nov - 13:10)",
       categoria: "Vuelos",
       cop: 245232,
       eur: 61.31,
       estado: "pagado",
-      notas: "Pagado y confirmado para 2 pax."
+      notas: "Sale 13:10 BAQ → Llega 14:40 BOG. Pagado y confirmado para 2 pax."
     },
     {
       id: "t-bog-mad-bog",
@@ -619,9 +619,9 @@ const defaultItineraryDays = [
     ciudad: "Barranquilla → Bogotá",
     flag: "🇨🇴",
     hospedaje: "Airbnb Bogotá (Noche previa)",
-    transporte: "✈️ Vuelo Nacional BAQ → BOG (Comprado)",
-    horarios: "Llegada en la tarde a Bogotá • Salir al aeropuerto a las 04:15 AM del día siguiente",
-    desc: "Vuelo a Bogotá y descanso temprano cerca de El Dorado. Noche obligada para no arriesgar el transatlántico.",
+    transporte: "✈️ Vuelo Nacional BAQ → BOG (Sale 13:10)",
+    horarios: "13:10 Despegue BAQ • 14:40 Aterrizaje BOG • Salir al aeropuerto a las 04:15 del día siguiente",
+    desc: "Vuelo a Bogotá a las 13:10 y descanso temprano cerca de El Dorado. Noche previa para madrugar al transatlántico.",
     planesFijos: ["Dormir temprano para madrugar"],
     oportunidadGratis: "Reservar online entradas gratis del Museo Picasso de BCN (se abren hoy a las 10:00 AM hora España)",
     estado: "pagado"
@@ -859,8 +859,8 @@ const defaultItineraryDays = [
     flag: "🇨🇴",
     hospedaje: "Bogotá (si regresan el 21) o Vuelo a BAQ",
     transporte: "✈️ Avianca AV27: Sale 07:20 Madrid T4S → Llega 11:40 Bogotá El Dorado T1",
-    horarios: "04:30 Estar en Barajas (Taxi/Uber) • 07:20 Despegue • 11:40 Aterrizaje en Bogotá",
-    desc: "Vuelo transatlántico de vuelta. Sellar Tax Free (DIVA) antes de salir. Llegada a Bogotá y descanso o conexión a Barranquilla.",
+    horarios: "04:30 Estar en Barajas • 07:20 Despegue MAD • 11:40 Aterrizaje BOG • Vuelo a BAQ por definir (20 o 21 Nov)",
+    desc: "Vuelo transatlántico de vuelta. Trámite Tax Free (DIVA) antes de salir. Llegada a Bogotá a las 11:40. Vuelo de retorno a Barranquilla pendiente por comprar (hora y fecha por definir).",
     planesFijos: ["Vuelo AV27 transatlántico", "Trámite Tax Free (DIVA) en Barajas"],
     estado: "pendiente"
   }
